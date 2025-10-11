@@ -125,8 +125,8 @@
 						<div class="flex flex-col">
 							<h3 class="text-lg font-semibold">{server.name}</h3>
 							<div class="flex flex-row items-center gap-1">
-								<div class="h-2.5 w-2.5 rounded-full bg-green-500"></div>
-								<p class="text-sm">0 online</p>
+								<div class="h-2.5 w-2.5 rounded-full {server.onlinePlayers < 0 ? "bg-red-500" : "bg-green-500"}"></div>
+								<p class="text-sm">{server.onlinePlayers < 0 ? "server offline" : server.onlinePlayers + "online"} </p>
 							</div>
 						</div>
 					</Card.Header>
