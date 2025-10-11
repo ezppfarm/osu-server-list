@@ -1,0 +1,29 @@
+{
+  "name": "osu-server-list",
+  "private": true,
+  "version": "0.0.1",
+  "packageManager": "bun@1.2.23",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "db:push": "turbo db:push",
+    "db:generate": "turbo db:generate",
+    "db:migrate": "turbo db:migrate",
+    "db:studio": "turbo db:studio"
+    
+  },
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "catalog": {
+      "typescript": "^5.8.2",
+      "tsdown": "^0.15.5"
+    }
+  },
+  "devDependencies": {
+    "turbo": "^2.5.8",
+    "tsdown": "^0.15.6"
+  }
+}

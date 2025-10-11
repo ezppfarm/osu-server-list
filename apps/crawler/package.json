@@ -1,0 +1,17 @@
+{
+  "name": "crawler",
+  "module": "./src/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun ./src/index.ts --watch",
+    "build": "tsdown"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "tsdown": "^0.15.6",
+    "typescript": "^5"
+  }
+}
