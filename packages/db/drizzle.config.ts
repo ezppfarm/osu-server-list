@@ -1,4 +1,7 @@
+import { config } from "dotenv";
 import { defineConfig } from "drizzle-kit";
+
+config();
 
 if (!process.env.DATABASE_HOST) throw new Error("DATABASE_HOST is not set");
 if (!process.env.DATABASE_PORT) throw new Error("DATABASE_PORT is not set");

@@ -1,7 +1,4 @@
-export type BpyUsersResponse = {
-  status: string;
-  counts: {
-    online: number;
-    total: number;
-  };
+export type UsersResponse = {
+  onlineCount: number;
+  totalCount: number;
 };
