@@ -14,6 +14,8 @@ baker.add({
     const servers = await getAllServers();
 
     for (const server of servers) {
+      console.log(`Fetching status for ${server.name}...`);
+
       let counts: UsersResponse = { onlineCount: -1, totalCount: -1 };
       let ping = -1;
 
