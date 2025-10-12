@@ -11,15 +11,18 @@ type BpyUsersResponse = {
 };
 
 export class BanchoPyApiHandler implements IServerApiHandler {
-  constructor(private baseUrl: string, private useOldApiFormat: boolean = false) { }
+  constructor(
+    private baseUrl: string,
+    private useOldApiFormat: boolean = false
+  ) {}
 
   private async makeRequest<T>(endpoint: string): Promise<T | null> {
     const apiUrl = this.baseUrl.replace("https://", "https://api.");
 
     // who knows, maybe someone still uses this /shrug
-    let oldApiFormat = "";
+    let oldApiFormat = "/v1";
     if (this.useOldApiFormat) {
-      oldApiFormat = "/v1";
+      oldApiFormat = "";
     }
 
     const url = `${apiUrl}${oldApiFormat}${endpoint}`;
@@ -27,12 +30,14 @@ export class BanchoPyApiHandler implements IServerApiHandler {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json",
+        Accept: "application/json",
       },
     });
 
     if (response.error) {
-      console.error(`Request to ${url} resulted in status code ${response.error.status} - ${response.error.statusText}`);
+      console.error(
+        `Request to ${url} resulted in status code ${response.error.status} - ${response.error.statusText}`
+      );
       return null;
     }
 
