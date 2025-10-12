@@ -110,6 +110,8 @@ To build all packages and apps:
 bun run build
 ```
 
+---
+
 ## 🐋 Running with Docker
 
 ### 1. Generate migrations
