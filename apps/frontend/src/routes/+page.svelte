@@ -2,7 +2,8 @@
 	import { Button } from '@/components/ui/button';
 	import * as Card from '@/components/ui/card';
 	import type { PageProps } from './$types';
-	import Circle from '@lucide/svelte/icons/circle';
+	import dayjs from 'dayjs';
+	import * as Tooltip from '@/components/ui/tooltip';
 
 	const props: PageProps = $props();
 
@@ -56,15 +57,14 @@
 				Browse, compare, and join thriving osu! private servers. Find communities with custom
 				features, unique gameplay modes, and active player bases.
 			</p>
-			<div class="mt-8 flex items-center justify-center gap-4">
+			<!-- <div class="mt-8 flex items-center justify-center gap-4">
 				<Button size="lg" class="bg-primary text-primary-foreground hover:bg-primary/90">
-					<!-- <Search class="mr-2 h-4 w-4" /> -->
 					Explore Servers
 				</Button>
 				<Button size="lg" variant="outline" class="border-border/40 bg-transparent">
 					Submit Server
 				</Button>
-			</div>
+			</div> -->
 		</div>
 	</section>
 
@@ -72,15 +72,15 @@
 		<div class="container mx-auto px-4 py-6">
 			<div class="flex flex-wrap items-center justify-center gap-8 text-sm">
 				<div class="flex items-center gap-2">
-					<span class="text-muted-foreground">{servers.length} Active Servers</span>
+					<span class="text-muted-foreground">{servers.filter(server => server.onlinePlayers >= 0).length} online servers</span>
 				</div>
 				<div class="flex items-center gap-2">
 					<!-- <Users class="h-4 w-4 text-primary" /> -->
-					<span class="text-muted-foreground">0 Players Online</span>
+					<span class="text-muted-foreground">{servers.reduce((acc, server) => acc + server.onlinePlayers, 0)} players online</span>
 				</div>
 				<div class="flex items-center gap-2">
 					<!-- <Clock class="h-4 w-4 text-primary" /> -->
-					<span class="text-muted-foreground">Updated 2 minutes ago</span>
+					<span class="text-muted-foreground">Updated {dayjs(servers[0]?.last_update).local().fromNow()}</span>
 				</div>
 			</div>
 		</div>
@@ -118,7 +118,7 @@
 									>
 								{/if}
 							</div>
-							<div class="mb-auto rounded-lg bg-card-foreground/10 px-2 py-1 font-mono text-lg">
+							<div class="mb-auto rounded-lg bg-card-foreground/10 px-2 py-1 font-mono">
 								#{idx + 1}
 							</div>
 						</div>
@@ -126,7 +126,7 @@
 							<h3 class="text-lg font-semibold">{server.name}</h3>
 							<div class="flex flex-row items-center gap-1">
 								<div class="h-2.5 w-2.5 rounded-full {server.onlinePlayers < 0 ? "bg-red-500" : "bg-green-500"}"></div>
-								<p class="text-sm">{server.onlinePlayers < 0 ? "server offline" : server.onlinePlayers + "online"} </p>
+								<p class="text-sm">{server.onlinePlayers < 0 ? "server offline" : server.onlinePlayers + " players online"} </p>
 							</div>
 						</div>
 					</Card.Header>
@@ -142,8 +142,15 @@
 					</Card.Content>
 					<Card.Footer>
 						<div class="grid w-full grid-cols-1 items-center gap-4 lg:grid-cols-2">
-							<Button class="w-full" variant="outline">View Details</Button>
-							<Button class="w-full" variant="default">10 Votes</Button>
+							<Button class="w-full" variant="outline" href={server.url} target="_blank">View Website</Button>
+							<Tooltip.Provider>
+								<Tooltip.Root delayDuration={0} disableCloseOnTriggerClick disableHoverableContent>
+								<Tooltip.Trigger>
+									<Button class="w-full" variant="default" disabled>{server.votes} Votes</Button>
+								</Tooltip.Trigger>
+								<Tooltip.Content>soon™</Tooltip.Content>
+							</Tooltip.Root>
+							</Tooltip.Provider>
 						</div>
 					</Card.Footer>
 				</Card.Root>
@@ -153,7 +160,7 @@
 
 	<footer class="border-t border-border/40 bg-card/30 py-8">
 		<div class="container mx-auto px-4 text-center text-sm text-muted-foreground">
-			<p>Built for the osu! community • Not affiliated with ppy</p>
+			<p>Built for the osu! community • Not affiliated with osu! or ppy Pty Ltd</p>
 		</div>
 	</footer>
 </div>

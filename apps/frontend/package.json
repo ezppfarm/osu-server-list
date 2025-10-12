@@ -14,7 +14,8 @@
 		"format": "prettier --write ."
 	},
 	"dependencies": {
-		"@osu-server-list/db": "workspace:*"
+		"@osu-server-list/db": "workspace:*",
+		"dayjs": "^1.11.18"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.4.0",
