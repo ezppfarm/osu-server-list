@@ -43,9 +43,25 @@ export const getAllServers = async () => {
       )
     )
     .leftJoin(serverVote, eq(server.id, serverVote.serverId))
-    .groupBy(server.id, serverStatus.timestamp)
+    .groupBy(
+      server.id,
+      server.name,
+      server.type,
+      server.description,
+      server.url,
+      server.iconUrl,
+      server.tags,
+      server.trending,
+      serverStatus.timestamp,
+      serverStatus.onlinePlayers,
+      serverStatus.registeredPlayers
+    )
     .orderBy(desc(serverStatus.timestamp));
 };
+
+export const getAllServersRaw = async () => {
+  return await db.select().from(server);
+}
 
 export const addServerStatus = async (
   server: number,

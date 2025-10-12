@@ -5,3 +5,9 @@
 node_modules
 
 .env
+
+# Migrations
+packages/db/drizzle
+
+# MySQL data
+db_data/
