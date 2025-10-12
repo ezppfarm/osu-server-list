@@ -70,7 +70,7 @@
 
 	<div class="border-b border-border/40 bg-gray-900/10">
 		<div class="container mx-auto px-4 py-6">
-			<div class="flex flex-wrap items-center justify-center gap-8 text-sm">
+			<div class="flex flex-col md:flex-row flex-wrap items-center justify-center gap-3 md:gap-8 text-sm">
 				<div class="flex items-center gap-2">
 					<span class="text-muted-foreground">{servers.filter(server => server.onlinePlayers >= 0).length} online servers</span>
 				</div>
