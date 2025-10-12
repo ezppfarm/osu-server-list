@@ -1,4 +1,4 @@
-import { mysqlTable, int, text, datetime } from "drizzle-orm/mysql-core";
+import { mysqlTable, int, text, bigint } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("user", {
   id: int().primaryKey().autoincrement().notNull(),
@@ -24,9 +24,10 @@ export const serverStatus = mysqlTable("server_status", {
   serverId: int()
     .references(() => server.id)
     .notNull(),
-  timestamp: datetime().default(new Date()).notNull(),
+  timestamp: bigint({ mode: "number" }).notNull(),
   onlinePlayers: int().notNull(),
   registeredPlayers: int().notNull(),
+  ping: int().notNull(),
 });
 
 export const serverVote = mysqlTable("server_vote", {
@@ -36,5 +37,5 @@ export const serverVote = mysqlTable("server_vote", {
     .notNull(),
   username: text().notNull(),
   ip: text().notNull(),
-  timestamp: datetime().default(new Date()).notNull(),
+  timestamp: bigint({ mode: "number" }).notNull(),
 });
