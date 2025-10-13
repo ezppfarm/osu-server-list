@@ -1,8 +1,9 @@
 import { BanchoPyApiHandler } from "./banchopyhandler";
+import type { IServerApiHandler } from "./iserverapihandler";
 import { RippleApiHandler } from "./ripplehandler";
 
 
-export function getApiHandler(baseUrl: string, type: string) {
+export const getApiHandler = (baseUrl: string, type: string): IServerApiHandler => {
   switch (type.toLowerCase()) {
     case "banchopy":
       return new BanchoPyApiHandler(baseUrl);

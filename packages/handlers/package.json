@@ -1,0 +1,26 @@
+{
+  "name": "@osu-server-list/handlers",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsdown"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./src/*.ts"
+    }
+  },
+  "peerDependencies": {
+    "tsdown": "catalog:",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@better-fetch/fetch": "^1.1.18"
+  }
+}

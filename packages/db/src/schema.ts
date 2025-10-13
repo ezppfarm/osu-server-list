@@ -35,7 +35,7 @@ export const serverVote = mysqlTable("server_vote", {
   serverId: int()
     .references(() => server.id)
     .notNull(),
-  username: text().notNull(),
+  userId: int().notNull(),
   ip: text().notNull(),
   timestamp: bigint({ mode: "number" }).notNull(),
 });

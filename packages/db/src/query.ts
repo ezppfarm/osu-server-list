@@ -1,4 +1,4 @@
-import { and, desc, eq, max } from "drizzle-orm";
+import { and, desc, eq, gt, max } from "drizzle-orm";
 import { db } from ".";
 import { server, serverStatus, serverVote } from "./schema";
 import { intWithFallback, sumAsIntWithFallback } from "./util";
@@ -75,5 +75,58 @@ export const addServerStatus = async (
     onlinePlayers,
     registeredPlayers,
     ping,
+  });
+};
+
+export const findServerById = async (serverId: number) => {
+  return (await db
+    .select()
+    .from(server)
+    .where(eq(server.id, serverId))
+    .limit(1))[0];
+}
+
+export const findRecentVoteByIp = async (serverId: number, ipAddress: string) => {
+  const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+
+  return (await db
+    .select()
+    .from(serverVote)
+    .where(
+      and(
+        eq(serverVote.serverId, serverId),
+        eq(serverVote.ip, ipAddress),
+        gt(serverVote.timestamp, oneDayAgo)
+      )
+    )
+    .limit(1))[0];
+};
+
+export const findRecentVoteByUserId = async (serverId: number, userId: number) => {
+  const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+
+  return (await db
+    .select()
+    .from(serverVote)
+    .where(
+      and(
+        eq(serverVote.serverId, serverId),
+        eq(serverVote.userId, userId),
+        gt(serverVote.timestamp, oneDayAgo)
+      )
+    )
+    .limit(1))[0];
+};
+
+export const addServerVote = async (
+  serverId: number,
+  ipAddress: string,
+  userId: number
+) => {
+  await db.insert(serverVote).values({
+    serverId,
+    ip: ipAddress,
+    timestamp: Date.now(),
+    userId
   });
 };

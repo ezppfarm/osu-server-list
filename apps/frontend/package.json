@@ -15,6 +15,7 @@
 	},
 	"dependencies": {
 		"@osu-server-list/db": "workspace:*",
+		"@osu-server-list/handlers": "workspace:*",
 		"dayjs": "^1.11.18"
 	},
 	"devDependencies": {

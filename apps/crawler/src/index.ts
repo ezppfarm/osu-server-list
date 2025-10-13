@@ -1,7 +1,7 @@
 import { addServerStatus, getAllServersRaw } from "@osu-server-list/db/query";
+import { getApiHandler } from "@osu-server-list/handlers";
+import type { UsersResponse } from "@osu-server-list/handlers/types";
 import Baker from "cronbake";
-import { getApiHandler } from "./handlers/apihandlerhelper";
-import type { UsersResponse } from "./types";
 
 const baker = Baker.create();
 

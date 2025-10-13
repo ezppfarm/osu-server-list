@@ -11,6 +11,8 @@ COPY apps/frontend/bun.lock ./apps/frontend/
 COPY packages/db/package.json ./packages/db/
 COPY packages/db/bun.lock ./packages/db/
 
+COPY packages/handlers/package.json ./packages/handlers/
+
 RUN bun install
 
 COPY . .

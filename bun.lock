@@ -12,6 +12,7 @@
       "dependencies": {
         "@better-fetch/fetch": "^1.1.18",
         "@osu-server-list/db": "workspace:*",
+        "@osu-server-list/handlers": "workspace:*",
         "cronbake": "^0.3.0",
       },
       "devDependencies": {
@@ -27,6 +28,7 @@
       "version": "0.0.1",
       "dependencies": {
         "@osu-server-list/db": "workspace:*",
+        "@osu-server-list/handlers": "workspace:*",
         "dayjs": "^1.11.18",
       },
       "devDependencies": {
@@ -76,6 +78,16 @@
       "devDependencies": {
         "@types/bun": "latest",
         "drizzle-kit": "^0.31.5",
+      },
+      "peerDependencies": {
+        "tsdown": "catalog:",
+        "typescript": "^5",
+      },
+    },
+    "packages/handlers": {
+      "name": "@osu-server-list/handlers",
+      "dependencies": {
+        "@better-fetch/fetch": "^1.1.18",
       },
       "peerDependencies": {
         "tsdown": "catalog:",
@@ -253,6 +265,8 @@
     "@nodelib/fs.walk": ["@nodelib/fs.walk@1.2.8", "", { "dependencies": { "@nodelib/fs.scandir": "2.1.5", "fastq": "^1.6.0" } }, "sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg=="],
 
     "@osu-server-list/db": ["@osu-server-list/db@workspace:packages/db"],
+
+    "@osu-server-list/handlers": ["@osu-server-list/handlers@workspace:packages/handlers"],
 
     "@oxc-project/types": ["@oxc-project/types@0.94.0", "", {}, "sha512-+UgQT/4o59cZfH6Cp7G0hwmqEQ0wE+AdIwhikdwnhWI9Dp8CgSY081+Q3O67/wq3VJu8mgUEB93J9EHHn70fOw=="],
 
