@@ -65,17 +65,17 @@ export class RippleApiHandler implements IServerApiHandler {
   }
 
   public async fetchUserInfo(username: string): Promise<UserResponse | null> {
-      const data = await this.makeApiRequest<RippleUserInfoResponse>(`/api/v1/users/full`, {
-        name: username
-      });
+    const data = await this.makeApiRequest<RippleUserInfoResponse>(`/api/v1/users/full`, {
+      name: username
+    });
 
-      if (!data) {
-        return null;
-      }
+    if (!data) {
+      return null;
+    }
 
-      return {
-        id: data.id,
-        username: data.username
-      };
+    return {
+      id: data.id,
+      username: data.username
+    };
   }
 }

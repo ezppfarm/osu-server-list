@@ -24,7 +24,7 @@ export class BanchoPyApiHandler implements IServerApiHandler {
   constructor(
     private baseUrl: string,
     private useOldApiFormat: boolean = false
-  ) {}
+  ) { }
 
   private async makeRequest<T>(endpoint: string, params?: any): Promise<T | null> {
     const apiUrl = this.baseUrl.replace("https://", "https://api.");
@@ -71,19 +71,19 @@ export class BanchoPyApiHandler implements IServerApiHandler {
     };
   }
 
-    public async fetchUserInfo(username: string): Promise<UserResponse | null> {
-        const data = await this.makeRequest<BpyUserInfoResponse>(`/get_player_info`, {
-          scope: "info",
-          name: username
-        });
-  
-        if (!data) {
-          return null;
-        }
-  
-        return {
-          id: data.player.info.id,
-          username: data.player.info.name
-        };
+  public async fetchUserInfo(username: string): Promise<UserResponse | null> {
+    const data = await this.makeRequest<BpyUserInfoResponse>(`/get_player_info`, {
+      scope: "info",
+      name: username
+    });
+
+    if (!data) {
+      return null;
     }
+
+    return {
+      id: data.player.info.id,
+      username: data.player.info.name
+    };
+  }
 }

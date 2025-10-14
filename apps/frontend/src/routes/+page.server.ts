@@ -4,6 +4,6 @@ export async function load() {
 	const servers = await getAllServers();
 
 	return {
-		servers: servers.sort((a, b) => b.onlinePlayers - a.onlinePlayers)
+		servers: servers
 	};
 }
