@@ -4,15 +4,32 @@
 	import type { PageProps } from './$types';
 	import dayjs from 'dayjs';
 	import * as Tooltip from '@/components/ui/tooltip';
+	import { browser } from '$app/environment';
+	import { getSortName, sortServers } from '@/helpers';
+	import * as DropdownMenu from '@/components/ui/dropdown-menu';
 
 	const props: PageProps = $props();
 
-	const servers = props.data.servers ?? [];
+	let servers = $state(props.data.servers ?? []);
+	let sort = $state('onlinePlayers');
+	let sortName = $derived(() => getSortName(sort).toLowerCase());
+
+	function updateSort(value: string) {
+		if (browser) {
+			localStorage.setItem('sort', value);
+		}
+		servers = sortServers(servers, value);
+		sort = value;
+	}
+
+	if (browser) {
+		sort = localStorage.getItem('sort') ?? 'onlinePlayers';
+	}
 </script>
 
-<div class="min-h-screen bg-background">
+<div class="bg-background min-h-screen">
 	<header
-		class="sticky top-0 z-50 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+		class="border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 border-b backdrop-blur"
 	>
 		<div class="container mx-auto flex h-16 items-center justify-between px-4">
 			<div class="flex items-center gap-8">
@@ -38,22 +55,22 @@
 		</div>
 	</header>
 
-	<section class="relative overflow-hidden border-b border-border/40 py-24">
-		<div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent"></div>
-		<div class="relative container mx-auto px-4 text-center">
+	<section class="border-border/40 relative overflow-hidden border-b py-24">
+		<div class="from-primary/5 absolute inset-0 bg-gradient-to-b to-transparent"></div>
+		<div class="container relative mx-auto px-4 text-center">
 			<div
-				class="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm text-primary"
+				class="border-primary/20 bg-primary/5 text-primary mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm"
 			>
 				<!-- <TrendingUp class="h-3.5 w-3.5" /> -->
 				<span>Discover the best osu! private servers</span>
 			</div>
-			<h1 class="mb-6 text-5xl font-bold tracking-tight text-balance lg:text-6xl">
+			<h1 class="mb-6 text-balance text-5xl font-bold tracking-tight lg:text-6xl">
 				Your Gateway to
-				<span class="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+				<span class="from-primary to-primary/60 bg-gradient-to-r bg-clip-text text-transparent">
 					osu! Communities
 				</span>
 			</h1>
-			<p class="mx-auto max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
+			<p class="text-muted-foreground mx-auto max-w-2xl text-pretty text-lg leading-relaxed">
 				Browse, compare, and join thriving osu! private servers. Find communities with custom
 				features, unique gameplay modes, and active player bases.
 			</p>
@@ -68,19 +85,27 @@
 		</div>
 	</section>
 
-	<div class="border-b border-border/40 bg-gray-900/10">
+	<div class="border-border/40 border-b bg-gray-900/10">
 		<div class="container mx-auto px-4 py-6">
-			<div class="flex flex-col md:flex-row flex-wrap items-center justify-center gap-3 md:gap-8 text-sm">
+			<div
+				class="flex flex-col flex-wrap items-center justify-center gap-3 text-sm md:flex-row md:gap-8"
+			>
 				<div class="flex items-center gap-2">
-					<span class="text-muted-foreground">{servers.filter(server => server.onlinePlayers >= 0).length} online servers</span>
+					<span class="text-muted-foreground"
+						>{servers.filter((server) => server.onlinePlayers >= 0).length} online servers</span
+					>
 				</div>
 				<div class="flex items-center gap-2">
 					<!-- <Users class="h-4 w-4 text-primary" /> -->
-					<span class="text-muted-foreground">{servers.reduce((acc, server) => acc + server.onlinePlayers, 0)} players online</span>
+					<span class="text-muted-foreground"
+						>{servers.reduce((acc, server) => acc + server.onlinePlayers, 0)} players online</span
+					>
 				</div>
 				<div class="flex items-center gap-2">
 					<!-- <Clock class="h-4 w-4 text-primary" /> -->
-					<span class="text-muted-foreground">Updated {dayjs(servers[0]?.last_update).local().fromNow()}</span>
+					<span class="text-muted-foreground"
+						>Updated {dayjs(servers[0]?.last_update).local().fromNow()}</span
+					>
 				</div>
 			</div>
 		</div>
@@ -90,22 +115,35 @@
 		<div class="mb-8 flex flex-wrap items-center justify-between gap-4">
 			<div>
 				<h2 class="text-2xl font-semibold tracking-tight">Top Servers</h2>
-				<p class="text-sm text-muted-foreground">Sorted by online users</p>
+				<p class="text-muted-foreground text-sm">Sorted by {sortName()}</p>
 			</div>
 			<div class="flex gap-2">
 				<Button variant="outline" size="sm" class="border-border/40 bg-transparent">
 					All Categories
 				</Button>
-				<Button variant="outline" size="sm" class="border-border/40 bg-transparent">Sort By</Button>
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger>
+						<Button variant="outline" size="sm" class="border-border/40 bg-transparent">
+							Sort By
+						</Button>
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content>
+						<DropdownMenu.Item onSelect={() => updateSort('onlinePlayers')}
+							>Online Users</DropdownMenu.Item
+						>
+						<DropdownMenu.Item onSelect={() => updateSort('votes')}>Votes</DropdownMenu.Item>
+						<DropdownMenu.Item onSelect={() => updateSort('name')}>Name</DropdownMenu.Item>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
 			</div>
 		</div>
 
 		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			{#each servers as server, idx}
-				<Card.Root class="gap-4 border-card-foreground/15 bg-card/50">
+				<Card.Root class="border-card-foreground/15 bg-card/50 gap-4">
 					<Card.Header>
 						<div class="flex flex-row items-center justify-between">
-							<div class="relative h-16 w-16 rounded-lg bg-card-foreground/10 p-1">
+							<div class="bg-card-foreground/10 relative h-16 w-16 rounded-lg p-1">
 								<img
 									src={server.iconUrl}
 									alt={`${server.name} logo`}
@@ -113,20 +151,28 @@
 								/>
 								{#if server.trending}
 									<span
-										class="absolute -top-2 -right-2 inline-flex items-center rounded-full border border-yellow-600 bg-yellow-900 px-0.5 py-0.5 text-xs font-medium text-primary-foreground"
+										class="text-primary-foreground absolute -right-2 -top-2 inline-flex items-center rounded-full border border-yellow-600 bg-yellow-900 px-0.5 py-0.5 text-xs font-medium"
 										>🔥</span
 									>
 								{/if}
 							</div>
-							<div class="mb-auto rounded-lg bg-card-foreground/10 px-2 py-1 font-mono">
+							<div class="bg-card-foreground/10 mb-auto rounded-lg px-2 py-1 font-mono">
 								#{idx + 1}
 							</div>
 						</div>
 						<div class="flex flex-col">
 							<h3 class="text-lg font-semibold">{server.name}</h3>
 							<div class="flex flex-row items-center gap-1">
-								<div class="h-2.5 w-2.5 rounded-full {server.onlinePlayers < 0 ? "bg-red-500" : "bg-green-500"}"></div>
-								<p class="text-sm">{server.onlinePlayers < 0 ? "server offline" : server.onlinePlayers + " players online"} </p>
+								<div
+									class="h-2.5 w-2.5 rounded-full {server.onlinePlayers < 0
+										? 'bg-red-500'
+										: 'bg-green-500'}"
+								></div>
+								<p class="text-sm">
+									{server.onlinePlayers < 0
+										? 'server offline'
+										: server.onlinePlayers + ' players online'}
+								</p>
 							</div>
 						</div>
 					</Card.Header>
@@ -142,14 +188,16 @@
 					</Card.Content>
 					<Card.Footer>
 						<div class="grid w-full grid-cols-1 items-center gap-4 lg:grid-cols-2">
-							<Button class="w-full" variant="outline" href={server.url} target="_blank">View Website</Button>
+							<Button class="w-full" variant="outline" href={server.url} target="_blank"
+								>View Website</Button
+							>
 							<Tooltip.Provider>
 								<Tooltip.Root delayDuration={0} disableCloseOnTriggerClick disableHoverableContent>
-								<Tooltip.Trigger>
-									<Button class="w-full" variant="default" disabled>{server.votes} Votes</Button>
-								</Tooltip.Trigger>
-								<Tooltip.Content>soon™</Tooltip.Content>
-							</Tooltip.Root>
+									<Tooltip.Trigger>
+										<Button class="w-full" variant="default" disabled>{server.votes} Votes</Button>
+									</Tooltip.Trigger>
+									<Tooltip.Content>soon™</Tooltip.Content>
+								</Tooltip.Root>
 							</Tooltip.Provider>
 						</div>
 					</Card.Footer>
@@ -158,8 +206,8 @@
 		</div>
 	</main>
 
-	<footer class="border-t border-border/40 bg-card/30 py-8">
-		<div class="container mx-auto px-4 text-center text-sm text-muted-foreground">
+	<footer class="border-border/40 bg-card/30 border-t py-8">
+		<div class="text-muted-foreground container mx-auto px-4 text-center text-sm">
 			<p>Built for the osu! community • Not affiliated with osu! or ppy Pty Ltd</p>
 		</div>
 	</footer>
