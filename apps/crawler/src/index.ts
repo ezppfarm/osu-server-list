@@ -31,8 +31,15 @@ baker.add({
       if (counts.onlineCount > -1)
         ping = Number(((Bun.nanoseconds() - pingStart) / 1000000).toFixed());
 
-      await addServerStatus(server.id, counts.onlineCount, counts.totalCount, ping);
-      console.log(`Fetched status for ${server.name}: ${counts.onlineCount} online, ${counts.totalCount} total, ${ping}ms ping`);
+      await addServerStatus(
+        server.id,
+        counts.onlineCount,
+        counts.totalCount,
+        ping,
+      );
+      console.log(
+        `Fetched status for ${server.name}: ${counts.onlineCount} online, ${counts.totalCount} total, ${ping}ms ping`,
+      );
     }
   },
 });

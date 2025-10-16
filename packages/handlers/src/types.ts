@@ -6,4 +6,4 @@ export type UsersResponse = {
 export type UserResponse = {
   id: number;
   username: string;
-}
+};

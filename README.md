@@ -34,12 +34,12 @@ osu-server-list/
 
 ## 🚀 Tech Stack
 
-* **🧠 Language:** TypeScript
-* **⚡ Runtime:** [Bun](https://bun.sh/)
-* **📦 Monorepo Management:** [Turborepo](https://turbo.build/repo)
-* **🗃 Database:** [Drizzle ORM](https://orm.drizzle.team/)
-* **🌐 Frontend:** [SvelteKit](https://svelte.dev/)
-* **🔍 Crawler:** Custom Bun service for collecting osu! server data
+- **🧠 Language:** TypeScript
+- **⚡ Runtime:** [Bun](https://bun.sh/)
+- **📦 Monorepo Management:** [Turborepo](https://turbo.build/repo)
+- **🗃 Database:** [Drizzle ORM](https://orm.drizzle.team/)
+- **🌐 Frontend:** [SvelteKit](https://svelte.dev/)
+- **🔍 Crawler:** Custom Bun service for collecting osu! server data
 
 ---
 
@@ -50,9 +50,9 @@ osu-server-list/
 Shared Drizzle ORM setup used by all apps in the monorepo.
 Includes:
 
-* `schema.ts`: database schema definitions
-* `query.ts`: reusable query helpers
-* `index.ts`: exports for external use
+- `schema.ts`: database schema definitions
+- `query.ts`: reusable query helpers
+- `index.ts`: exports for external use
 
 ---
 
@@ -159,6 +159,6 @@ If you’d like to contribute:
 
 ## 🩵 Acknowledgements
 
-* Powered by [Bun](https://bun.sh) and [Turborepo](https://turbo.build)
+- Powered by [Bun](https://bun.sh) and [Turborepo](https://turbo.build)
 
 ---

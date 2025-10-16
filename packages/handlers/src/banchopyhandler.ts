@@ -16,17 +16,20 @@ type BpyUserInfoResponse = {
     info: {
       id: number;
       name: string;
-    }
-  }
+    };
+  };
 };
 
 export class BanchoPyApiHandler implements IServerApiHandler {
   constructor(
     private baseUrl: string,
-    private useOldApiFormat: boolean = false
-  ) { }
+    private useOldApiFormat: boolean = false,
+  ) {}
 
-  private async makeRequest<T>(endpoint: string, params?: any): Promise<T | null> {
+  private async makeRequest<T>(
+    endpoint: string,
+    params?: any,
+  ): Promise<T | null> {
     const apiUrl = this.baseUrl.replace("https://", "https://api.");
 
     // who knows, maybe someone still uses this /shrug
@@ -42,7 +45,7 @@ export class BanchoPyApiHandler implements IServerApiHandler {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      query: params
+      query: params,
     });
 
     if (response.error) {
@@ -51,7 +54,7 @@ export class BanchoPyApiHandler implements IServerApiHandler {
       }
 
       throw new Error(
-        `Request to ${url} resulted in status code ${response.error.status} - ${response.error.statusText}`
+        `Request to ${url} resulted in status code ${response.error.status} - ${response.error.statusText}`,
       );
     }
 
@@ -72,10 +75,13 @@ export class BanchoPyApiHandler implements IServerApiHandler {
   }
 
   public async fetchUserInfo(username: string): Promise<UserResponse | null> {
-    const data = await this.makeRequest<BpyUserInfoResponse>(`/get_player_info`, {
-      scope: "info",
-      name: username
-    });
+    const data = await this.makeRequest<BpyUserInfoResponse>(
+      `/get_player_info`,
+      {
+        scope: "info",
+        name: username,
+      },
+    );
 
     if (!data) {
       return null;
@@ -83,7 +89,7 @@ export class BanchoPyApiHandler implements IServerApiHandler {
 
     return {
       id: data.player.info.id,
-      username: data.player.info.name
+      username: data.player.info.name,
     };
   }
 }

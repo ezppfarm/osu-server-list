@@ -2,11 +2,9 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "dependencies": {
+      "devDependencies": {
         "prettier": "3",
         "prettier-plugin-svelte": "3",
-      },
-      "devDependencies": {
         "prettier-plugin-tailwindcss": "^0.7.0",
         "tsdown": "^0.15.6",
         "turbo": "^2.5.8",

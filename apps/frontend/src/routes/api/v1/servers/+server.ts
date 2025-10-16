@@ -18,10 +18,7 @@ export const GET = async (req: RequestEvent) => {
 	} else if (sort === 'votes') {
 		servers = servers.sort((a, b) => b.votes - a.votes);
 	} else {
-		return error(
-			400,
-			'Invalid sort parameter, available options are: onlinePlayers, name, votes'
-		);
+		return error(400, 'Invalid sort parameter, available options are: onlinePlayers, name, votes');
 	}
 
 	return json(servers);

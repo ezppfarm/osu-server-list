@@ -1,39 +1,38 @@
 {
-    "$schema": "https://turborepo.com/schema.json",
-    "ui": "tui",
-    "globalEnv": ["MYSQL_HOST", "MYSQL_PORT", "MYSQL_USERNAME", "MYSQL_PASSWORD", "MYSQL_DATABASE"],
-    "tasks": {
-        "build": {
-            "dependsOn": [
-                "^build"
-            ],
-            "inputs": [
-                "$TURBO_DEFAULT$",
-                ".env*"
-            ],
-            "outputs": [
-                "dist/**"
-            ]
-        },
-        "dev": {
-            "cache": false,
-            "persistent": true
-        },
-        "db:push": {
-            "cache": false,
-            "persistent": true
-        },
-        "db:studio": {
-            "cache": false,
-            "persistent": true
-        },
-        "db:migrate": {
-            "cache": false,
-            "persistent": true
-        },
-        "db:generate": {
-            "cache": false,
-            "persistent": true
-        }
+  "$schema": "https://turborepo.com/schema.json",
+  "ui": "tui",
+  "globalEnv": [
+    "MYSQL_HOST",
+    "MYSQL_PORT",
+    "MYSQL_USERNAME",
+    "MYSQL_PASSWORD",
+    "MYSQL_DATABASE"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:push": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:migrate": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:generate": {
+      "cache": false,
+      "persistent": true
     }
+  }
 }

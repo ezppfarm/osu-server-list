@@ -5,8 +5,8 @@
 	import relativeTime from 'dayjs/plugin/relativeTime';
 	import utc from 'dayjs/plugin/utc';
 
-	dayjs.extend(relativeTime)
-	dayjs.extend(utc)
+	dayjs.extend(relativeTime);
+	dayjs.extend(utc);
 
 	let { children } = $props();
 </script>
