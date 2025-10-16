@@ -9,6 +9,7 @@
     "mylesmurphy.prettify-ts",
     "svelte.svelte-vscode",
     "bradlc.vscode-tailwindcss",
-    "gruntfuggly.todo-tree"
+    "gruntfuggly.todo-tree",
+    "esbenp.prettier-vscode"
   ]
 }
