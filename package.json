@@ -6,13 +6,13 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
+    "format": "prettier --write .",
     "package:db:rebuild": "turbo -F @osu-server-list/db build",
     "package:handlers:rebuild": "turbo -F @osu-server-list/handlers build",
     "db:push": "turbo db:push",
     "db:generate": "turbo db:generate",
     "db:migrate": "turbo db:migrate",
     "db:studio": "turbo db:studio"
-    
   },
   "workspaces": {
     "packages": [
@@ -25,7 +25,10 @@
     }
   },
   "devDependencies": {
-    "turbo": "^2.5.8",
-    "tsdown": "^0.15.6"
+    "prettier": "3",
+    "prettier-plugin-svelte": "3",
+    "prettier-plugin-tailwindcss": "^0.7.0",
+    "tsdown": "^0.15.6",
+    "turbo": "^2.5.8"
   }
 }
