@@ -152,7 +152,7 @@
 									class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-primary/20"
 								>
 									<img
-										src={server.iconUrl || '/placeholder.svg'}
+										src={server.iconUrl}
 										alt={server.name}
 										class="h-full w-full object-contain"
 									/>

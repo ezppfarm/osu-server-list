@@ -22,7 +22,7 @@
 								class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl bg-primary/20"
 							>
 								<img
-									src={server?.iconUrl || ''}
+									src={server?.iconUrl}
 									alt={server.name}
 									class="h-full w-full object-cover"
 								/>
