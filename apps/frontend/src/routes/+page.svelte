@@ -149,7 +149,7 @@
 						<a href="/server/{server.id}" class="block">
 							<div class="mb-4 flex items-center gap-4">
 								<div
-									class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-primary/20"
+									class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-primary/10 border p-1"
 								>
 									<img
 										src={server.iconUrl}
@@ -183,7 +183,7 @@
 						</div>
 					</Card.Header>
 					<Card.Content>
-						<div class="mb-4 grid grid-cols-3 gap-2 rounded-lg bg-secondary/50 p-3">
+						<div class="mb-4 grid grid-cols-3 gap-2 rounded-lg bg-secondary/50 border p-3">
 							<div class="text-center">
 								<p class="mb-1 text-xs text-muted-foreground">Online</p>
 								<p class="text-sm font-bold text-foreground">

@@ -19,10 +19,10 @@
 					<div class="flex flex-col gap-8 md:flex-row">
 						<div class="flex-shrink-0">
 							<div
-								class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl bg-primary/20"
+								class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl bg-primary/10 border p-1"
 							>
 								<img
-									src={server?.iconUrl}
+									src={server.iconUrl}
 									alt={server.name}
 									class="h-full w-full object-cover"
 								/>
