@@ -17,6 +17,8 @@ export const server = mysqlTable("server", {
   iconUrl: text().notNull(),
   tags: text(),
   trending: int().notNull(),
+  date_added: bigint({ mode: "number" }).notNull(),
+  location: text(),
 });
 
 export const serverStatus = mysqlTable("server_status", {
