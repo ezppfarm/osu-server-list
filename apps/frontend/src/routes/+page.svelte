@@ -61,7 +61,7 @@
 		<Card.Root class="border-card-foreground/15 bg-card/50">
 			<Card.Content class="p-6">
 				<div class="flex items-center gap-4">
-					<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+					<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 border">
 						<Server class="h-6 w-6 text-primary" />
 					</div>
 					<div>
@@ -77,7 +77,7 @@
 		<Card.Root class="border-card-foreground/15 bg-card/50">
 			<Card.Content class="p-6">
 				<div class="flex items-center gap-4">
-					<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+					<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 border">
 						<Users class="h-6 w-6 text-primary" />
 					</div>
 					<div>
@@ -96,7 +96,7 @@
 		<Card.Root class="border-card-foreground/15 bg-card/50">
 			<Card.Content class="p-6">
 				<div class="flex items-center gap-4">
-					<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+					<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 border">
 						<Vote class="h-6 w-6 text-primary" />
 					</div>
 					<div>
