@@ -3,10 +3,15 @@
 	import * as Card from '@/components/ui/card';
 	import type { PageProps } from './$types';
 	import dayjs from 'dayjs';
-	import * as Tooltip from '@/components/ui/tooltip';
 	import { browser } from '$app/environment';
 	import { getSortName, sortServers } from '@/helpers';
 	import * as DropdownMenu from '@/components/ui/dropdown-menu';
+	import TrendingUp from '@lucide/svelte/icons/trending-up';
+	import Server from '@lucide/svelte/icons/server';
+	import Users from '@lucide/svelte/icons/users';
+	import Vote from '@lucide/svelte/icons/vote';
+	import ExternalLink from '@lucide/svelte/icons/external-link';
+
 
 	const props: PageProps = $props();
 
@@ -27,41 +32,16 @@
 	}
 </script>
 
-<div class="min-h-screen bg-background">
-	<header
-		class="sticky top-0 z-50 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
-	>
-		<div class="container mx-auto flex h-16 items-center justify-between px-4">
-			<div class="flex items-center gap-8">
-				<a href="/" class="flex items-center gap-3">
-					<span class="text-lg font-semibold tracking-tight">osu-server-list</span>
-				</a>
-				<!-- <nav class="hidden items-center gap-6 md:flex">
-					<a
-						href="/"
-						class="text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
-					>
-						Servers
-					</a>
-				</nav> -->
-			</div>
-			<!-- <Button
-				variant="outline"
-				size="sm"
-				class="border-primary/20 bg-transparent hover:bg-primary/10 hover:text-primary"
-			>
-				Sign In
-			</Button> -->
-		</div>
-	</header>
+
+	
 
 	<section class="relative overflow-hidden border-b border-border/40 py-24">
-		<div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent"></div>
+		<div class="absolute inset-0 bg-gradient-to-b from-accent/25 to-transparent"></div>
 		<div class="relative container mx-auto px-4 text-center">
 			<div
 				class="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm text-primary"
 			>
-				<!-- <TrendingUp class="h-3.5 w-3.5" /> -->
+				<TrendingUp class="h-3.5 w-3.5" />
 				<span>Discover the best osu! private servers</span>
 			</div>
 			<h1 class="mb-6 text-5xl font-bold tracking-tight text-balance lg:text-6xl">
@@ -74,48 +54,69 @@
 				Browse, compare, and join thriving osu! private servers. Find communities with custom
 				features, unique gameplay modes, and active player bases.
 			</p>
-			<!-- <div class="mt-8 flex items-center justify-center gap-4">
-				<Button size="lg" class="bg-primary text-primary-foreground hover:bg-primary/90">
-					Explore Servers
-				</Button>
-				<Button size="lg" variant="outline" class="border-border/40 bg-transparent">
-					Submit Server
-				</Button>
-			</div> -->
 		</div>
 	</section>
 
-	<div class="border-b border-border/40 bg-gray-900/10">
-		<div class="container mx-auto px-4 py-6">
-			<div
-				class="flex flex-col flex-wrap items-center justify-center gap-3 text-sm md:flex-row md:gap-8"
-			>
-				<div class="flex items-center gap-2">
-					<span class="text-muted-foreground"
-						>{servers.filter((server) => server.onlinePlayers >= 0).length} online servers</span
-					>
+	<div class="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-4 md:grid-cols-3">
+		<Card.Root class="border-card-foreground/15 bg-card/50">
+			<Card.Content class="p-6">
+				<div class="flex items-center gap-4">
+					<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+						<Server class="h-6 w-6 text-primary" />
+					</div>
+					<div>
+						<p class="text-2xl font-bold text-foreground">
+							{Math.max(servers.filter((s) => s.onlinePlayers >= 0).length, 0)}
+						</p>
+						<p class="text-sm text-muted-foreground">Online Servers</p>
+					</div>
 				</div>
-				<div class="flex items-center gap-2">
-					<!-- <Users class="h-4 w-4 text-primary" /> -->
-					<span class="text-muted-foreground"
-						>{servers.reduce((acc, server) => acc + server.onlinePlayers, 0)} players online</span
-					>
+			</Card.Content>
+		</Card.Root>
+
+		<Card.Root class="border-card-foreground/15 bg-card/50">
+			<Card.Content class="p-6">
+				<div class="flex items-center gap-4">
+					<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+						<Users class="h-6 w-6 text-primary" />
+					</div>
+					<div>
+						<p class="text-2xl font-bold text-foreground">
+							{Math.max(
+								servers.reduce((a, b) => a + Math.max(b.onlinePlayers, 0), 0),
+								0
+							)}
+						</p>
+						<p class="text-sm text-muted-foreground">Total Online Players</p>
+					</div>
 				</div>
-				<div class="flex items-center gap-2">
-					<!-- <Clock class="h-4 w-4 text-primary" /> -->
-					<span class="text-muted-foreground"
-						>Updated {dayjs(servers[0]?.last_update).local().fromNow()}</span
-					>
+			</Card.Content>
+		</Card.Root>
+
+		<Card.Root class="border-card-foreground/15 bg-card/50">
+			<Card.Content class="p-6">
+				<div class="flex items-center gap-4">
+					<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+						<Vote class="h-6 w-6 text-primary" />
+					</div>
+					<div>
+						<p class="text-2xl font-bold text-foreground">
+							{Math.max(
+								servers.reduce((a, b) => a + Math.max(b.votes, 0), 0),
+								0
+							)}
+						</p>
+						<p class="text-sm text-muted-foreground">Total Votes</p>
+					</div>
 				</div>
-			</div>
-		</div>
+			</Card.Content>
+		</Card.Root>
 	</div>
 
 	<main class="container mx-auto px-4 py-12">
 		<div class="mb-8 flex flex-wrap items-center justify-between gap-4">
 			<div>
 				<h2 class="text-2xl font-semibold tracking-tight">Top Servers</h2>
-				<p class="text-sm text-muted-foreground">Sorted by {sortName()}</p>
 			</div>
 			<div class="flex gap-2">
 				<Button variant="outline" size="sm" class="border-border/40 bg-transparent">
@@ -124,7 +125,7 @@
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger>
 						<Button variant="outline" size="sm" class="border-border/40 bg-transparent">
-							Sort By
+							Sort: {sortName()}
 						</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content>
@@ -142,41 +143,64 @@
 			{#each servers as server, idx}
 				<Card.Root class="gap-4 border-card-foreground/15 bg-card/50">
 					<Card.Header>
-						<div class="flex flex-row items-center justify-between">
-							<div class="relative h-16 w-16 rounded-lg bg-card-foreground/10 p-1">
-								<img
-									src={server.iconUrl}
-									alt={`${server.name} logo`}
-									class="h-full w-full rounded-lg object-contain"
-								/>
-								{#if server.trending}
-									<span
-										class="absolute -top-2 -right-2 inline-flex items-center rounded-full border border-yellow-600 bg-yellow-900 px-0.5 py-0.5 text-xs font-medium text-primary-foreground"
-										>🔥</span
-									>
-								{/if}
-							</div>
-							<div class="mb-auto rounded-lg bg-card-foreground/10 px-2 py-1 font-mono">
-								#{idx + 1}
-							</div>
+						<div class="mb-2 w-fit rounded-lg bg-card-foreground/10 px-2 py-1 font-mono text-sm">
+							#{idx + 1}
 						</div>
-						<div class="flex flex-col">
-							<h3 class="text-lg font-semibold">{server.name}</h3>
-							<div class="flex flex-row items-center gap-1">
+						<a href="/server/{server.id}" class="block">
+							<div class="mb-4 flex items-center gap-4">
 								<div
-									class="h-2.5 w-2.5 rounded-full {server.onlinePlayers < 0
-										? 'bg-red-500'
-										: 'bg-green-500'}"
-								></div>
-								<p class="text-sm">
-									{server.onlinePlayers < 0
-										? 'server offline'
-										: server.onlinePlayers + ' players online'}
-								</p>
+									class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-primary/20"
+								>
+									<img
+										src={server.iconUrl || '/placeholder.svg'}
+										alt={server.name}
+										class="h-full w-full object-contain"
+									/>
+								</div>
+								<div class="min-w-0 flex-1">
+									<h3
+										class="truncate text-xl font-bold text-foreground transition-colors group-hover:text-primary"
+									>
+										{server.name}
+									</h3>
+									<div class="flex flex-row items-center gap-1">
+										<div
+											class="h-2.5 w-2.5 rounded-full {server.onlinePlayers < 0
+												? 'bg-red-500'
+												: 'bg-green-500'}"
+										></div>
+										<p class="text-sm">
+											{server.onlinePlayers < 0
+												? 'server offline'
+												: server.onlinePlayers.toLocaleString() + ' players online'}
+										</p>
+									</div>
+								</div>
 							</div>
+						</a>
+						<div class="mb-1 line-clamp-1 px-1 text-sm text-muted-foreground">
+							<p class="truncate">{server.description}</p>
 						</div>
 					</Card.Header>
 					<Card.Content>
+						<div class="mb-4 grid grid-cols-3 gap-2 rounded-lg bg-secondary/50 p-3">
+							<div class="text-center">
+								<p class="mb-1 text-xs text-muted-foreground">Online</p>
+								<p class="text-sm font-bold text-foreground">
+									{server.onlinePlayers.toLocaleString()}
+								</p>
+							</div>
+							<div class="border-x border-border text-center">
+								<p class="mb-1 text-xs text-muted-foreground">Registered</p>
+								<p class="text-sm font-bold text-foreground">
+									{server.registeredPlayers.toLocaleString()}
+								</p>
+							</div>
+							<div class="text-center">
+								<p class="mb-1 text-xs text-muted-foreground">Votes</p>
+								<p class="text-sm font-bold text-foreground">{server.votes.toLocaleString()}</p>
+							</div>
+						</div>
 						<div class="mb-2 flex flex-wrap gap-2">
 							{#each server.tags?.split(',') as tag}
 								<span
@@ -185,30 +209,24 @@
 								>
 							{/each}
 						</div>
-					</Card.Content>
-					<Card.Footer>
-						<div class="grid w-full grid-cols-1 items-center gap-4 lg:grid-cols-2">
-							<Button class="w-full" variant="outline" href={server.url} target="_blank"
-								>View Website</Button
+						<div class="grid grid-cols-3 gap-2 pt-3">
+							<Button
+								variant="outline"
+								size="sm"
+								href={server.url}
+								target="_blank"
+								rel="noopener noreferrer"
 							>
-							<Tooltip.Provider>
-								<Tooltip.Root delayDuration={0} disableCloseOnTriggerClick disableHoverableContent>
-									<Tooltip.Trigger>
-										<Button class="w-full" variant="default" disabled>{server.votes} Votes</Button>
-									</Tooltip.Trigger>
-									<Tooltip.Content>soon™</Tooltip.Content>
-								</Tooltip.Root>
-							</Tooltip.Provider>
+								Website
+								<ExternalLink class="ml-1 h-3 w-3" />
+							</Button>
+							<Button size="sm" href="/server/{server.id}">Details</Button>
+							<Button variant="secondary" size="sm" class="border border-border" href="/server/{server.id}/vote">Vote</Button>
 						</div>
-					</Card.Footer>
+					</Card.Content>
 				</Card.Root>
 			{/each}
 		</div>
 	</main>
 
-	<footer class="border-t border-border/40 bg-card/30 py-8">
-		<div class="container mx-auto px-4 text-center text-sm text-muted-foreground">
-			<p>Built for the osu! community • Not affiliated with osu! or ppy Pty Ltd</p>
-		</div>
-	</footer>
-</div>
+	

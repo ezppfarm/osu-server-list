@@ -4,6 +4,7 @@
 	import dayjs from 'dayjs';
 	import relativeTime from 'dayjs/plugin/relativeTime';
 	import utc from 'dayjs/plugin/utc';
+	import Navbar from '@/components/ui/navbar/Navbar.svelte';
 
 	dayjs.extend(relativeTime);
 	dayjs.extend(utc);
@@ -14,5 +15,16 @@
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
+<div class="flex min-h-screen flex-col bg-background">
+	<Navbar />
 
-{@render children?.()}
+	<main class="flex-1">
+		{@render children?.()}
+	</main>
+
+	<footer class="mt-auto border-t border-border/40 bg-card/30 py-8">
+		<div class="container mx-auto px-4 text-center text-sm text-muted-foreground">
+			<p>Built for the osu! community • Not affiliated with osu! or ppy Pty Ltd</p>
+		</div>
+	</footer>
+</div>

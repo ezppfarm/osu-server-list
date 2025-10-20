@@ -9,6 +9,9 @@ export type ServerFull = {
 	trending: number;
 	onlinePlayers: number;
 	registeredPlayers: number;
+	ping: number;
 	votes: number;
 	last_update: number | null;
+	date_added: number;
+	location: string | null;
 };
