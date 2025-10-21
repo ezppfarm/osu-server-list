@@ -13,6 +13,8 @@
 	import ExternalLink from '@lucide/svelte/icons/external-link';
 	import ArrowUpDown from '@lucide/svelte/icons/arrow-up-down';
 	import Funnel from '@lucide/svelte/icons/funnel';
+	import Globe from '@lucide/svelte/icons/globe';
+	import List from '@lucide/svelte/icons/list';
 
 	const props: PageProps = $props();
 
@@ -208,24 +210,27 @@
 							>
 						{/each}
 					</div>
-					<div class="grid grid-cols-3 gap-2 pt-3">
+					<div class="grid grid-cols-1 gap-2 pt-3 xl:grid-cols-3">
 						<Button
-							variant="outline"
+							variant="secondary"
+							class="border border-border"
 							size="sm"
 							href={server.url}
 							target="_blank"
 							rel="noopener noreferrer"
 						>
+							<Globe class="mr-1 h-3 w-3" />
 							Website
-							<ExternalLink class="ml-1 h-3 w-3" />
+							<ExternalLink class="size-2.5 -translate-x-0.5 -translate-y-[3px]" />
 						</Button>
-						<Button size="sm" href="/server/{server.id}">Details</Button>
-						<Button
-							variant="secondary"
-							size="sm"
-							class="border border-border"
-							href="/server/{server.id}/vote">Vote</Button
-						>
+						<Button variant="outline" size="sm" href="/server/{server.id}">
+							<List class="mr-1 h-4 w-4" />
+							Details
+						</Button>
+						<Button variant="default" size="sm" href="/server/{server.id}/vote">
+							<Vote class="mr-1 h-4 w-4" />
+							Vote
+						</Button>
 					</div>
 				</Card.Content>
 			</Card.Root>

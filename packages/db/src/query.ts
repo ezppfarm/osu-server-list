@@ -261,3 +261,34 @@ export const getServerUptime = async (
     endTime: now,
   };
 };
+
+export const getServerStatusThisYear = async (serverId: number) => {
+  const now = new Date();
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const endOfYear = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
+
+  const startUnixMs = startOfYear.getTime();
+  const endUnixMs = endOfYear.getTime();
+
+  const dayExpr = sql<string>`DATE(FROM_UNIXTIME(${serverStatus.timestamp} / 1000))`;
+
+  const result = await db
+    .select({
+      day: dayExpr,
+      onlinePlayers: sql<number>`MAX(${serverStatus.onlinePlayers})`,
+      registeredPlayers: sql<number>`MAX(${serverStatus.registeredPlayers})`,
+      avgPing: sql<number>`ROUND(AVG(${serverStatus.ping}))`,
+    })
+    .from(serverStatus)
+    .where(
+      and(
+        eq(serverStatus.serverId, serverId),
+        gte(serverStatus.timestamp, startUnixMs),
+        lte(serverStatus.timestamp, endUnixMs),
+      ),
+    )
+    .groupBy(dayExpr)
+    .orderBy(sql`DATE(FROM_UNIXTIME(${serverStatus.timestamp} / 1000)) ASC`);
+
+  return result;
+};

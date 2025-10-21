@@ -5,10 +5,22 @@
 	import Globe from '@lucide/svelte/icons/globe';
 	import ExternalLink from '@lucide/svelte/icons/external-link';
 	import ThumbsUp from '@lucide/svelte/icons/thumbs-up';
+	import Heatmap from '@/components/ui/heatmap/Heatmap.svelte';
+	import { onMount } from 'svelte';
 
 	const props: PageProps = $props();
+	let heatmapData = $state<{ [key: string]: number }>({});
 
 	const server = props.data.server;
+
+	onMount(() => {
+		if (server?.heatmap) {
+			heatmapData = server.heatmap.reduce((acc: { [key: string]: number }, curr) => {
+				acc[curr.day] = curr.onlinePlayers;
+				return acc;
+			}, {});
+		}
+	});
 </script>
 
 {#if server}
@@ -19,13 +31,9 @@
 					<div class="flex flex-col gap-8 md:flex-row">
 						<div class="flex-shrink-0">
 							<div
-								class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl bg-primary/10 border p-1"
+								class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border bg-primary/10 p-1"
 							>
-								<img
-									src={server.iconUrl}
-									alt={server.name}
-									class="h-full w-full object-cover"
-								/>
+								<img src={server.iconUrl} alt={server.name} class="h-full w-full object-cover" />
 							</div>
 						</div>
 
@@ -53,24 +61,9 @@
 									>
 										<Globe class="mr-2 h-4 w-4" />
 										Website
-										<ExternalLink class="ml-1 h-3 w-3" />
+										<ExternalLink class="size-2.5 -translate-x-0.5 -translate-y-[3px]" />
 									</Button>
-									<Button
-										size="sm"
-										class="bg-primary text-primary-foreground hover:bg-primary/90"
-										href="{server.url}/register"
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										Join Server
-										<ExternalLink class="ml-1 h-3 w-3" />
-									</Button>
-									<Button
-										variant="secondary"
-										size="sm"
-										class="border border-border"
-										href="/server/{server.id}/vote"
-									>
+									<Button variant="default" size="sm" href="/server/{server.id}/vote">
 										<ThumbsUp class="mr-2 h-4 w-4" />
 										Vote
 									</Button>
@@ -101,7 +94,7 @@
 								</div>
 								<div class="rounded-lg border border-border bg-secondary/50 p-3">
 									<p class="mb-1 text-xs text-muted-foreground">Uptime</p>
-									<p class="text-xl font-bold text-foreground">{server.uptime.uptime}%</p>
+									<p class="text-xl font-bold text-foreground">{server.uptime}%</p>
 								</div>
 								<div class="rounded-lg border border-border bg-secondary/50 p-3">
 									<p class="mb-1 text-xs text-muted-foreground">Location</p>
@@ -113,8 +106,21 @@
 				</Card.Content>
 			</Card.Root>
 		</div>
+		<Card.Root class="overflow-hidden border-card-foreground/15 bg-card/50">
+			<Card.Header>
+				<div class="mb-2 px-6 pt-6">
+					<h2 class="text-2xl font-bold text-foreground">Server Status Heatmap</h2>
+					<p class="text-sm text-muted-foreground">Server uptime over the year</p>
+				</div>
+			</Card.Header>
+			<Card.Content class="px-6 pb-6 overflow-x-auto">
+				<div class="text-xs lg:text-normal mx-auto w-max">
+					<Heatmap data={heatmapData} cellSize={14} year={new Date().getFullYear()} />
+				</div>
+			</Card.Content>
+		</Card.Root>
 	</div>
 {:else}
-    <!-- TODO: Server not found / Internal Server Error -->
+	<!-- TODO: Server not found / Internal Server Error -->
 	<div class="container mx-auto px-4 py-12"></div>
 {/if}

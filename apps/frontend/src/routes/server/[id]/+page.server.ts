@@ -1,4 +1,4 @@
-import { getServerById, getServerUptime } from '@osu-server-list/db/query';
+import { getServerById, getServerStatusThisYear, getServerUptime } from '@osu-server-list/db/query';
 
 export const load = async ({ params }) => {
 	const { id } = params;
@@ -11,6 +11,7 @@ export const load = async ({ params }) => {
 			};
 		}
 		const uptime = await getServerUptime(Number(id), 1440);
+		const heatmap = await getServerStatusThisYear(Number(id));
 		return {
 			server: {
 				id: server.id,
@@ -28,13 +29,8 @@ export const load = async ({ params }) => {
 				last_update: server.last_update,
 				date_added: server.date_added,
 				location: server.location,
-				uptime: {
-					uptime: uptime.uptime,
-					successfulPings: uptime.successfulPings,
-					expectedPings: uptime.expectedPings,
-					startTime: uptime.startTime,
-					endTime: uptime.endTime
-				}
+				uptime: uptime.uptime,
+				heatmap
 			}
 		};
 	} catch (e) {

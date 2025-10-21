@@ -5,11 +5,19 @@
 	import relativeTime from 'dayjs/plugin/relativeTime';
 	import utc from 'dayjs/plugin/utc';
 	import Navbar from '@/components/ui/navbar/Navbar.svelte';
+	import { beforeNavigate } from '$app/navigation';
+	import { updated } from '$app/state';
 
 	dayjs.extend(relativeTime);
 	dayjs.extend(utc);
 
 	let { children } = $props();
+
+	beforeNavigate(({ willUnload, to }) => {
+		if (updated.current && !willUnload && to?.url) {
+			location.href = to.url.href;
+		}
+	});
 </script>
 
 <svelte:head>
