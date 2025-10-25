@@ -6,6 +6,7 @@
 
 	let {
 		data,
+		dataName,
 		colors = ['#3a3f4a', '#aceebb', '#4ac26b', '#2da44e', '#116329'],
 		className = 'Heatmap',
 		cellSize = 18,
@@ -14,10 +15,13 @@
 		lmonth = true
 	}: Props = $props();
 
-	let { max, calendar } = $derived(getCalendar(data, year));
+	let heatmapData = $derived(
+		Object.keys(data).reduce((acc, key) => ({ ...acc, [key]: data[key][dataName] }), {})
+	);
+	let { max, calendar } = $derived(getCalendar(heatmapData, year));
 </script>
 
-<table class={cn(className, "border-separate", "border-spacing-0.5")} style="font-size:1em">
+<table class={cn(className, 'border-separate', 'border-spacing-0.5')} style="font-size:1em">
 	{#if lmonth}
 		<thead>
 			<tr style="font-size:0.75em">
@@ -49,7 +53,12 @@
 					{#if d}
 						<td data-date={d.date} data-value={d.value} tabindex="0">
 							<Tooltip.Provider>
-								<Tooltip.Root delayDuration={50} disableCloseOnTriggerClick disableHoverableContent>
+								<Tooltip.Root
+									delayDuration={50}
+									disableCloseOnTriggerClick
+									disableHoverableContent
+									disabled={data[d.date] === undefined}
+								>
 									<Tooltip.Trigger>
 										<div
 											class="rounded-[0.1rem] border border-border brightness-90 transition-all duration-100 ease-in-out hover:brightness-110"
@@ -57,13 +66,22 @@
 										></div>
 									</Tooltip.Trigger>
 									<Tooltip.Content>
-										<div>
-											<strong>{d.value}</strong> players on{' '}
-											{new Date(d.date).toLocaleDateString(undefined, {
-												year: 'numeric',
-												month: 'long',
-												day: 'numeric'
-											})}
+										<div class="flex flex-col gap-1">
+											<div class="border-b border-background/20 font-bold pb-1">
+												{new Date(d.date).toLocaleDateString(undefined, {
+													year: 'numeric',
+													month: 'long',
+													day: 'numeric'
+												})}
+											</div>
+											<div>
+												{#each Object.entries(data[d.date]) as [field, value]}
+													<div class="">
+														<strong>{field}:</strong>
+														{value}
+													</div>
+												{/each}
+											</div>
 										</div>
 									</Tooltip.Content>
 								</Tooltip.Root>

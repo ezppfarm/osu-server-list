@@ -35,8 +35,8 @@ export const getCalendar = (data: { [key: string]: number }, year: number) => {
 };
 
 export type Props = {
-	data: { [key: string]: number };
-
+	data: { [key: string]: { [key: string]: number } };
+	dataName: string;
 	year?: number;
 	lday?: boolean;
 	lmonth?: boolean;
