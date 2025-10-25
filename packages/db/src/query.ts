@@ -1,7 +1,7 @@
 import { and, desc, eq, gt, gte, lte, max, sql } from "drizzle-orm";
 import { db } from ".";
-import { server, serverStatus, serverVote } from "./schema";
-import { intWithFallback, sumAsIntWithFallback } from "./util";
+import { server, serverStatus, serverVote, user } from "./schema";
+import { comparePassword, intWithFallback, sumAsIntWithFallback } from "./util";
 
 export const getAllServers = async () => {
   const latestStatus = db
@@ -200,16 +200,41 @@ export const findRecentVoteByUserId = async (
   )[0];
 };
 
+export const findRecentVoteByUserAndBrowserFingerprint = async (
+  serverId: number,
+  userId: number,
+  browserFingerprint: number,
+) => {
+  const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+
+  return (
+    await db
+      .select()
+      .from(serverVote)
+      .where(
+        and(
+          eq(serverVote.serverId, serverId),
+          eq(serverVote.userId, userId),
+          eq(serverVote.browserFingerprint, browserFingerprint),
+          gt(serverVote.timestamp, oneDayAgo),
+        ),
+      )
+      .limit(1)
+  )[0];
+};
+
 export const addServerVote = async (
   serverId: number,
   ipAddress: string,
   userId: number,
+  browserFingerprint: number,
 ) => {
   await db.insert(serverVote).values({
     serverId,
     ip: ipAddress,
     timestamp: Date.now(),
     userId,
+    browserFingerprint,
   });
 };
 
@@ -291,4 +316,31 @@ export const getServerStatusThisYear = async (serverId: number) => {
     .orderBy(sql`DATE(FROM_UNIXTIME(${serverStatus.timestamp} / 1000)) ASC`);
 
   return result;
+};
+
+export const checkLoginUser = async (username: string, password: string) => {
+  const currentUser = await db
+    .select()
+    .from(user)
+    .where(eq(user.name, username))
+    .limit(1);
+
+  if (!currentUser[0]) {
+    return null;
+  }
+
+  const isPasswordValid = comparePassword(
+    password,
+    currentUser[0].passwordHash,
+  );
+  return isPasswordValid ? currentUser[0] : null;
+};
+
+export const getUser = async (username: string, hashedPassword: string) => {
+  const currentUser = await db
+    .select()
+    .from(user)
+    .where(and(eq(user.name, username), eq(user.passwordHash, hashedPassword)))
+    .limit(1);
+  return currentUser[0] ?? null;
 };

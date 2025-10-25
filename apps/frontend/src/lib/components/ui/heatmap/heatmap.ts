@@ -41,6 +41,6 @@ export type Props = {
 	lday?: boolean;
 	lmonth?: boolean;
 	colors?: string[];
-    cellSize?: number;
+	cellSize?: number;
 	className?: string;
 };

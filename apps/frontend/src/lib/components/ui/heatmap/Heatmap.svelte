@@ -15,19 +15,9 @@
 	}: Props = $props();
 
 	let { max, calendar } = $derived(getCalendar(data, year));
-
-	let current = $state('');
-
-	let handleHover = (date: string) => {
-		current = date;
-	};
-
-	let handleLeave = () => {
-		current = '';
-	};
 </script>
 
-<table class={cn(className, 'border-spacing-1', 'border-separate')} style="font-size:1em">
+<table class={cn(className, "border-separate", "border-spacing-0.5")} style="font-size:1em">
 	{#if lmonth}
 		<thead>
 			<tr style="font-size:0.75em">
@@ -49,9 +39,9 @@
 	{/if}
 	<tbody>
 		{#each calendar as w, i}
-			<tr>
+			<tr class="leading-0">
 				{#if lday}
-					<td style="padding-right:0.5em;font-size:0.75em">
+					<td style="padding-right:0.5em;font-size:0.75em" class="leading-0">
 						{['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]}
 					</td>
 				{/if}
@@ -59,10 +49,10 @@
 					{#if d}
 						<td data-date={d.date} data-value={d.value} tabindex="0">
 							<Tooltip.Provider>
-								<Tooltip.Root disableCloseOnTriggerClick disableHoverableContent>
+								<Tooltip.Root delayDuration={50} disableCloseOnTriggerClick disableHoverableContent>
 									<Tooltip.Trigger>
 										<div
-											class="rounded-[0.1rem] border border-border brightness-90 hover:brightness-110 transition-all duration-100 ease-in-out"
+											class="rounded-[0.1rem] border border-border brightness-90 transition-all duration-100 ease-in-out hover:brightness-110"
 											style={`width:${cellSize}px;height:${cellSize}px;background:${getColor(colors, max, d.value)}`}
 										></div>
 									</Tooltip.Trigger>

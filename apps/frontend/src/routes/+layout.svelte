@@ -7,15 +7,24 @@
 	import Navbar from '@/components/ui/navbar/Navbar.svelte';
 	import { beforeNavigate } from '$app/navigation';
 	import { updated } from '$app/state';
+	import { Toaster } from '@/components/ui/sonner';
+	import { onMount } from 'svelte';
+	import { user } from '@/global';
 
 	dayjs.extend(relativeTime);
 	dayjs.extend(utc);
 
-	let { children } = $props();
+	let { children, data } = $props();
 
 	beforeNavigate(({ willUnload, to }) => {
 		if (updated.current && !willUnload && to?.url) {
 			location.href = to.url.href;
+		}
+	});
+
+	onMount(() => {
+		if (data.user) {
+			user.set(data.user);
 		}
 	});
 </script>
@@ -23,6 +32,9 @@
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
+
+<Toaster position="top-right" richColors closeButton />
+
 <div class="flex min-h-screen flex-col bg-background">
 	<Navbar />
 

@@ -57,7 +57,7 @@
 	</div>
 </section>
 
-<div class="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-4 md:grid-cols-3">
+<div class="mx-auto mt-12 grid max-w-4xl grid-cols-1 gap-4 px-3 md:grid-cols-3 lg:px-0">
 	<Card.Root class="border-card-foreground/15 bg-card/50">
 		<Card.Content class="p-6">
 			<div class="flex items-center gap-4">
@@ -227,7 +227,7 @@
 							<List class="mr-1 h-4 w-4" />
 							Details
 						</Button>
-						<Button variant="default" size="sm" href="/server/{server.id}/vote">
+						<Button variant="default" size="sm" href="/server/{server.id}?vote">
 							<Vote class="mr-1 h-4 w-4" />
 							Vote
 						</Button>

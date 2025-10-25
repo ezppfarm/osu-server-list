@@ -3,7 +3,7 @@ import { mysqlTable, int, text, bigint } from "drizzle-orm/mysql-core";
 export const user = mysqlTable("user", {
   id: int().primaryKey().autoincrement().notNull(),
   name: text().notNull(),
-  password: text().notNull(),
+  passwordHash: text().notNull(),
 });
 
 export const server = mysqlTable("server", {
@@ -39,5 +39,6 @@ export const serverVote = mysqlTable("server_vote", {
     .notNull(),
   userId: int().notNull(),
   ip: text().notNull(),
+  browserFingerprint: int().notNull(),
   timestamp: bigint({ mode: "number" }).notNull(),
 });
