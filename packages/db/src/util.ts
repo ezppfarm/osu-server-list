@@ -7,6 +7,11 @@ export const sumAsIntWithFallback = (expr: MySqlColumn, fallback: number) =>
 export const intWithFallback = (expr: MySqlColumn, fallback: number) =>
   sql<number>`COALESCE(${expr}, ${fallback})`;
 
+export const countDistinctWithFallback = (
+  expr: MySqlColumn,
+  fallback: number,
+) => sql<number>`COALESCE(COUNT(DISTINCT ${expr}), ${fallback})`;
+
 export const encodePassword = (password: string) => {
   const sha1 = new Bun.SHA1();
   const md5 = new Bun.MD5();

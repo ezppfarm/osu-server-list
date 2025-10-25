@@ -1,7 +1,18 @@
-import { and, desc, eq, gt, gte, lte, max, sql } from "drizzle-orm";
+import {
+  and,
+  count,
+  countDistinct,
+  desc,
+  eq,
+  gt,
+  gte,
+  lte,
+  max,
+  sql,
+} from "drizzle-orm";
 import { db } from ".";
 import { server, serverStatus, serverVote, user } from "./schema";
-import { comparePassword, intWithFallback, sumAsIntWithFallback } from "./util";
+import { comparePassword, countDistinctWithFallback, intWithFallback, sumAsIntWithFallback } from "./util";
 
 export const getAllServers = async () => {
   const latestStatus = db
@@ -30,7 +41,7 @@ export const getAllServers = async () => {
         "registeredPlayers",
       ),
       ping: intWithFallback(serverStatus.ping, -1).as("ping"),
-      votes: sumAsIntWithFallback(serverVote.id, 0).as("votes"),
+      votes: countDistinctWithFallback(serverVote.id, 0).as("votes"),
       last_update: serverStatus.timestamp,
       date_added: server.date_added,
       location: server.location,
@@ -302,6 +313,7 @@ export const getServerStatusThisYear = async (serverId: number) => {
       day: dayExpr,
       onlinePlayers: sql<number>`MAX(${serverStatus.onlinePlayers})`,
       registeredPlayers: sql<number>`MAX(${serverStatus.registeredPlayers})`,
+      votes: countDistinct(serverVote.id),
       avgPing: sql<number>`ROUND(AVG(${serverStatus.ping}))`,
     })
     .from(serverStatus)
@@ -310,6 +322,13 @@ export const getServerStatusThisYear = async (serverId: number) => {
         eq(serverStatus.serverId, serverId),
         gte(serverStatus.timestamp, startUnixMs),
         lte(serverStatus.timestamp, endUnixMs),
+      ),
+    )
+    .leftJoin(
+      serverVote,
+      and(
+        eq(serverVote.serverId, serverStatus.serverId),
+        sql`DATE(FROM_UNIXTIME(${serverVote.timestamp} / 1000)) = ${dayExpr}`,
       ),
     )
     .groupBy(dayExpr)
