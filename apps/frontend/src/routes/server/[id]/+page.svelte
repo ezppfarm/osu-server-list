@@ -21,7 +21,7 @@
 		env.PUBLIC_TURNSTILE_SITE_KEY && env.PUBLIC_TURNSTILE_SITE_KEY.length > 0;
 
 	const props: PageProps = $props();
-	let heatmapData = $state<{ [key: string]: number }>({});
+	let heatmapData = $state<{ [key: string]: { [key: string]: number } }>({});
 
 	const server = props.data.server;
 
@@ -33,10 +33,18 @@
 		if (props.data.voteUser && props.data.voteUser.trim().length > 0)
 			username = props.data.voteUser;
 		if (server?.heatmap) {
-			heatmapData = server.heatmap.reduce((acc: { [key: string]: number }, curr) => {
-				acc[curr.day] = curr.onlinePlayers;
-				return acc;
-			}, {});
+			heatmapData = server.heatmap.reduce(
+				(acc: { [key: string]: { [key: string]: number } }, curr) => {
+					acc[curr.day] = {
+						onlinePlayers: curr.onlinePlayers,
+						registeredPlayers: curr.registeredPlayers,
+						ping: curr.avgPing,
+						votes: curr.votes
+					};
+					return acc;
+				},
+				{}
+			);
 		}
 	});
 
@@ -119,11 +127,11 @@
 	</Dialog.Root>
 	<section class="relative overflow-hidden border-b border-border/40 py-24">
 		<div class="absolute inset-0 bg-gradient-to-b from-accent/25 to-transparent"></div>
-		<div class="container mx-auto px-4 py-12">
+		<div class="relative container mx-auto px-4 py-12">
 			<div class="mb-12">
-				<Card.Root class="overflow-hidden border-card-foreground/15 bg-card/50">
+				<Card.Root class="z-10 overflow-hidden border-card-foreground/15 bg-card/50">
 					<Card.Content class="p-8">
-						<div class="flex flex-col gap-8 md:flex-row">
+						<div class="z-10 flex flex-col gap-8 md:flex-row">
 							<div class="flex-shrink-0">
 								<div
 									class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border bg-primary/10 p-1"
@@ -212,7 +220,12 @@
 				</Card.Header>
 				<Card.Content class="overflow-x-auto px-6 pb-6">
 					<div class="lg:text-normal mx-auto w-max text-xs">
-						<Heatmap data={heatmapData} cellSize={14} year={new Date().getFullYear()} />
+						<Heatmap
+							data={heatmapData}
+							dataName="onlinePlayers"
+							cellSize={14}
+							year={new Date().getFullYear()}
+						/>
 					</div>
 				</Card.Content>
 			</Card.Root>
