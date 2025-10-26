@@ -127,7 +127,7 @@
 				/>
 			{/if}
 			<Dialog.Footer>
-				<Button variant="outline">Cancel</Button>
+				<Button variant="outline" onclick={() => (voteDialogOpen = false)}>Cancel</Button>
 				<Button onclick={performVote}>Vote</Button>
 			</Dialog.Footer>
 		</Dialog.Content>
@@ -143,7 +143,11 @@
 								<div
 									class="flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border bg-primary/10 p-1"
 								>
-									<img src={server.iconUrl} alt={server.name} class="h-full w-full object-contain" />
+									<img
+										src={server.iconUrl}
+										alt={server.name}
+										class="h-full w-full object-contain"
+									/>
 								</div>
 							</div>
 
