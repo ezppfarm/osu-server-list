@@ -21,5 +21,25 @@ export const GET = async (req: RequestEvent) => {
 		return error(400, 'Invalid sort parameter, available options are: onlinePlayers, name, votes');
 	}
 
-	return json(servers);
+	const remappedServers = servers.map((server) => {
+		return {
+			id: server.id,
+			name: server.name,
+			type: server.type,
+			description: server.description,
+			url: server.url,
+			iconUrl: server.iconUrl,
+			tags: server.tags?.split(','),
+			trending: server.trending,
+			onlinePlayers: server.onlinePlayers,
+			registeredPlayers: server.registeredPlayers,
+			ping: server.ping,
+			votes: server.votes,
+			last_update: server.last_update,
+			date_added: server.date_added,
+			location: server.location
+		};
+	});
+
+	return json(remappedServers);
 };
