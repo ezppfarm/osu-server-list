@@ -15,6 +15,7 @@
 	import Funnel from '@lucide/svelte/icons/funnel';
 	import Globe from '@lucide/svelte/icons/globe';
 	import List from '@lucide/svelte/icons/list';
+	import { onMount } from 'svelte';
 
 	const props: PageProps = $props();
 
@@ -23,6 +24,7 @@
 	let sortName = $derived(() => getSortName(sort).toLowerCase());
 
 	function updateSort(value: string) {
+		if (!servers) return;
 		if (browser) {
 			localStorage.setItem('sort', value);
 		}
@@ -30,9 +32,10 @@
 		sort = value;
 	}
 
-	if (browser) {
+	onMount(() => {
 		sort = localStorage.getItem('sort') ?? 'onlinePlayers';
-	}
+		sortServers(props.data.servers ?? [], 'onlinePlayers');
+	});
 </script>
 
 <section class="relative overflow-hidden border-b border-border/40 py-24">
@@ -189,7 +192,7 @@
 							? 'grid-cols-3'
 							: 'grid-cols-2'} gap-2 rounded-lg border bg-secondary/50 p-3"
 					>
-						<div class="text-center">
+						<div class="text-center {server.type === 'BANCHOPY' ? '' : 'border-r border-border'}">
 							<p class="mb-1 text-xs text-muted-foreground">Online</p>
 							<p class="text-sm font-bold text-foreground">
 								{server.onlinePlayers.toLocaleString()}
