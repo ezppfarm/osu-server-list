@@ -35,12 +35,19 @@
 		if (server?.heatmap) {
 			heatmapData = server.heatmap.reduce(
 				(acc: { [key: string]: { [key: string]: number } }, curr) => {
-					acc[curr.day] = {
-						onlinePlayers: curr.onlinePlayers,
-						registeredPlayers: curr.registeredPlayers,
-						ping: curr.avgPing,
-						votes: curr.votes
-					};
+					if (server.type === 'BANCHOPY')
+						acc[curr.day] = {
+							onlinePlayers: curr.onlinePlayers,
+							registeredPlayers: curr.registeredPlayers,
+							ping: curr.avgPing,
+							votes: curr.votes
+						};
+					else
+						acc[curr.day] = {
+							onlinePlayers: curr.onlinePlayers,
+							ping: curr.avgPing,
+							votes: curr.votes
+						};
 					return acc;
 				},
 				{}
@@ -184,13 +191,19 @@
 									{/each}
 								</div>
 
-								<div class="grid grid-cols-2 gap-4 pt-4 md:grid-cols-4">
-									<div class="rounded-lg border border-border bg-secondary/50 p-3">
-										<p class="mb-1 text-xs text-muted-foreground">Total Players</p>
-										<p class="text-xl font-bold text-foreground">
-											{server.registeredPlayers.toLocaleString()}
-										</p>
-									</div>
+								<div
+									class="grid grid-cols-2 gap-4 pt-4 {server.type === 'BANCHOPY'
+										? 'md:grid-cols-4'
+										: 'md:grid-cols-3'}"
+								>
+									{#if server.type === 'BANCHOPY'}
+										<div class="rounded-lg border border-border bg-secondary/50 p-3">
+											<p class="mb-1 text-xs text-muted-foreground">Total Players</p>
+											<p class="text-xl font-bold text-foreground">
+												{server.registeredPlayers.toLocaleString()}
+											</p>
+										</div>
+									{/if}
 									<div class="rounded-lg border border-border bg-secondary/50 p-3">
 										<p class="mb-1 text-xs text-muted-foreground">Ping</p>
 										<p class="text-xl font-bold text-green-500">{server.ping}ms</p>
