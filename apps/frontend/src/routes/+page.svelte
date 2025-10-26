@@ -16,10 +16,11 @@
 	import Globe from '@lucide/svelte/icons/globe';
 	import List from '@lucide/svelte/icons/list';
 	import { onMount } from 'svelte';
+	import type { ServerFull } from '@/types/serverfull';
 
 	const props: PageProps = $props();
 
-	let servers = $state(props.data.servers ?? []);
+	let servers = $state<ServerFull[]>([]);
 	let sort = $state('onlinePlayers');
 	let sortName = $derived(() => getSortName(sort).toLowerCase());
 
@@ -34,7 +35,7 @@
 
 	onMount(() => {
 		sort = localStorage.getItem('sort') ?? 'onlinePlayers';
-		sortServers(props.data.servers ?? [], 'onlinePlayers');
+		servers = sortServers(props.data.servers ?? [], sort);
 	});
 </script>
 
