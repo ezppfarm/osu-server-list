@@ -8,7 +8,7 @@ export const user = mysqlTable("user", {
 
 export const server = mysqlTable("server", {
   id: int().primaryKey().autoincrement().notNull(),
-  type: text({ enum: ["BANCHOPY", "RIPPLE", "CUSTOM"] })
+  type: text({ enum: ["BANCHOPY", "RIPPLE", "TITANIC", "CUSTOM"] })
     .default("BANCHOPY")
     .notNull(),
   name: text().notNull(),
