@@ -195,11 +195,11 @@
 								</div>
 
 								<div
-									class="grid grid-cols-2 gap-4 pt-4 {server.type === 'BANCHOPY'
+									class="grid grid-cols-2 gap-4 pt-4 {server.type !== 'RIPPLE'
 										? 'md:grid-cols-4'
 										: 'md:grid-cols-3'}"
 								>
-									{#if server.type === 'BANCHOPY'}
+									{#if server.type !== 'RIPPLE'}
 										<div class="rounded-lg border border-border bg-secondary/50 p-3">
 											<p class="mb-1 text-xs text-muted-foreground">Total Players</p>
 											<p class="text-xl font-bold text-foreground">

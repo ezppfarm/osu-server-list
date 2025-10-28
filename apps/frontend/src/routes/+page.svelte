@@ -189,17 +189,17 @@
 				</Card.Header>
 				<Card.Content>
 					<div
-						class="mb-4 grid {server.type === 'BANCHOPY'
+						class="mb-4 grid {server.type !== 'RIPPLE'
 							? 'grid-cols-3'
 							: 'grid-cols-2'} gap-2 rounded-lg border bg-secondary/50 p-3"
 					>
-						<div class="text-center {server.type === 'BANCHOPY' ? '' : 'border-r border-border'}">
+						<div class="text-center {server.type !== 'RIPPLE' ? '' : 'border-r border-border'}">
 							<p class="mb-1 text-xs text-muted-foreground">Online</p>
 							<p class="text-sm font-bold text-foreground">
 								{server.onlinePlayers.toLocaleString()}
 							</p>
 						</div>
-						{#if server.type === 'BANCHOPY'}
+						{#if server.type !== 'RIPPLE'}
 							<div class="border-x border-border text-center">
 								<p class="mb-1 text-xs text-muted-foreground">Registered</p>
 								<p class="text-sm font-bold text-foreground">
