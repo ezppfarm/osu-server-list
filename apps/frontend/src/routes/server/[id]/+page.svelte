@@ -203,13 +203,13 @@
 										<div class="rounded-lg border border-border bg-secondary/50 p-3">
 											<p class="mb-1 text-xs text-muted-foreground">Total Players</p>
 											<p class="text-xl font-bold text-foreground">
-												{server.registeredPlayers.toLocaleString()}
+												{server.registeredPlayers.toLocaleString("en-US")}
 											</p>
 										</div>
 									{/if}
 									<div class="rounded-lg border border-border bg-secondary/50 p-3">
 										<p class="mb-1 text-xs text-muted-foreground">Ping</p>
-										<p class="text-xl font-bold text-green-500">{server.ping}ms</p>
+										<p class="text-xl font-bold text-green-500">{server.ping.toLocaleString("en-US")}ms</p>
 									</div>
 									<div class="rounded-lg border border-border bg-secondary/50 p-3">
 										<p class="mb-1 text-xs text-muted-foreground">Uptime</p>
