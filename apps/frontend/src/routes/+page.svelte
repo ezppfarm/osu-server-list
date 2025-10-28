@@ -15,6 +15,7 @@
 	import Funnel from '@lucide/svelte/icons/funnel';
 	import Globe from '@lucide/svelte/icons/globe';
 	import List from '@lucide/svelte/icons/list';
+	import ArrowDown from '@lucide/svelte/icons/arrow-down';
 	import { onMount } from 'svelte';
 	import type { ServerFull } from '@/types/serverfull';
 
@@ -48,16 +49,29 @@
 			<TrendingUp class="h-3.5 w-3.5" />
 			<span>Discover the best osu! private servers</span>
 		</div>
-		<h1 class="mb-6 text-5xl font-bold tracking-tight text-balance lg:text-6xl">
+		<h1 class="mb-4 text-5xl font-bold tracking-tight text-balance lg:text-6xl">
 			Your Gateway to
 			<span class="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
 				osu! Communities
 			</span>
 		</h1>
-		<p class="mx-auto max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
+		<p class="mx-auto mb-6 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
 			Browse, compare, and join thriving osu! private servers. Find communities with custom
 			features, unique gameplay modes, and active player bases.
 		</p>
+		<div class="flex items-center justify-center">
+			<Button
+				onclick={() => {
+					window.scrollTo({
+						behavior: 'smooth',
+						top: Math.max((document.getElementById('server-view')?.offsetTop ?? 0) - 30, 0)
+					});
+				}}
+			>
+				<ArrowDown />
+				Browse osu! Servers
+			</Button>
+		</div>
 	</div>
 </section>
 
@@ -117,7 +131,7 @@
 	</Card.Root>
 </div>
 
-<main class="container mx-auto px-4 py-12">
+<main class="container mx-auto px-4 py-12" id="server-view">
 	<div class="mb-8 flex flex-wrap items-center justify-between gap-4">
 		<div>
 			<h2 class="text-2xl font-semibold tracking-tight">
