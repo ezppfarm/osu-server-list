@@ -34,18 +34,18 @@
 		if (server?.heatmap) {
 			heatmapData = server.heatmap.reduce(
 				(acc: { [key: string]: { [key: string]: number } }, curr) => {
-					if (server.type === 'BANCHOPY')
+					if (server.type !== 'RIPPLE')
 						acc[curr.day] = {
-							onlinePlayers: curr.onlinePlayers,
-							registeredPlayers: curr.registeredPlayers,
-							ping: curr.avgPing,
-							votes: curr.votes
+							"Online Players": curr.onlinePlayers.toLocaleString("en-US"),
+							"Registered Players": curr.registeredPlayers.toLocaleString("en-US"),
+							"Ping": `${curr.avgPing.toLocaleString("en-US")}ms`,
+							"Votes": curr.votes.toLocaleString("en-US")
 						};
 					else
 						acc[curr.day] = {
-							onlinePlayers: curr.onlinePlayers,
-							ping: curr.avgPing,
-							votes: curr.votes
+							"Online Players": curr.onlinePlayers.toLocaleString("en-US"),
+							"Ping": `${curr.avgPing.toLocaleString("en-US")}ms`,
+							"Votes": curr.votes.toLocaleString("en-US")
 						};
 					return acc;
 				},
@@ -203,13 +203,13 @@
 										<div class="rounded-lg border border-border bg-secondary/50 p-3">
 											<p class="mb-1 text-xs text-muted-foreground">Total Players</p>
 											<p class="text-xl font-bold text-foreground">
-												{server.registeredPlayers.toLocaleString("en-US")}
+												{server.registeredPlayers.toLocaleString()}
 											</p>
 										</div>
 									{/if}
 									<div class="rounded-lg border border-border bg-secondary/50 p-3">
 										<p class="mb-1 text-xs text-muted-foreground">Ping</p>
-										<p class="text-xl font-bold text-green-500">{server.ping.toLocaleString("en-US")}ms</p>
+										<p class="text-xl font-bold text-green-500">{server.ping.toLocaleString()}ms</p>
 									</div>
 									<div class="rounded-lg border border-border bg-secondary/50 p-3">
 										<p class="mb-1 text-xs text-muted-foreground">Uptime</p>
