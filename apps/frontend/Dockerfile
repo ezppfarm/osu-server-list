@@ -2,6 +2,8 @@ FROM oven/bun:latest
 
 WORKDIR /src
 
+RUN apt update && apt install -y git
+
 COPY package.json .
 COPY bun.lock .
 
@@ -17,7 +19,7 @@ RUN bun install
 
 COPY . .
 
-RUN bun run package:db:rebuild
+RUN bun run packages:rebuild
 RUN bun run build
 
 RUN chmod +x ./apps/frontend/run.sh

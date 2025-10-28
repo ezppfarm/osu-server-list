@@ -17,6 +17,6 @@ RUN bun install
 
 COPY . .
 
-RUN bun run package:db:rebuild
+RUN bun run packages:rebuild
 
 CMD ["bun", "run", "apps/crawler/src/index.ts"]
