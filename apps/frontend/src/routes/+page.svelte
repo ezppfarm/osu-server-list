@@ -68,7 +68,7 @@
 					});
 				}}
 			>
-				<ArrowDown />
+				<ArrowDown class="animate-bounce" />
 				Browse osu! Servers
 			</Button>
 		</div>

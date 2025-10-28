@@ -10,6 +10,7 @@
 	import { Toaster } from '@/components/ui/sonner';
 	import { onMount } from 'svelte';
 	import { user } from '@/global';
+	import PageLoader from '@/components/ui/page-loader/PageLoader.svelte';
 
 	dayjs.extend(relativeTime);
 	dayjs.extend(utc);
@@ -34,6 +35,8 @@
 </svelte:head>
 
 <Toaster position="top-right" richColors closeButton />
+
+<PageLoader />
 
 <div class="flex min-h-screen flex-col bg-background">
 	<Navbar />
