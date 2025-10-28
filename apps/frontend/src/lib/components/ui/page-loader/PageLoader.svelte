@@ -51,7 +51,7 @@
 </script>
 
 <div class="progress-bar" style={`opacity: ${opacity.current}`}>
-	<div class="progress-sliver bg-primary-foreground" style={`--width: ${progress.current * 100}%`}></div>
+	<div class="progress-sliver bg-primary" style={`--width: ${progress.current * 100}%`}></div>
 </div>
 
 <style lang="postcss">
