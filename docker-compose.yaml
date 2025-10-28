@@ -1,6 +1,6 @@
 services:
   mysql:
-    image: mariadb:ltsubi9
+    image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_USER=${MYSQL_USERNAME}
@@ -49,6 +49,7 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - PUBLIC_TURNSTILE_SITE_KEY=${PUBLIC_TURNSTILE_SITE_KEY}
       - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
+      - PUBLIC_APP_NAME=${FRONTEND_APP_NAME}
     ports:
       - "3000:3000"
 

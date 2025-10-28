@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Activity from '@lucide/svelte/icons/activity';
+	import { env } from '$env/dynamic/public';
 </script>
 
 <header
@@ -11,7 +12,7 @@
 				<Activity class="h-5 w-5 text-primary-foreground" />
 			</div>
 			<a href="/" class="flex items-center gap-3">
-				<span class="text-lg font-semibold tracking-tight">osu-server-list</span>
+				<span class="text-lg font-semibold tracking-tight">{env.PUBLIC_APP_NAME}</span>
 			</a>
 			<!-- <nav class="hidden items-center gap-6 md:flex">
 					<a

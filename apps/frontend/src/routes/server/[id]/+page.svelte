@@ -17,8 +17,7 @@
 	import getBrowserFingerprint from 'get-browser-fingerprint';
 
 	const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
-	const turnstileEnabled =
-		env.PUBLIC_TURNSTILE_SITE_KEY && env.PUBLIC_TURNSTILE_SITE_KEY.length > 0;
+	const turnstileEnabled = turnstileSiteKey.length > 0;
 
 	const props: PageProps = $props();
 	let heatmapData = $state<{ [key: string]: { [key: string]: number } }>({});

@@ -134,7 +134,7 @@
 				<DropdownMenu.Trigger>
 					<Button variant="outline" size="sm" class="border-border/40 bg-transparent">
 						<ArrowUpDown class="h-4 w-4" />
-						Sort: {sortName()}
+						{getSortName(sort)}
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content>
