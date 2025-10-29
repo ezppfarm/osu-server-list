@@ -15,6 +15,8 @@ COPY packages/db/bun.lock ./packages/db/
 
 COPY packages/handlers/package.json ./packages/handlers/
 
+COPY packages/hooks/package.json ./packages/hooks/
+
 RUN bun install
 
 COPY . .
