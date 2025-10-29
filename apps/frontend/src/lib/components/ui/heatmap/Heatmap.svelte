@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { cn } from '@/utils.js';
-	import { getCalendar, getColor } from './heatmap.js';
+	import { getCalendar, getColour } from './heatmap.js';
 	import type { Props } from './heatmap.js';
 	import * as Tooltip from '@/components/ui/tooltip';
 
 	let {
 		data,
 		dataName,
-		colors = ['#3a3f4a', '#aceebb', '#4ac26b', '#2da44e', '#116329'],
+		colours = ['#3a3f4a', '#aceebb', '#4ac26b', '#2da44e', '#116329'],
 		className = 'Heatmap',
 		cellSize = 18,
 		year = new Date().getFullYear(),
@@ -19,6 +19,16 @@
 		Object.keys(data).reduce((acc, key) => ({ ...acc, [key]: data[key][dataName] }), {})
 	);
 	let { max, calendar } = $derived(getCalendar(heatmapData, year));
+
+	function camelToTitle(input: string): string {
+		return input
+			.replace(/([A-Z])/g, ' $1')
+			.replace(/[_-]+/g, ' ')
+			.trim()
+			.split(/\s+/)
+			.map((w) => (w.length ? w[0].toUpperCase() + w.slice(1) : w))
+			.join(' ');
+	}
 </script>
 
 <table class={cn(className, 'border-separate', 'border-spacing-0.5')} style="font-size:1em">
@@ -62,12 +72,12 @@
 									<Tooltip.Trigger>
 										<div
 											class="rounded-[0.1rem] border border-border brightness-90 transition-all duration-100 ease-in-out hover:brightness-110"
-											style={`width:${cellSize}px;height:${cellSize}px;background:${getColor(colors, max, d.value)}`}
+											style={`width:${cellSize}px;height:${cellSize}px;background:${getColour(colours, max, d.value)}`}
 										></div>
 									</Tooltip.Trigger>
 									<Tooltip.Content>
 										<div class="flex flex-col gap-1">
-											<div class="border-b border-background/20 font-bold pb-1">
+											<div class="border-b border-background/20 pb-1 font-bold">
 												{new Date(d.date).toLocaleDateString(undefined, {
 													year: 'numeric',
 													month: 'long',
@@ -76,10 +86,10 @@
 											</div>
 											<div>
 												{#each Object.entries(data[d.date]) as [field, value]}
-													<div class="flex flex-row gap-1 items-center">
-														<div><strong>{field}:</strong></div>
-                            
-														<div>{value.toLocaleString("en-US")}{field === "ping" ? "ms" : ""}</div>
+													<div class="flex flex-row items-center gap-1">
+														<div><strong>{camelToTitle(field)}:</strong></div>
+
+														<div>{value.toLocaleString('en-US')}{field === 'ping' ? 'ms' : ''}</div>
 													</div>
 												{/each}
 											</div>
