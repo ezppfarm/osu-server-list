@@ -8,6 +8,10 @@ type RippleOnlineUsersResponse = {
   status: number;
 };
 
+type RippleDeltaClientsResponse = {
+  connected_users: number;
+}
+
 type RippleUserInfoResponse = {
   id: number;
   username: string;
@@ -58,16 +62,23 @@ export class RippleApiHandler implements IServerApiHandler {
   }
 
   public async fetchUserCounts(): Promise<UsersResponse> {
-    const data = await this.makeBanchoRequest<RippleOnlineUsersResponse>(
+    let data: RippleOnlineUsersResponse | RippleDeltaClientsResponse | null = await this.makeBanchoRequest<RippleOnlineUsersResponse>(
       "/api/v1/onlineUsers",
     );
 
     if (!data) {
-      throw new Error("Failed to fetch user counts");
+      data = await this.makeBanchoRequest<RippleDeltaClientsResponse>(
+        "/api/v2/clients",
+      );
+
+      if (!data) {
+        throw new Error("Failed to fetch user counts");
+      }
     }
 
     return {
-      onlineCount: data.result,
+      // what the hell
+      onlineCount: "result" in data ? data.result : data.connected_users,
       totalCount: -1, // Ripple does not provide total user count
     };
   }
