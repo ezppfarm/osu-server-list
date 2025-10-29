@@ -140,7 +140,7 @@
 			</h2>
 		</div>
 		<div class="flex gap-2">
-			<Button variant="outline" size="sm" class="border-border/40 bg-transparent">
+			<Button variant="outline" size="sm" class="border-border/40 bg-transparent hidden">
 				<Funnel class="h-4 w-4" />
 				All Categories
 			</Button>
@@ -148,7 +148,7 @@
 				<DropdownMenu.Trigger>
 					<Button variant="outline" size="sm" class="border-border/40 bg-transparent">
 						<ArrowUpDown class="h-4 w-4" />
-						{getSortName(sort)}
+						Sort by: {getSortName(sort)}
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content>
