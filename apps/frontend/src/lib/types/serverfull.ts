@@ -1,7 +1,7 @@
 export type ServerFull = {
 	id: number;
 	name: string;
-	type: 'BANCHOPY' | 'RIPPLE' | 'CUSTOM';
+	type: 'BANCHOPY' | 'RIPPLE' | 'TITANIC' | 'CUSTOM';
 	description: string | null;
 	url: string;
 	iconUrl: string;
