@@ -9,8 +9,11 @@
 	import { updated } from '$app/state';
 	import { Toaster } from '@/components/ui/sonner';
 	import { onMount } from 'svelte';
-	import { user } from '@/global';
+	import { navigationState, user } from '@/global';
 	import PageLoader from '@/components/ui/page-loader/PageLoader.svelte';
+	import { setupViewTransitions } from '@/viewTransition';
+
+  setupViewTransitions();
 
 	dayjs.extend(relativeTime);
 	dayjs.extend(utc);
@@ -27,6 +30,8 @@
 		if (data.user) {
 			user.set(data.user);
 		}
+
+    navigationState.set("loaded");
 	});
 </script>
 
