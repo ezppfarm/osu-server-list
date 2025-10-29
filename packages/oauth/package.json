@@ -1,0 +1,33 @@
+{
+  "name": "@osu-server-list/oauth",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsdown"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./src/*.ts"
+    }
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "tsdown": "catalog:",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@better-fetch/fetch": "catalog:",
+    "@osu-server-list/db": "workspace:*",
+    "@vermaysha/discord-webhook": "1.4.0",
+    "discord-api-types": "^0.38.31",
+    "zod": "catalog:"
+  }
+}

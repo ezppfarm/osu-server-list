@@ -13,6 +13,8 @@ COPY packages/db/bun.lock ./packages/db/
 
 COPY packages/handlers/package.json ./packages/handlers/
 
+COPY packages/oauth/package.json ./packages/oauth/
+
 RUN bun install
 
 COPY . .

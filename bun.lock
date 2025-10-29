@@ -121,6 +121,23 @@
         "typescript": "^5",
       },
     },
+    "packages/oauth": {
+      "name": "@osu-server-list/oauth",
+      "dependencies": {
+        "@better-fetch/fetch": "catalog:",
+        "@osu-server-list/db": "workspace:*",
+        "@vermaysha/discord-webhook": "1.4.0",
+        "discord-api-types": "^0.38.31",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@types/bun": "latest",
+      },
+      "peerDependencies": {
+        "tsdown": "catalog:",
+        "typescript": "^5",
+      },
+    },
   },
   "catalog": {
     "@better-fetch/fetch": "^1.1.18",
@@ -298,6 +315,8 @@
     "@osu-server-list/handlers": ["@osu-server-list/handlers@workspace:packages/handlers"],
 
     "@osu-server-list/hooks": ["@osu-server-list/hooks@workspace:packages/hooks"],
+
+    "@osu-server-list/oauth": ["@osu-server-list/oauth@workspace:packages/oauth"],
 
     "@oxc-project/types": ["@oxc-project/types@0.94.0", "", {}, "sha512-+UgQT/4o59cZfH6Cp7G0hwmqEQ0wE+AdIwhikdwnhWI9Dp8CgSY081+Q3O67/wq3VJu8mgUEB93J9EHHn70fOw=="],
 
@@ -554,6 +573,8 @@
     "devalue": ["devalue@5.3.2", "", {}, "sha512-UDsjUbpQn9kvm68slnrs+mfxwFkIflOhkanmyabZ8zOYk8SMEIbJ3TK+88g70hSIeytu4y18f0z/hYHMTrXIWw=="],
 
     "diff": ["diff@8.0.2", "", {}, "sha512-sSuxWU5j5SR9QQji/o2qMvqRNYRDOcBTgsJ/DeCf4iSN4gW+gNMXM7wFIP+fdXZxoNiAnHUTGjCr+TSWXdRDKg=="],
+
+    "discord-api-types": ["discord-api-types@0.38.31", "", {}, "sha512-kC94ANsk8ackj8ENTuO8joTNEL0KtymVhHy9dyEC/s4QAZ7GCx40dYEzQaadyo8w+oP0X8QydE/nzAWRylTGtQ=="],
 
     "dotenv": ["dotenv@17.2.3", "", {}, "sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w=="],
 
