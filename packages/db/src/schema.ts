@@ -42,3 +42,13 @@ export const serverVote = mysqlTable("server_vote", {
   browserFingerprint: int().notNull(),
   timestamp: bigint({ mode: "number" }).notNull(),
 });
+
+export const serverVoteHook = mysqlTable("server_vote_hook", {
+  server_id: int()
+    .unique()
+    .references(() => server.id)
+    .notNull()
+    .primaryKey(),
+  postback_url: text(),
+  discord_webhook_url: text(),
+});

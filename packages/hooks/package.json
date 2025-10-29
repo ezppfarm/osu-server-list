@@ -1,6 +1,6 @@
 {
-  "name": "@osu-server-list/handlers",
-  "module": "index.ts",
+  "name": "@osu-server-list/hooks",
+  "module": "src/index.ts",
   "type": "module",
   "private": true,
   "scripts": {
@@ -16,11 +16,15 @@
       "default": "./src/*.ts"
     }
   },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
   "peerDependencies": {
     "tsdown": "catalog:",
     "typescript": "^5"
   },
   "dependencies": {
-    "@better-fetch/fetch": "catalog:"
+    "@better-fetch/fetch": "catalog:",
+    "zod": "catalog:"
   }
 }

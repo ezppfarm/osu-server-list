@@ -11,8 +11,19 @@ import {
   sql,
 } from "drizzle-orm";
 import { db } from ".";
-import { server, serverStatus, serverVote, user } from "./schema";
-import { comparePassword, countDistinctWithFallback, intWithFallback, sumAsIntWithFallback } from "./util";
+import {
+  server,
+  serverStatus,
+  serverVote,
+  serverVoteHook,
+  user,
+} from "./schema";
+import {
+  comparePassword,
+  countDistinctWithFallback,
+  intWithFallback,
+  sumAsIntWithFallback,
+} from "./util";
 
 export const getAllServers = async () => {
   const latestStatus = db
@@ -355,11 +366,48 @@ export const checkLoginUser = async (username: string, password: string) => {
   return isPasswordValid ? currentUser[0] : null;
 };
 
-export const getUser = async (username: string, hashedPassword: string) => {
+export const getUser = async (userName: string, hashedPassword: string) => {
   const currentUser = await db
     .select()
     .from(user)
-    .where(and(eq(user.name, username), eq(user.passwordHash, hashedPassword)))
+    .where(and(eq(user.name, userName), eq(user.passwordHash, hashedPassword)))
     .limit(1);
   return currentUser[0] ?? null;
+};
+
+export const getUserTotalVotesForServer = async (
+  userId: number,
+  serverId: number,
+) => {
+  const userVotes = await db
+    .select()
+    .from(serverVote)
+    .where(
+      and(eq(serverVote.userId, userId), eq(serverVote.serverId, serverId)),
+    );
+  return userVotes.length;
+};
+
+export const getUserLastVoteForServer = async (
+  userId: number,
+  serverId: number,
+) => {
+  const lastUserVote = await db
+    .select()
+    .from(serverVote)
+    .where(
+      and(eq(serverVote.userId, userId), eq(serverVote.serverId, serverId)),
+    )
+    .orderBy(desc(serverVote.timestamp))
+    .limit(1);
+  return lastUserVote[0]?.timestamp ?? 0;
+};
+
+export const getServerHookData = async (serverId: number) => {
+  const currentServer = await db
+    .select()
+    .from(serverVoteHook)
+    .where(eq(serverVoteHook.server_id, serverId))
+    .limit(1);
+  return currentServer[0] ?? null;
 };

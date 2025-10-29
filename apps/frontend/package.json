@@ -16,6 +16,7 @@
 	"dependencies": {
 		"@osu-server-list/db": "workspace:*",
 		"@osu-server-list/handlers": "workspace:*",
+    "@osu-server-list/hooks": "workspace:*",
 		"dayjs": "^1.11.18",
 		"get-browser-fingerprint": "^4.1.1"
 	},

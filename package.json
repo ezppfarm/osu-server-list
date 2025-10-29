@@ -20,8 +20,13 @@
     ],
     "catalog": {
       "typescript": "^5.8.2",
-      "tsdown": "^0.15.5"
+      "tsdown": "^0.15.5",
+      "@better-fetch/fetch": "^1.1.18",
+      "zod": "^4.1.12"
     }
+  },
+  "dependencies": {
+    "@osu-server-list/db": "workspace:*"
   },
   "devDependencies": {
     "prettier": "3",
