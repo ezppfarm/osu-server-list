@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@better-fetch/fetch": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@vermaysha/discord-webhook": "1.4.0"
   }
 }

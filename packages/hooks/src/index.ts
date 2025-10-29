@@ -6,36 +6,102 @@ import {
 } from "@osu-server-list/db/query";
 import z from "zod";
 import type { ServerPOSTBackData } from "./types";
+import { Embed, Webhook } from "@vermaysha/discord-webhook";
 
 const urlValidation = z.url().startsWith("https://");
 
-export const sendPOSTBackVoteDataToServer = async (
-  serverId: number,
+export const sendVoteDataToServer = async (
+  server: any, // TODO: Replace with actual server type
   userId: number,
+  userName: string
 ): Promise<boolean> => {
-  const serverHookData = await getServerHookData(serverId);
-  if (
-    !serverHookData ||
-    !serverHookData.postback_url ||
-    serverHookData.postback_url.trim().length <= 0
-  )
-    return true;
+  const serverHookData = await getServerHookData(server.id);
 
-  if (!urlValidation.safeParse(serverHookData.postback_url).success) {
-    console.log(`Server ${serverId} has a invalid valid postback_url!`);
+  if (!serverHookData) return true;
+
+  const postbackUrlPresent =
+    typeof serverHookData.postback_url === 'string' &&
+    serverHookData.postback_url.trim().length > 0;
+
+  const discordWebhookPresent =
+    typeof serverHookData.discord_webhook_url === 'string' &&
+    serverHookData.discord_webhook_url.trim().length > 0;
+
+  if (!postbackUrlPresent && !discordWebhookPresent) return true;
+
+  const lastUserVote = await getUserLastVoteForServer(userId, server.id);
+  const totalUserVotes = await getUserTotalVotesForServer(userId, server.id);
+
+  return (
+    postbackUrlPresent && 
+    await sendPOSTBackVoteDataToServer(server.id, serverHookData.postback_url!, userId, lastUserVote, totalUserVotes)
+  ) || (
+    discordWebhookPresent && 
+    await sendDiscordVoteWebhook(serverHookData.discord_webhook_url!, serverHookData.discord_webhook_content!, server, userId, userName, totalUserVotes)
+  );
+};
+
+const sendDiscordVoteWebhook = async (
+  webhookUrl: string,
+  webhookContent: string,
+  server: any,
+  userId: number,
+  userName: string,
+  totalVotes: number,
+): Promise<boolean> => {
+  if (!urlValidation.safeParse(webhookUrl).success) {
+    console.log(`Server ${server.id} has a invalid valid webhookUrl!`);
     return true;
   }
 
-  const lastUserVote = await getUserLastVoteForServer(userId, serverId);
-  const totalUserVotes = await getUserTotalVotesForServer(userId, serverId);
+  const client = new Webhook(webhookUrl);
+
+  const content = webhookContent
+    .replace("{{ user_id }}", userId.toString())
+    .replace("{{ user_name }}", userName)
+    .replace("{{ total_votes }}", totalVotes.toString())
+    .replace("{{ server_name }}", server.name)
+    // vote is added after data is sent
+    .replace("{{ server_votes }}", (server.votes + 1).toString());
+
+  const embed = new Embed()
+    .setTitle(`Vote for ${server.name}`)
+    .setDescription(content)
+    .setColor(0x1e2939)
+    .setTimestamp()
+    .setFooter({ text: `powered by ${process.env.PUBLIC_APP_NAME}` });
+
+  client.addEmbed(embed);
 
   try {
-    const result = await betterFetch(serverHookData.postback_url, {
+    await client.send();
+  } catch {
+    console.log(`Failed to send Discord vote webhook for server ${server.id}!`);
+    return false;
+  }
+  
+  return true;
+}
+
+const sendPOSTBackVoteDataToServer = async (
+  serverId: number,
+  postbackUrl: string,
+  userId: number,
+  previousVoteTimestamp: number,
+  totalVotes: number,
+): Promise<boolean> => {
+  if (!urlValidation.safeParse(postbackUrl).success) {
+    console.log(`Server ${serverId} has a invalid valid postbackUrl!`);
+    return true;
+  }
+
+  try {
+    const result = await betterFetch(postbackUrl, {
       method: "POST",
       body: JSON.stringify({
         currentVoteTimestamp: Date.now(),
-        previousVoteTimestamp: lastUserVote,
-        totalVotes: totalUserVotes,
+        previousVoteTimestamp: previousVoteTimestamp,
+        totalVotes: totalVotes,
         userId: userId,
       } satisfies ServerPOSTBackData),
       headers: {

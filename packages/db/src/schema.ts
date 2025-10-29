@@ -51,4 +51,6 @@ export const serverVoteHook = mysqlTable("server_vote_hook", {
     .primaryKey(),
   postback_url: text(),
   discord_webhook_url: text(),
+  // TODO: default content?
+  discord_webhook_content: text(),
 });

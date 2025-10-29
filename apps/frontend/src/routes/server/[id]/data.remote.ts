@@ -9,7 +9,7 @@ import {
 import { getApiHandler } from '@osu-server-list/handlers';
 import { validateTurnstileToken } from '@/turnstile';
 import { env } from '$env/dynamic/private';
-import { sendPOSTBackVoteDataToServer } from '@osu-server-list/hooks';
+import { sendVoteDataToServer } from '@osu-server-list/hooks';
 
 export const submitVote = query(
 	v.object({
@@ -73,9 +73,9 @@ export const submitVote = query(
 			};
 		}
 
-		const postbackResult = await sendPOSTBackVoteDataToServer(server.id, userInfo.id);
+		const serverVoteDataResult = await sendVoteDataToServer(server, userInfo.id, userInfo.username);
 
-		if (!postbackResult) {
+		if (!serverVoteDataResult) {
 			return {
 				success: false,
 				message: 'Failed to submit vote, please try again.'
