@@ -3,7 +3,7 @@ import { mysqlTable, int, text, bigint } from "drizzle-orm/mysql-core";
 export const user = mysqlTable("user", {
   id: int().primaryKey().autoincrement().notNull(),
   name: text().notNull(),
-  passwordHash: text().notNull(),
+  discordId: text().notNull(),
 });
 
 export const server = mysqlTable("server", {
