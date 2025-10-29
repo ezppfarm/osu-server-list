@@ -50,7 +50,7 @@ const sendDiscordVoteWebhook = async (
   totalVotes: number,
 ): Promise<boolean> => {
   if (!urlValidation.safeParse(webhookUrl).success) {
-    console.log(`Server ${server.id} has a invalid valid webhookUrl!`);
+    console.log(`Server ${server.id} has a invalid webhookUrl!`);
     return true;
   }
 
@@ -91,7 +91,7 @@ const sendPOSTBackVoteDataToServer = async (
   totalVotes: number,
 ): Promise<boolean> => {
   if (!urlValidation.safeParse(postbackUrl).success) {
-    console.log(`Server ${serverId} has a invalid valid postbackUrl!`);
+    console.log(`Server ${serverId} has a invalid postbackUrl!`);
     return true;
   }
 
