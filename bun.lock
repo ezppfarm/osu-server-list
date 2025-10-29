@@ -109,6 +109,7 @@
       "name": "@osu-server-list/hooks",
       "dependencies": {
         "@better-fetch/fetch": "catalog:",
+        "@osu-server-list/db": "workspace:*",
         "@vermaysha/discord-webhook": "1.4.0",
         "zod": "catalog:",
       },

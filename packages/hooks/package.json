@@ -24,6 +24,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@osu-server-list/db": "workspace:*",
     "@better-fetch/fetch": "catalog:",
     "zod": "catalog:",
     "@vermaysha/discord-webhook": "1.4.0"

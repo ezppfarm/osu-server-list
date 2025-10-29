@@ -7,24 +7,30 @@ import {
 import z from "zod";
 import type { ServerPOSTBackData } from "./types";
 import { Embed, Webhook } from "@vermaysha/discord-webhook";
+import type { Server } from "@osu-server-list/db/types";
 
-const urlValidation = z.url().startsWith("https://");
+const postBackUrlValidation = z.url().startsWith("https://");
+const discordWebhookUrlSchema = z
+  .url()
+  .regex(
+    /^https:\/\/(?:ptb\.|canary\.)?discord(?:app)?\.com\/api\/webhooks\/\d+\/[\w-]+$/,
+  );
 
 export const sendVoteDataToServer = async (
-  server: any, // TODO: Replace with actual server type
+  server: Server,
   userId: number,
-  userName: string
+  userName: string,
 ): Promise<boolean> => {
   const serverHookData = await getServerHookData(server.id);
 
   if (!serverHookData) return true;
 
   const postbackUrlPresent =
-    typeof serverHookData.postback_url === 'string' &&
+    typeof serverHookData.postback_url === "string" &&
     serverHookData.postback_url.trim().length > 0;
 
   const discordWebhookPresent =
-    typeof serverHookData.discord_webhook_url === 'string' &&
+    typeof serverHookData.discord_webhook_url === "string" &&
     serverHookData.discord_webhook_url.trim().length > 0;
 
   if (!postbackUrlPresent && !discordWebhookPresent) return true;
@@ -32,13 +38,31 @@ export const sendVoteDataToServer = async (
   const lastUserVote = await getUserLastVoteForServer(userId, server.id);
   const totalUserVotes = await getUserTotalVotesForServer(userId, server.id);
 
-  return (
-    postbackUrlPresent && 
-    await sendPOSTBackVoteDataToServer(server.id, serverHookData.postback_url!, userId, lastUserVote, totalUserVotes)
-  ) || (
-    discordWebhookPresent && 
-    await sendDiscordVoteWebhook(serverHookData.discord_webhook_url!, serverHookData.discord_webhook_content!, server, userId, userName, totalUserVotes)
-  );
+  if (postbackUrlPresent) {
+    const postBackResult = await sendPOSTBackVoteDataToServer(
+      server.id,
+      serverHookData.postback_url!,
+      userId,
+      lastUserVote,
+      totalUserVotes,
+    );
+    if (!postBackResult) {
+      return false;
+    }
+  }
+
+  if (discordWebhookPresent) {
+    await sendDiscordVoteWebhook(
+      serverHookData.discord_webhook_url!,
+      serverHookData.discord_webhook_content!,
+      server,
+      userId,
+      userName,
+      totalUserVotes,
+    );
+  }
+
+  return true;
 };
 
 const sendDiscordVoteWebhook = async (
@@ -49,7 +73,7 @@ const sendDiscordVoteWebhook = async (
   userName: string,
   totalVotes: number,
 ): Promise<boolean> => {
-  if (!urlValidation.safeParse(webhookUrl).success) {
+  if (!discordWebhookUrlSchema.safeParse(webhookUrl).success) {
     console.log(`Server ${server.id} has a invalid webhookUrl!`);
     return true;
   }
@@ -79,9 +103,9 @@ const sendDiscordVoteWebhook = async (
     console.log(`Failed to send Discord vote webhook for server ${server.id}!`);
     return false;
   }
-  
+
   return true;
-}
+};
 
 const sendPOSTBackVoteDataToServer = async (
   serverId: number,
@@ -90,7 +114,7 @@ const sendPOSTBackVoteDataToServer = async (
   previousVoteTimestamp: number,
   totalVotes: number,
 ): Promise<boolean> => {
-  if (!urlValidation.safeParse(postbackUrl).success) {
+  if (!postBackUrlValidation.safeParse(postbackUrl).success) {
     console.log(`Server ${serverId} has a invalid postbackUrl!`);
     return true;
   }
