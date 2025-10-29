@@ -195,9 +195,9 @@
 								</div>
 
 								<div
-									class="grid grid-cols-2 gap-4 pt-4 {server.type !== 'RIPPLE'
-										? 'md:grid-cols-4'
-										: 'md:grid-cols-3'}"
+									class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 {server.type !== 'RIPPLE'
+										? 'lg:grid-cols-4'
+										: 'lg:grid-cols-3'}"
 								>
 									{#if server.type !== 'RIPPLE'}
 										<div class="rounded-lg border border-border bg-secondary/50 p-3">
