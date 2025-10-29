@@ -17,13 +17,12 @@
 	import List from '@lucide/svelte/icons/list';
 	import ArrowDown from '@lucide/svelte/icons/arrow-down';
 	import { onMount } from 'svelte';
-	import type { ServerFull } from '@/types/serverfull';
+  import type { ServerFull } from '@osu-server-list/db/types';
 
 	const props: PageProps = $props();
 
 	let servers = $state<ServerFull[]>([]);
 	let sort = $state('onlinePlayers');
-	let sortName = $derived(() => getSortName(sort).toLowerCase());
 
 	function updateSort(value: string) {
 		if (!servers) return;
