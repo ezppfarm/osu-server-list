@@ -191,7 +191,7 @@
 									<p class="text-sm">
 										{server.onlinePlayers < 0
 											? 'server offline'
-											: server.onlinePlayers.toLocaleString() + ' players online'}
+											: server.onlinePlayers.toLocaleString("en-US") + ' players online'}
 									</p>
 								</div>
 							</div>
@@ -210,20 +210,20 @@
 						<div class="text-center {server.type !== 'RIPPLE' ? '' : 'border-r border-border'}">
 							<p class="mb-1 text-xs text-muted-foreground">Online</p>
 							<p class="text-sm font-bold text-foreground">
-								{server.onlinePlayers.toLocaleString()}
+								{server.onlinePlayers.toLocaleString("en-US")}
 							</p>
 						</div>
 						{#if server.type !== 'RIPPLE'}
 							<div class="border-x border-border text-center">
 								<p class="mb-1 text-xs text-muted-foreground">Registered</p>
 								<p class="text-sm font-bold text-foreground">
-									{server.registeredPlayers.toLocaleString()}
+									{server.registeredPlayers.toLocaleString("en-US")}
 								</p>
 							</div>
 						{/if}
 						<div class="text-center">
 							<p class="mb-1 text-xs text-muted-foreground">Votes</p>
-							<p class="text-sm font-bold text-foreground">{server.votes.toLocaleString()}</p>
+							<p class="text-sm font-bold text-foreground">{server.votes.toLocaleString("en-US")}</p>
 						</div>
 					</div>
 					<div class="mb-2 flex flex-wrap gap-2">
