@@ -4,10 +4,10 @@ import {
   getUserLastVoteForServer,
   getUserTotalVotesForServer,
 } from "@osu-server-list/db/query";
+import type { ServerFull } from "@osu-server-list/db/types";
 import z from "zod";
 import type { ServerPOSTBackData } from "./types";
 import { Embed, Webhook } from "@vermaysha/discord-webhook";
-import type { Server } from "@osu-server-list/db/types";
 
 const postBackUrlValidation = z.url().startsWith("https://");
 const discordWebhookUrlSchema = z
@@ -17,7 +17,7 @@ const discordWebhookUrlSchema = z
   );
 
 export const sendVoteDataToServer = async (
-  server: Server,
+  server: ServerFull,
   userId: number,
   userName: string,
 ): Promise<boolean> => {
@@ -68,7 +68,7 @@ export const sendVoteDataToServer = async (
 const sendDiscordVoteWebhook = async (
   webhookUrl: string,
   webhookContent: string,
-  server: any,
+  server: ServerFull,
   userId: number,
   userName: string,
   totalVotes: number,

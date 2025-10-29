@@ -4,7 +4,7 @@ import {
 	addServerVote,
 	findRecentVoteByIp,
 	findRecentVoteByUserId,
-	findServerById
+	getServerById
 } from '@osu-server-list/db/query';
 import { getApiHandler } from '@osu-server-list/handlers';
 import { validateTurnstileToken } from '@/turnstile';
@@ -40,7 +40,7 @@ export const submitVote = query(
 			};
 		}
 
-		const server = await findServerById(serverId);
+		const server = await getServerById(serverId);
 		if (!server) {
 			return {
 				success: false,
