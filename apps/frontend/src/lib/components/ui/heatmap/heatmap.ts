@@ -4,10 +4,10 @@ export const getLastMonday = (start: Date) => {
 	return start;
 };
 
-export const getColor = (colors: string[], max: number, value: number) => {
-	if (!value) return colors[0];
-	const p = (value / max) * (colors.length - 1);
-	return colors[Math.ceil(p)];
+export const getColour = (colours: string[], max: number, value: number) => {
+	if (!value) return colours[0];
+	const p = (value / max) * (colours.length - 1);
+	return colours[Math.ceil(p)];
 };
 
 export const getCalendar = (data: { [key: string]: number }, year: number) => {
@@ -40,7 +40,7 @@ export type Props = {
 	year?: number;
 	lday?: boolean;
 	lmonth?: boolean;
-	colors?: string[];
+	colours?: string[];
 	cellSize?: number;
 	className?: string;
 };
