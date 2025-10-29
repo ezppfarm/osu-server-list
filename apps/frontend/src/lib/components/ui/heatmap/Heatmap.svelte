@@ -76,9 +76,10 @@
 											</div>
 											<div>
 												{#each Object.entries(data[d.date]) as [field, value]}
-													<div class="">
-														<strong>{field}:</strong>
-														{value}
+													<div class="flex flex-row gap-1 items-center">
+														<div><strong>{field}:</strong></div>
+                            
+														<div>{value.toLocaleString("en-US")}{field === "ping" ? "ms" : ""}</div>
 													</div>
 												{/each}
 											</div>

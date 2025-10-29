@@ -36,16 +36,16 @@
 				(acc: { [key: string]: { [key: string]: number } }, curr) => {
 					if (server.type !== 'RIPPLE')
 						acc[curr.day] = {
-							"Online Players": curr.onlinePlayers.toLocaleString("en-US"),
-							"Registered Players": curr.registeredPlayers.toLocaleString("en-US"),
-							"Ping": `${curr.avgPing.toLocaleString("en-US")}ms`,
-							"Votes": curr.votes.toLocaleString("en-US")
+							onlinePlayers: curr.onlinePlayers,
+							registeredPlayers: curr.registeredPlayers,
+							ping: curr.avgPing,
+							votes: curr.votes
 						};
 					else
 						acc[curr.day] = {
-							"Online Players": curr.onlinePlayers.toLocaleString("en-US"),
-							"Ping": `${curr.avgPing.toLocaleString("en-US")}ms`,
-							"Votes": curr.votes.toLocaleString("en-US")
+							onlinePlayers: curr.onlinePlayers,
+							ping: curr.avgPing,
+							votes: curr.votes
 						};
 					return acc;
 				},
