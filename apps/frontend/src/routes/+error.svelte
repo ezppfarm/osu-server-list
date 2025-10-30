@@ -66,29 +66,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-	.pixelated-number {
-		color: white;
-		image-rendering: pixelated;
-		image-rendering: -moz-crisp-edges;
-		image-rendering: crisp-edges;
-		filter: drop-shadow(4px 4px 0px rgba(255, 255, 255, 0.3))
-			drop-shadow(8px 8px 0px rgba(255, 255, 255, 0.15));
-		animation: pixelate 2s infinite;
-		font-family: monospace;
-		letter-spacing: 0.1em;
-	}
-
-	@keyframes pixelate {
-		0%,
-		100% {
-			filter: drop-shadow(4px 4px 0px rgba(255, 255, 255, 0.3))
-				drop-shadow(8px 8px 0px rgba(255, 255, 255, 0.15)) contrast(1.2);
-		}
-		50% {
-			filter: drop-shadow(6px 6px 0px rgba(255, 255, 255, 0.4))
-				drop-shadow(12px 12px 0px rgba(255, 255, 255, 0.2)) contrast(1.5);
-		}
-	}
-</style>
