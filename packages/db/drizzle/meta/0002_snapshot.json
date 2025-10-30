@@ -84,9 +84,7 @@
       "compositePrimaryKeys": {
         "server_id": {
           "name": "server_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -144,12 +142,8 @@
           "name": "server_status_serverId_server_id_fk",
           "tableFrom": "server_status",
           "tableTo": "server",
-          "columnsFrom": [
-            "serverId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["serverId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -157,9 +151,7 @@
       "compositePrimaryKeys": {
         "server_status_id": {
           "name": "server_status_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -217,12 +209,8 @@
           "name": "server_vote_serverId_server_id_fk",
           "tableFrom": "server_vote",
           "tableTo": "server",
-          "columnsFrom": [
-            "serverId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["serverId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -230,9 +218,7 @@
       "compositePrimaryKeys": {
         "server_vote_id": {
           "name": "server_vote_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -276,12 +262,8 @@
           "name": "server_vote_hook_server_id_server_id_fk",
           "tableFrom": "server_vote_hook",
           "tableTo": "server",
-          "columnsFrom": [
-            "server_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["server_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -289,17 +271,13 @@
       "compositePrimaryKeys": {
         "server_vote_hook_server_id": {
           "name": "server_vote_hook_server_id",
-          "columns": [
-            "server_id"
-          ]
+          "columns": ["server_id"]
         }
       },
       "uniqueConstraints": {
         "server_vote_hook_server_id_unique": {
           "name": "server_vote_hook_server_id_unique",
-          "columns": [
-            "server_id"
-          ]
+          "columns": ["server_id"]
         }
       },
       "checkConstraint": {}
@@ -334,9 +312,7 @@
       "compositePrimaryKeys": {
         "user_id": {
           "name": "user_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},

@@ -9,7 +9,7 @@ const config = {
 	preprocess: vitePreprocess(),
 	compilerOptions: {
 		experimental: {
-			async: true,
+			async: true
 		}
 	},
 	kit: {

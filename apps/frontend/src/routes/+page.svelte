@@ -17,7 +17,7 @@
 	import List from '@lucide/svelte/icons/list';
 	import ArrowDown from '@lucide/svelte/icons/arrow-down';
 	import { onMount } from 'svelte';
-  import type { ServerFull } from '@osu-server-list/db/types';
+	import type { ServerFull } from '@osu-server-list/db/types';
 
 	const props: PageProps = $props();
 
@@ -139,7 +139,7 @@
 			</h2>
 		</div>
 		<div class="flex gap-2">
-			<Button variant="outline" size="sm" class="border-border/40 bg-transparent hidden">
+			<Button variant="outline" size="sm" class="hidden border-border/40 bg-transparent">
 				<Funnel class="h-4 w-4" />
 				All Categories
 			</Button>
@@ -190,7 +190,7 @@
 									<p class="text-sm">
 										{server.onlinePlayers < 0
 											? 'server offline'
-											: server.onlinePlayers.toLocaleString("en-US") + ' players online'}
+											: server.onlinePlayers.toLocaleString('en-US') + ' players online'}
 									</p>
 								</div>
 							</div>
@@ -206,23 +206,27 @@
 							? 'grid-cols-3'
 							: 'grid-cols-2'} gap-2 rounded-lg border bg-secondary/50 p-3"
 					>
-						<div class="text-center {server.registeredPlayers > -1 ? '' : 'border-r border-border'}">
+						<div
+							class="text-center {server.registeredPlayers > -1 ? '' : 'border-r border-border'}"
+						>
 							<p class="mb-1 text-xs text-muted-foreground">Online</p>
 							<p class="text-sm font-bold text-foreground">
-								{server.onlinePlayers.toLocaleString("en-US")}
+								{server.onlinePlayers.toLocaleString('en-US')}
 							</p>
 						</div>
 						{#if server.registeredPlayers > -1}
 							<div class="border-x border-border text-center">
 								<p class="mb-1 text-xs text-muted-foreground">Registered</p>
 								<p class="text-sm font-bold text-foreground">
-									{server.registeredPlayers.toLocaleString("en-US")}
+									{server.registeredPlayers.toLocaleString('en-US')}
 								</p>
 							</div>
 						{/if}
 						<div class="text-center">
 							<p class="mb-1 text-xs text-muted-foreground">Votes</p>
-							<p class="text-sm font-bold text-foreground">{server.votes.toLocaleString("en-US")}</p>
+							<p class="text-sm font-bold text-foreground">
+								{server.votes.toLocaleString('en-US')}
+							</p>
 						</div>
 					</div>
 					<div class="mb-2 flex flex-wrap gap-2">

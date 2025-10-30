@@ -10,7 +10,7 @@ type RippleOnlineUsersResponse = {
 
 type RippleDeltaClientsResponse = {
   connected_users: number;
-}
+};
 
 type RippleUserInfoResponse = {
   id: number;
@@ -62,14 +62,16 @@ export class RippleApiHandler implements IServerApiHandler {
   }
 
   public async fetchUserCounts(): Promise<UsersResponse> {
-    let data: RippleOnlineUsersResponse | RippleDeltaClientsResponse | null = await this.makeBanchoRequest<RippleOnlineUsersResponse>(
-      "/api/v1/onlineUsers",
-    );
+    let data: RippleOnlineUsersResponse | RippleDeltaClientsResponse | null =
+      await this.makeBanchoRequest<RippleOnlineUsersResponse>(
+        "/api/v1/onlineUsers",
+      );
 
     if (!data) {
-      data = await this.makeBanchoRequest<RippleDeltaClientsResponse>(
-        "/api/v2/clients",
-      );
+      data =
+        await this.makeBanchoRequest<RippleDeltaClientsResponse>(
+          "/api/v2/clients",
+        );
 
       if (!data) {
         throw new Error("Failed to fetch user counts");
