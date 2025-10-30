@@ -181,10 +181,18 @@
 											<h1 class="text-4xl font-bold text-foreground">{server.name}</h1>
 										</div>
 										<div class="mb-3 flex items-center gap-2">
-											<div class="h-2 w-2 animate-pulse rounded-full bg-green-500"></div>
-											<span class="text-sm text-muted-foreground"
-												>Online · {server.onlinePlayers} players</span
-											>
+											<div
+												class="h-2 w-2 animate-pulse rounded-full {server.onlinePlayers < 0
+													? 'bg-red-500'
+													: 'bg-green-500'}"
+											></div>
+											<span class="text-sm text-muted-foreground">
+												{#if server.onlinePlayers >= 0}
+													Online · {server.onlinePlayers} players
+												{:else}
+													Offline
+												{/if}
+											</span>
 										</div>
 									</div>
 									<div class="flex gap-2">
