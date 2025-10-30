@@ -17,6 +17,7 @@ import {
   serverVote,
   serverVoteHook,
   user,
+  user_server_manage,
 } from "./schema";
 import {
   comparePassword,
@@ -24,6 +25,7 @@ import {
   intWithFallback,
   sumAsIntWithFallback,
 } from "./util";
+import type { ServerManage } from "./types";
 
 export const getAllServers = async () => {
   const latestStatus = db
@@ -383,4 +385,46 @@ export const getServerHookData = async (serverId: number) => {
     .where(eq(serverVoteHook.server_id, serverId))
     .limit(1);
   return currentServer[0] ?? null;
+};
+
+export const addUser = async (discordId: string) => {
+  try {
+    await db.insert(user).values({
+      discordId,
+      systemAdmin: 0,
+    });
+  } catch {}
+};
+
+export const getUserManagePermissions = async (
+  discordId: string,
+): Promise<ServerManage | null> => {
+  const currentUser = await db
+    .select()
+    .from(user)
+    .where(eq(user.discordId, discordId))
+    .limit(1);
+  const selectedUser = currentUser[0];
+  if (!selectedUser) {
+    return null;
+  }
+
+  const serversToManage = await db
+    .select({
+      id: server.id,
+      name: server.name,
+      description: server.description,
+      url: server.url,
+      iconUrl: server.iconUrl,
+      tags: server.tags,
+      trending: server.trending,
+    })
+    .from(user_server_manage)
+    .innerJoin(server, eq(server.id, user_server_manage.serverId))
+    .where(eq(user_server_manage.discordId, selectedUser.discordId));
+
+  return {
+    systemAdmin: selectedUser.systemAdmin === 1,
+    manageServers: serversToManage ?? [],
+  };
 };

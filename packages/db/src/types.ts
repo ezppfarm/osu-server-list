@@ -1,10 +1,10 @@
 export type Server = {
   id: number;
   name: string;
-  description?: string;
+  description: string | null;
   url: string;
   iconUrl: string;
-  tags?: string;
+  tags: string | null;
   trending: number;
 };
 
@@ -24,4 +24,9 @@ export type ServerFull = {
   last_update: number | null;
   date_added: number;
   location: string | null;
+};
+
+export type ServerManage = {
+  systemAdmin: boolean;
+  manageServers: Server[];
 };

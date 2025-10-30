@@ -1,6 +1,17 @@
 <script lang="ts">
 	import Activity from '@lucide/svelte/icons/activity';
 	import { env } from '$env/dynamic/public';
+	import * as Avatar from '@/components/ui/avatar';
+	import User from '@lucide/svelte/icons/user';
+	import Logout from '@lucide/svelte/icons/log-out';
+	import Shield from '@lucide/svelte/icons/shield';
+	import Discord from 'svelte-radix/DiscordLogo.svelte';
+	import * as DropdownMenu from '@/components/ui/dropdown-menu';
+	import type { APIUser } from 'discord-api-types/v10';
+	import { goto } from '$app/navigation';
+	import type { ServerManage } from '@osu-server-list/db/types-C9BBRE4F';
+
+	let props: { session?: { user: APIUser; manage: ServerManage } } = $props();
 </script>
 
 <header
@@ -30,5 +41,46 @@
 			>
 				Sign In
 			</Button> -->
+		<DropdownMenu.Root>
+			<DropdownMenu.Trigger>
+				<div class="cursor-pointer rounded-full bg-white/40 p-[1px] transition hover:bg-white/60">
+					<Avatar.Root>
+						{#if props.session}
+							<Avatar.Image
+								src="https://cdn.discordapp.com/avatars/{props.session.user.id}/{props.session.user
+									.avatar}.png"
+							></Avatar.Image>
+						{/if}
+						<Avatar.Fallback><User class="p-1" /></Avatar.Fallback>
+					</Avatar.Root>
+				</div>
+			</DropdownMenu.Trigger>
+			<DropdownMenu.Content>
+				{#if props.session}
+					{#if props.session.manage.systemAdmin}
+						<DropdownMenu.Item class="flex cursor-pointer items-center">
+							<Shield class="text-white" />
+							Manage all servers
+						</DropdownMenu.Item>
+						<DropdownMenu.Separator />
+					{/if}
+				{/if}
+				<DropdownMenu.Item
+					class="flex cursor-pointer items-center"
+					onclick={() => {
+						if (props.session) goto('/api/v1/session/logout');
+						else goto('/api/v1/session/authorize');
+					}}
+				>
+					{#if props.session}
+						<Logout class="text-white" />
+						Logout
+					{:else}
+						<Discord class="text-white" />
+						Login
+					{/if}
+				</DropdownMenu.Item>
+			</DropdownMenu.Content>
+		</DropdownMenu.Root>
 	</div>
 </header>

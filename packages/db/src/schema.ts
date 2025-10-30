@@ -1,9 +1,25 @@
-import { mysqlTable, int, text, bigint } from "drizzle-orm/mysql-core";
+import {
+  mysqlTable,
+  int,
+  text,
+  bigint,
+  tinyint,
+  longtext,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("user", {
-  id: int().primaryKey().autoincrement().notNull(),
-  name: text().notNull(),
-  discordId: text().notNull(),
+  discordId: varchar({ length: 128 }).primaryKey().notNull(),
+  systemAdmin: tinyint().notNull().default(0),
+});
+
+export const user_server_manage = mysqlTable("user_server_manage", {
+  discordId: varchar({ length: 128 })
+    .references(() => user.discordId)
+    .notNull(),
+  serverId: int()
+    .notNull()
+    .references(() => server.id),
 });
 
 export const server = mysqlTable("server", {

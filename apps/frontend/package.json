@@ -17,9 +17,12 @@
 		"@osu-server-list/db": "workspace:*",
 		"@osu-server-list/handlers": "workspace:*",
 		"@osu-server-list/hooks": "workspace:*",
+    "@osu-server-list/oauth": "workspace:*",
+    "discord-api-types": "catalog:",
 		"dayjs": "^1.11.18",
 		"get-browser-fingerprint": "^4.1.1",
-		"powerglitch": "^2.5.0"
+		"powerglitch": "^2.5.0",
+		"svelte-radix": "^3.0.0"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.4.0",

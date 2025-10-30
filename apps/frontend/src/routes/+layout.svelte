@@ -13,7 +13,7 @@
 	import PageLoader from '@/components/ui/page-loader/PageLoader.svelte';
 	import { setupViewTransitions } from '@/viewTransition';
 
-  setupViewTransitions();
+	setupViewTransitions();
 
 	dayjs.extend(relativeTime);
 	dayjs.extend(utc);
@@ -27,11 +27,7 @@
 	});
 
 	onMount(() => {
-		if (data.user) {
-			user.set(data.user);
-		}
-
-    navigationState.set("loaded");
+		navigationState.set('loaded');
 	});
 </script>
 
@@ -44,7 +40,7 @@
 <PageLoader />
 
 <div class="flex min-h-screen flex-col bg-background">
-	<Navbar />
+	<Navbar session={data.session} />
 
 	<main class="flex-1">
 		{@render children?.()}

@@ -27,7 +27,7 @@
     "@better-fetch/fetch": "catalog:",
     "@osu-server-list/db": "workspace:*",
     "@vermaysha/discord-webhook": "1.4.0",
-    "discord-api-types": "^0.38.31",
+    "discord-api-types": "catalog:",
     "zod": "catalog:"
   }
 }
