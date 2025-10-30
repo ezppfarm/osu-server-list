@@ -31,10 +31,19 @@
 	import ChevronsLeft from '@lucide/svelte/icons/chevrons-left';
 	import Plus from '@lucide/svelte/icons/plus';
 	import DataTableActions from './data-table-actions.svelte';
+	import * as Dialog from '@/components/ui/dialog';
+	import { Label } from '@/components/ui/label';
+	import { toast } from 'svelte-sonner';
+	import { removeServer } from './data.remote';
 
 	const props: PageProps = $props();
 
 	const data: ServerFull[] = props.data.servers;
+
+	let selectedServer = $state<ServerFull | undefined>(undefined);
+	let deleteServerConfirmation = $state('');
+	let deleteServerDialogOpen = $state(false);
+	let deleteServerLoading = $state(false);
 
 	const columns: ColumnDef<ServerFull>[] = [
 		{
@@ -73,7 +82,8 @@
 			cell: ({ row }) =>
 				renderComponent(DataTableActions, {
 					onclick_delete: () => {
-						alert('delete');
+						selectedServer = row.original;
+						deleteServerDialogOpen = true;
 					},
 					onclick_edit: () => {
 						alert('edit');
@@ -128,7 +138,49 @@
 			}
 		}
 	});
+
+	const deleteServer = async () => {
+		if (!selectedServer) return;
+		if (selectedServer.name !== deleteServerConfirmation) {
+			toast.error('Delete confirmation does not match');
+			return;
+		}
+		const deleteResult = await removeServer(selectedServer.id);
+		if (deleteResult.code === 200) toast.success(deleteResult.message);
+		else toast.error(deleteResult.message);
+	};
 </script>
+
+<!-- Server delete dialog-->
+<Dialog.Root
+	bind:open={deleteServerDialogOpen}
+	onOpenChangeComplete={(val) => {
+		if (!val) selectedServer = undefined;
+	}}
+>
+	<Dialog.Content>
+		<Dialog.Header>
+			<Dialog.Title>Delete {selectedServer?.name}?</Dialog.Title>
+			<Dialog.Description>This action is not reversible!</Dialog.Description>
+		</Dialog.Header>
+		<div class="flex flex-col gap-1.5">
+			<Label for="servername" class="text-right">Confirm by typing the servers name</Label>
+			<Input
+				id="servername"
+				placeholder={selectedServer?.name}
+				bind:value={deleteServerConfirmation}
+			/>
+		</div>
+		<Dialog.Footer>
+			<Button
+				onclick={() => {
+					deleteServerDialogOpen = false;
+				}}>Cancel</Button
+			>
+			<Button variant="destructive" onclick={deleteServer}>Delete server</Button>
+		</Dialog.Footer>
+	</Dialog.Content>
+</Dialog.Root>
 
 <div class="mx-auto mt-12 max-w-7xl px-3">
 	<Card.Root class="border-card-foreground/15 bg-card/50">
