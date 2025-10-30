@@ -39,7 +39,7 @@ export const serverVote = mysqlTable("server_vote", {
     .notNull(),
   userId: int().notNull(),
   ip: text().notNull(),
-  browserFingerprint: int().notNull(),
+  browserFingerprint: bigint({ mode: "number" }).notNull(),
   timestamp: bigint({ mode: "number" }).notNull(),
 });
 
