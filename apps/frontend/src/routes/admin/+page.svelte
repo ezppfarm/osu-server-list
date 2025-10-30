@@ -45,7 +45,7 @@
 			header: 'Status',
 			cell: ({ row }) =>
 				renderComponent(DataTableOnlineStatusBadge, {
-					online: row.original.onlinePlayers > 0
+					online: row.original.onlinePlayers > -1
 				})
 		},
 		{
