@@ -20,7 +20,7 @@
 		renderComponent,
 		renderSnippet
 	} from '$lib/components/ui/data-table/index.js';
-	import type { ServerFull } from '@osu-server-list/db/types-C9BBRE4F';
+	import type { ServerFull, Server } from '@osu-server-list/db/types';
 	import type { PageProps } from './$types';
 	import DataTableOnlineStatusBadge from './data-table-online-status-badge.svelte';
 	import * as Card from '@/components/ui/card';
@@ -34,7 +34,10 @@
 	import * as Dialog from '@/components/ui/dialog';
 	import { Label } from '@/components/ui/label';
 	import { toast } from 'svelte-sonner';
-	import { removeServer } from './data.remote';
+	import { createServer, removeServer } from './data.remote';
+	import { Textarea } from '@/components/ui/textarea';
+	import Checkbox from '@/components/ui/checkbox/checkbox.svelte';
+	import type { ServerAdd } from './types';
 
 	const props: PageProps = $props();
 
@@ -44,6 +47,17 @@
 	let deleteServerConfirmation = $state('');
 	let deleteServerDialogOpen = $state(false);
 	let deleteServerLoading = $state(false);
+
+	let addServerDialogOpen = $state(false);
+	let addServerLoading = $state(false);
+	let addServerObject = $state<ServerAdd>({
+		name: '',
+		description: '',
+		iconUrl: '',
+		tags: '',
+		trending: false,
+		url: ''
+	});
 
 	const columns: ColumnDef<ServerFull>[] = [
 		{
@@ -144,7 +158,7 @@
 	});
 
 	const deleteServer = async () => {
-		if (!selectedServer) return;
+		if (!selectedServer || deleteServerLoading) return;
 		if (selectedServer.name !== deleteServerConfirmation) {
 			toast.error('Delete confirmation does not match');
 			return;
@@ -159,6 +173,42 @@
 		deleteServerDialogOpen = false;
 		selectedServer = undefined;
 		deleteServerConfirmation = '';
+	};
+
+	const addServer = async () => {
+		if (addServerLoading) return;
+		if (addServerObject.name.trim().length <= 0) {
+			toast.error('Name cannot be empty');
+			return;
+		}
+		if (addServerObject.url.trim().length <= 0) {
+			toast.error('URL cannot be empty');
+			return;
+		}
+		if (addServerObject.iconUrl.trim().length <= 0) {
+			toast.error('Icon URL cannot be empty');
+			return;
+		}
+		if (addServerObject.tags.trim().length <= 0) {
+			toast.error('Tags cannot be empty');
+			return;
+		}
+		addServerLoading = true;
+		const addResult = await createServer(addServerObject);
+		if (addResult.code === 200) {
+			toast.success(addResult.message);
+			data = addResult.servers;
+		} else toast.error(addResult.message);
+		addServerLoading = false;
+		addServerDialogOpen = false;
+		addServerObject = {
+			name: '',
+			description: '',
+			iconUrl: '',
+			tags: '',
+			trending: false,
+			url: ''
+		};
 	};
 </script>
 
@@ -188,11 +238,70 @@
 				disabled={deleteServerLoading}
 				onclick={() => {
 					deleteServerDialogOpen = false;
+				}}
+			>
+				Cancel
+			</Button>
+			<Button disabled={deleteServerLoading} variant="destructive" onclick={deleteServer}>
+				Delete server
+			</Button>
+		</Dialog.Footer>
+	</Dialog.Content>
+</Dialog.Root>
+
+<!-- Server add dialog -->
+<Dialog.Root
+	bind:open={addServerDialogOpen}
+	onOpenChangeComplete={(val) => {
+		if (!val)
+			addServerObject = {
+				name: '',
+				description: '',
+				iconUrl: '',
+				tags: '',
+				trending: false,
+				url: ''
+			};
+	}}
+>
+	<Dialog.Content class="md:max-w-3xl">
+		<Dialog.Header>
+			<Dialog.Title>Add Server</Dialog.Title>
+		</Dialog.Header>
+		<div class="flex flex-col gap-3">
+			<div class="flex flex-col gap-1.5">
+				<Label for="name">Name</Label>
+				<Input id="name" bind:value={addServerObject.name} />
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="description">Description</Label>
+				<Textarea id="description" bind:value={addServerObject.description} />
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="url">URL</Label>
+				<Input id="url" bind:value={addServerObject.url} />
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="icon_url">Icon URL</Label>
+				<Input id="icon_url" bind:value={addServerObject.iconUrl} />
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="tags">Tags</Label>
+				<Input id="tags" bind:value={addServerObject.tags} />
+			</div>
+			<div class="flex flex-row items-center gap-1.5">
+				<Checkbox id="trending" bind:checked={addServerObject.trending} />
+				<Label for="trending">Trending</Label>
+			</div>
+		</div>
+		<Dialog.Footer>
+			<Button
+				variant="outline"
+				onclick={() => {
+					addServerDialogOpen = false;
 				}}>Cancel</Button
 			>
-			<Button disabled={deleteServerLoading} variant="destructive" onclick={deleteServer}
-				>Delete server</Button
-			>
+			<Button onclick={addServer} disabled={addServerLoading}>Add Server</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>
@@ -210,7 +319,9 @@
 					}}
 					class="max-w-sm"
 				/>
-				<Button class="ml-auto"><Plus />Add Server</Button>
+				<Button class="ml-auto" onclick={() => (addServerDialogOpen = true)}
+					><Plus />Add Server</Button
+				>
 			</div>
 			<div class="rounded-md border">
 				<Table.Root>

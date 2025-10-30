@@ -447,3 +447,27 @@ export const deleteServer = async (serverId: number) => {
     return false;
   }
 };
+
+export const addServer = async (
+  name: string,
+  description: string,
+  iconUrl: string,
+  tags: string,
+  trending: boolean,
+  url: string,
+) => {
+  try {
+    await db.insert(server).values({
+      name,
+      description,
+      iconUrl,
+      tags,
+      trending: trending ? 1 : 0,
+      date_added: Date.now(),
+      url,
+    });
+    return true;
+  } catch {
+    return false;
+  }
+};
