@@ -59,8 +59,12 @@
 		},
 		{
 			header: 'Players',
-			cell: ({ row }) =>
-				`${row.original.onlinePlayers} / ${row.original.registeredPlayers.toLocaleString('en-US')}`
+			cell: ({ row }) => {
+				if (row.original.registeredPlayers > -1)
+					return `${row.original.onlinePlayers.toLocaleString('en-US')} / ${row.original.registeredPlayers.toLocaleString('en-US')}`;
+
+				return `${row.original.onlinePlayers.toLocaleString('en-US')}`;
+			}
 		},
 		{
 			header: 'Server Tags',
@@ -171,7 +175,7 @@
 			<Dialog.Description>This action is not reversible!</Dialog.Description>
 		</Dialog.Header>
 		<div class="flex flex-col gap-1.5">
-			<Label for="servername" class="text-right">Confirm by typing the servers name</Label>
+			<Label for="servername" class="text-right">Confirm by typing the server's name</Label>
 			<Input
 				disabled={deleteServerLoading}
 				id="servername"

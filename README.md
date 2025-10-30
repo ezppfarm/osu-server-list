@@ -114,15 +114,7 @@ bun run build
 
 ## 🐋 Running with Docker
 
-### 1. Generate migrations
-
-You need to generate migrations so drizzle knows what to keep track of and not error. To do that, run:
-
-```bash
-bun run db:generate
-```
-
-### 2. Running
+### 1. Running
 
 To run, run:
 

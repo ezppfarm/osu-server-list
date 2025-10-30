@@ -58,7 +58,7 @@
 		if (server?.heatmap) {
 			heatmapData = server.heatmap.reduce(
 				(acc: { [key: string]: { [key: string]: number } }, curr) => {
-					if (server.type !== 'RIPPLE')
+					if (server.registeredPlayers > -1)
 						acc[curr.day] = {
 							onlinePlayers: curr.onlinePlayers,
 							registeredPlayers: curr.registeredPlayers,
@@ -219,11 +219,11 @@
 								</div>
 
 								<div
-									class="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2 {server.type !== 'RIPPLE'
+									class="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2 {server.registeredPlayers > -1
 										? 'lg:grid-cols-4'
 										: 'lg:grid-cols-3'}"
 								>
-									{#if server.type !== 'RIPPLE'}
+									{#if server.registeredPlayers > -1}
 										<div class="rounded-lg border border-border bg-secondary/50 p-3">
 											<p class="mb-1 text-xs text-muted-foreground">Total Players</p>
 											<p class="text-xl font-bold text-foreground">
