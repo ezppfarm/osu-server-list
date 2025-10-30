@@ -2,15 +2,39 @@
 	import { page } from '$app/state';
 	import Button from '@/components/ui/button/button.svelte';
 	import Home from '@lucide/svelte/icons/home';
+	import { onMount } from 'svelte';
+	import { PowerGlitch } from 'powerglitch';
 
 	const errorTitles: { [key: number]: string } = {
-		404: 'Miss! Server Not Found',
+		404: 'Miss! Page Not Found',
 		500: 'Failed! Something Went Wrong'
 	};
 	const errorTexts: { [key: number]: string } = {
-		404: "Looks like you missed the beat! The server you're looking for doesn't exist or has been removed from the list.",
+		404: "Looks like you missed the beat! The page you're looking for doesn't exist or has been removed.",
 		500: "The server encountered an unexpected error. Don't worry, it happens to the best of us. Try refreshing or head back home."
 	};
+
+	let glitchElement: HTMLElement;
+
+	onMount(() => {
+		PowerGlitch.glitch(glitchElement, {
+			timing: {
+				duration: 2250
+			},
+			glitchTimeSpan: {
+				start: 0.2,
+				end: 0.8
+			},
+			shake: {
+				velocity: 14,
+				amplitudeX: 0.08,
+				amplitudeY: 0.08
+			},
+			slice: {
+				count: 3
+			}
+		});
+	});
 </script>
 
 <div
@@ -19,7 +43,10 @@
 	<div class="absolute inset-0 bg-gradient-to-b from-accent/25 to-transparent"></div>
 	<div class="w-full max-w-2xl space-y-8 text-center">
 		<div class="relative">
-			<div class="animate-pulse text-[12rem] leading-none font-bold text-primary/20 select-none">
+			<div
+				class="text-[12rem] leading-none font-bold text-primary/30 select-none"
+				bind:this={glitchElement}
+			>
 				{page.status}
 			</div>
 		</div>
@@ -39,3 +66,29 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.pixelated-number {
+		color: white;
+		image-rendering: pixelated;
+		image-rendering: -moz-crisp-edges;
+		image-rendering: crisp-edges;
+		filter: drop-shadow(4px 4px 0px rgba(255, 255, 255, 0.3))
+			drop-shadow(8px 8px 0px rgba(255, 255, 255, 0.15));
+		animation: pixelate 2s infinite;
+		font-family: monospace;
+		letter-spacing: 0.1em;
+	}
+
+	@keyframes pixelate {
+		0%,
+		100% {
+			filter: drop-shadow(4px 4px 0px rgba(255, 255, 255, 0.3))
+				drop-shadow(8px 8px 0px rgba(255, 255, 255, 0.15)) contrast(1.2);
+		}
+		50% {
+			filter: drop-shadow(6px 6px 0px rgba(255, 255, 255, 0.4))
+				drop-shadow(12px 12px 0px rgba(255, 255, 255, 0.2)) contrast(1.5);
+		}
+	}
+</style>
