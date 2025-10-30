@@ -38,7 +38,7 @@
 
 	const props: PageProps = $props();
 
-	const data: ServerFull[] = props.data.servers;
+	let data: ServerFull[] = $state(props.data.servers);
 
 	let selectedServer = $state<ServerFull | undefined>(undefined);
 	let deleteServerConfirmation = $state('');
@@ -145,9 +145,16 @@
 			toast.error('Delete confirmation does not match');
 			return;
 		}
+		deleteServerLoading = true;
 		const deleteResult = await removeServer(selectedServer.id);
-		if (deleteResult.code === 200) toast.success(deleteResult.message);
-		else toast.error(deleteResult.message);
+		if (deleteResult.code === 200) {
+			toast.success(deleteResult.message);
+			data = deleteResult.servers;
+		} else toast.error(deleteResult.message);
+		deleteServerLoading = false;
+		deleteServerDialogOpen = false;
+		selectedServer = undefined;
+		deleteServerConfirmation = '';
 	};
 </script>
 
