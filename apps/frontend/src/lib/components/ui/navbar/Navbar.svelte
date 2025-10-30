@@ -58,7 +58,7 @@
 			<DropdownMenu.Content>
 				{#if props.session}
 					{#if props.session.manage.systemAdmin}
-						<DropdownMenu.Item class="flex cursor-pointer items-center">
+						<DropdownMenu.Item class="flex cursor-pointer items-center" onclick={() => goto("/admin")}>
 							<Shield class="text-white" />
 							Manage all servers
 						</DropdownMenu.Item>
