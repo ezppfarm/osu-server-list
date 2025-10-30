@@ -211,14 +211,14 @@
 						>
 							<p class="mb-1 text-xs text-muted-foreground">Online</p>
 							<p class="text-sm font-bold text-foreground">
-								{server.onlinePlayers.toLocaleString('en-US')}
+								{Math.max(server.onlinePlayers, 0).toLocaleString('en-US')}
 							</p>
 						</div>
 						{#if server.registeredPlayers > -1}
 							<div class="border-x border-border text-center">
 								<p class="mb-1 text-xs text-muted-foreground">Registered</p>
 								<p class="text-sm font-bold text-foreground">
-									{server.registeredPlayers.toLocaleString('en-US')}
+									{Math.max(server.registeredPlayers, 0).toLocaleString('en-US')}
 								</p>
 							</div>
 						{/if}
