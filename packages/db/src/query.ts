@@ -348,33 +348,6 @@ export const getServerStatusThisYear = async (serverId: number) => {
   return result;
 };
 
-export const checkLoginUser = async (username: string, password: string) => {
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(eq(user.name, username))
-    .limit(1);
-
-  if (!currentUser[0]) {
-    return null;
-  }
-
-  const isPasswordValid = comparePassword(
-    password,
-    currentUser[0].passwordHash,
-  );
-  return isPasswordValid ? currentUser[0] : null;
-};
-
-export const getUser = async (userName: string, hashedPassword: string) => {
-  const currentUser = await db
-    .select()
-    .from(user)
-    .where(and(eq(user.name, userName), eq(user.passwordHash, hashedPassword)))
-    .limit(1);
-  return currentUser[0] ?? null;
-};
-
 export const getUserTotalVotesForServer = async (
   userId: number,
   serverId: number,
