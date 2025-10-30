@@ -173,6 +173,7 @@
 		<div class="flex flex-col gap-1.5">
 			<Label for="servername" class="text-right">Confirm by typing the servers name</Label>
 			<Input
+				disabled={deleteServerLoading}
 				id="servername"
 				placeholder={selectedServer?.name}
 				bind:value={deleteServerConfirmation}
@@ -180,11 +181,14 @@
 		</div>
 		<Dialog.Footer>
 			<Button
+				disabled={deleteServerLoading}
 				onclick={() => {
 					deleteServerDialogOpen = false;
 				}}>Cancel</Button
 			>
-			<Button variant="destructive" onclick={deleteServer}>Delete server</Button>
+			<Button disabled={deleteServerLoading} variant="destructive" onclick={deleteServer}
+				>Delete server</Button
+			>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>
