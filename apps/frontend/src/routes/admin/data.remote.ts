@@ -26,7 +26,8 @@ export const createServer = query(
 		iconUrl: v.string(),
 		tags: v.string(),
 		trending: v.boolean(),
-		url: v.string()
+		url: v.string(),
+		location: v.string()
 	}),
 	async (server) => {
 		const allServers = await getAllServers();

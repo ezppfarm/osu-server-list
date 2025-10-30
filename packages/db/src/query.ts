@@ -455,6 +455,7 @@ export const addServer = async (
   tags: string,
   trending: boolean,
   url: string,
+  location: string,
 ) => {
   try {
     await db.insert(server).values({
@@ -465,6 +466,7 @@ export const addServer = async (
       trending: trending ? 1 : 0,
       date_added: Date.now(),
       url,
+      location,
     });
     return true;
   } catch {

@@ -56,7 +56,8 @@
 		iconUrl: '',
 		tags: '',
 		trending: false,
-		url: ''
+		url: '',
+		location: ''
 	});
 
 	const columns: ColumnDef<ServerFull>[] = [
@@ -207,7 +208,8 @@
 			iconUrl: '',
 			tags: '',
 			trending: false,
-			url: ''
+			url: '',
+			location: ''
 		};
 	};
 </script>
@@ -260,7 +262,8 @@
 				iconUrl: '',
 				tags: '',
 				trending: false,
-				url: ''
+				url: '',
+				location: ''
 			};
 	}}
 >
@@ -288,6 +291,10 @@
 			<div class="flex flex-col gap-1.5">
 				<Label for="tags">Tags</Label>
 				<Input id="tags" bind:value={addServerObject.tags} />
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="location">Location</Label>
+				<Input id="location" bind:value={addServerObject.location} />
 			</div>
 			<div class="flex flex-row items-center gap-1.5">
 				<Checkbox id="trending" bind:checked={addServerObject.trending} />

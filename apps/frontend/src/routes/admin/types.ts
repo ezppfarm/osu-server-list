@@ -5,4 +5,5 @@ export type ServerAdd = {
 	tags: string;
 	trending: boolean;
 	url: string;
+    location: string;
 };
