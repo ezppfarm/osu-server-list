@@ -17,7 +17,7 @@ import {
   serverVote,
   serverVoteHook,
   user,
-  user_server_manage,
+  user_server_manage as userServerManage,
 } from "./schema";
 import {
   comparePassword,
@@ -419,12 +419,31 @@ export const getUserManagePermissions = async (
       tags: server.tags,
       trending: server.trending,
     })
-    .from(user_server_manage)
-    .innerJoin(server, eq(server.id, user_server_manage.serverId))
-    .where(eq(user_server_manage.discordId, selectedUser.discordId));
+    .from(userServerManage)
+    .innerJoin(server, eq(server.id, userServerManage.serverId))
+    .where(eq(userServerManage.discordId, selectedUser.discordId));
 
   return {
     systemAdmin: selectedUser.systemAdmin === 1,
     manageServers: serversToManage ?? [],
   };
+};
+
+export const deleteServer = async (serverId: number) => {
+  try {
+    await db.transaction(async (tx) => {
+      await tx
+        .delete(serverVoteHook)
+        .where(eq(serverVoteHook.server_id, serverId));
+      await tx.delete(serverVote).where(eq(serverVote.serverId, serverId));
+      await tx.delete(serverStatus).where(eq(serverStatus.serverId, serverId));
+      await tx
+        .delete(userServerManage)
+        .where(eq(userServerManage.serverId, serverId));
+      await tx.delete(server).where(eq(server.id, serverId));
+    });
+    return true;
+  } catch {
+    return false;
+  }
 };
