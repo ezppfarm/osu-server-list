@@ -3,7 +3,6 @@ CREATE TABLE `user_server_manage` (
 	`serverId` int NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE `user` DROP PRIMARY KEY;--> statement-breakpoint
 ALTER TABLE `user` DROP COLUMN `id`;--> statement-breakpoint
 ALTER TABLE `user` DROP COLUMN `name`;
 ALTER TABLE `user` MODIFY COLUMN `discordId` varchar(128) NOT NULL;--> statement-breakpoint
