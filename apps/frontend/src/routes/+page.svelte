@@ -202,17 +202,17 @@
 				</Card.Header>
 				<Card.Content>
 					<div
-						class="mb-4 grid {server.type !== 'RIPPLE'
+						class="mb-4 grid {server.registeredPlayers > -1
 							? 'grid-cols-3'
 							: 'grid-cols-2'} gap-2 rounded-lg border bg-secondary/50 p-3"
 					>
-						<div class="text-center {server.type !== 'RIPPLE' ? '' : 'border-r border-border'}">
+						<div class="text-center {server.registeredPlayers > -1 ? '' : 'border-r border-border'}">
 							<p class="mb-1 text-xs text-muted-foreground">Online</p>
 							<p class="text-sm font-bold text-foreground">
 								{server.onlinePlayers.toLocaleString("en-US")}
 							</p>
 						</div>
-						{#if server.type !== 'RIPPLE'}
+						{#if server.registeredPlayers > -1}
 							<div class="border-x border-border text-center">
 								<p class="mb-1 text-xs text-muted-foreground">Registered</p>
 								<p class="text-sm font-bold text-foreground">
