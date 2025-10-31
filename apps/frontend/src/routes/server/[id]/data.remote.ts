@@ -2,6 +2,7 @@ import * as v from 'valibot';
 import { query } from '$app/server';
 import {
 	addServerVote,
+	findRecentVoteByBrowserFingerprint,
 	findRecentVoteByIp,
 	findRecentVoteByUserId,
 	getServerById
@@ -48,11 +49,19 @@ export const submitVote = query(
 			};
 		}
 
-		const recentIpVote = await findRecentVoteByIp(serverId, userIp);
+		const recentIpVote = await findRecentVoteByIp(userIp);
 		if (recentIpVote) {
 			return {
 				success: false,
-				message: 'You have already voted for this server in the last 24 hours'
+				message: 'You have already voted in the last 24 hours'
+			};
+		}
+
+		const recentBrowserFingerprintVote = await findRecentVoteByBrowserFingerprint(browserFingerprint);
+		if (recentBrowserFingerprintVote) {
+			return {
+				success: false,
+				message: 'You have already voted in the last 24 hours'
 			};
 		}
 
@@ -69,7 +78,7 @@ export const submitVote = query(
 		if (recentIdVote) {
 			return {
 				success: false,
-				message: 'You have already voted for this server in the last 24 hours'
+				message: 'You have already voted in the last 24 hours'
 			};
 		}
 

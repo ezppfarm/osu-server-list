@@ -183,7 +183,6 @@ export const findServerById = async (serverId: number) => {
 };
 
 export const findRecentVoteByIp = async (
-  serverId: number,
   ipAddress: string,
 ) => {
   const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
@@ -194,7 +193,6 @@ export const findRecentVoteByIp = async (
       .from(serverVote)
       .where(
         and(
-          eq(serverVote.serverId, serverId),
           eq(serverVote.ip, ipAddress),
           gt(serverVote.timestamp, oneDayAgo),
         ),
@@ -224,9 +222,7 @@ export const findRecentVoteByUserId = async (
   )[0];
 };
 
-export const findRecentVoteByUserAndBrowserFingerprint = async (
-  serverId: number,
-  userId: number,
+export const findRecentVoteByBrowserFingerprint = async (
   browserFingerprint: number,
 ) => {
   const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
@@ -237,8 +233,6 @@ export const findRecentVoteByUserAndBrowserFingerprint = async (
       .from(serverVote)
       .where(
         and(
-          eq(serverVote.serverId, serverId),
-          eq(serverVote.userId, userId),
           eq(serverVote.browserFingerprint, browserFingerprint),
           gt(serverVote.timestamp, oneDayAgo),
         ),
