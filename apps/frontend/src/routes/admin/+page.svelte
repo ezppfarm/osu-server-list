@@ -368,46 +368,52 @@
 			<Dialog.Title>Add Server</Dialog.Title>
 		</Dialog.Header>
 		<div class="flex flex-col gap-3">
-			<div class="flex flex-col gap-1.5">
-				<Label for="name">Name</Label>
-				<Input id="name" bind:value={addServerObject.name} />
-			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="type">Type</Label>
-				<Select.Root type="single" name="type" bind:value={addServerObject.type}>
-					<Select.Trigger class="w-full">
-						{addServerObject.type}
-					</Select.Trigger>
-					<Select.Content>
-						<Select.Group>
-							{#each serverTypes as serverType}
-								<Select.Item value={serverType.value} label={serverType.label}>
-									{serverType.label}
-								</Select.Item>
-							{/each}
-						</Select.Group>
-					</Select.Content>
-				</Select.Root>
+			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
+				<div class="flex flex-col gap-1.5">
+					<Label for="name">Name</Label>
+					<Input id="name" bind:value={addServerObject.name} />
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<Label for="type">Type</Label>
+					<Select.Root type="single" name="type" bind:value={addServerObject.type}>
+						<Select.Trigger class="w-full">
+							{addServerObject.type}
+						</Select.Trigger>
+						<Select.Content>
+							<Select.Group>
+								{#each serverTypes as serverType}
+									<Select.Item value={serverType.value} label={serverType.label}>
+										{serverType.label}
+									</Select.Item>
+								{/each}
+							</Select.Group>
+						</Select.Content>
+					</Select.Root>
+				</div>
 			</div>
 			<div class="flex flex-col gap-1.5">
 				<Label for="description">Description</Label>
 				<Textarea id="description" bind:value={addServerObject.description} />
 			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="url">URL</Label>
-				<Input id="url" bind:value={addServerObject.url} />
+			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
+				<div class="flex flex-col gap-1.5">
+					<Label for="url">URL</Label>
+					<Input id="url" bind:value={addServerObject.url} />
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<Label for="icon_url">Icon URL</Label>
+					<Input id="icon_url" bind:value={addServerObject.iconUrl} />
+				</div>
 			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="icon_url">Icon URL</Label>
-				<Input id="icon_url" bind:value={addServerObject.iconUrl} />
-			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="tags">Tags</Label>
-				<Input id="tags" bind:value={addServerObject.tags} />
-			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="location">Location</Label>
-				<Input id="location" bind:value={addServerObject.location} />
+			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
+				<div class="flex flex-col gap-1.5">
+					<Label for="tags">Tags</Label>
+					<Input id="tags" bind:value={addServerObject.tags} />
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<Label for="location">Location</Label>
+					<Input id="location" bind:value={addServerObject.location} />
+				</div>
 			</div>
 			<div class="flex flex-row items-center gap-1.5">
 				<Checkbox
@@ -490,13 +496,15 @@
 					<Input id="icon_url" bind:value={editServerObject.iconUrl} />
 				</div>
 			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="tags">Tags</Label>
-				<Input id="tags" bind:value={editServerObject.tags} />
-			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="location">Location</Label>
-				<Input id="location" bind:value={editServerObject.location} />
+			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
+				<div class="flex flex-col gap-1.5">
+					<Label for="tags">Tags</Label>
+					<Input id="tags" bind:value={editServerObject.tags} />
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<Label for="location">Location</Label>
+					<Input id="location" bind:value={editServerObject.location} />
+				</div>
 			</div>
 			<div class="flex flex-row items-center gap-1.5">
 				<Checkbox
