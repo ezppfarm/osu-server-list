@@ -100,6 +100,7 @@
 			},
 			cell: ({ row }) =>
 				renderComponent(DataTableActions, {
+					delete_enabled: props.data.session?.manage.systemAdmin ?? false,
 					onclick_delete: () => {
 						selectedServer = row.original;
 						deleteServerDialogOpen = true;
@@ -112,7 +113,7 @@
 	];
 
 	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
-	let sorting = $state<SortingState>([]);
+	let sorting = $state<SortingState>([{ id: 'name', desc: false }]);
 	let columnFilters = $state<ColumnFiltersState>([]);
 
 	const table = createSvelteTable({
