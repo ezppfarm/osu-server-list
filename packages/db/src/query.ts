@@ -182,9 +182,7 @@ export const findServerById = async (serverId: number) => {
   )[0];
 };
 
-export const findRecentVoteByIp = async (
-  ipAddress: string,
-) => {
+export const findRecentVoteByIp = async (ipAddress: string) => {
   const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
 
   return (
@@ -192,10 +190,7 @@ export const findRecentVoteByIp = async (
       .select()
       .from(serverVote)
       .where(
-        and(
-          eq(serverVote.ip, ipAddress),
-          gt(serverVote.timestamp, oneDayAgo),
-        ),
+        and(eq(serverVote.ip, ipAddress), gt(serverVote.timestamp, oneDayAgo)),
       )
       .limit(1)
   )[0];
@@ -462,6 +457,37 @@ export const addServer = async (
       url,
       location,
     });
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export const editServer = async (
+  serverId: number,
+  opts: {
+    name: string;
+    description: string;
+    iconUrl: string;
+    tags: string;
+    trending: boolean;
+    url: string;
+    location: string;
+  },
+) => {
+  try {
+    await db
+      .update(server)
+      .set({
+        name: opts.name,
+        description: opts.description,
+        iconUrl: opts.iconUrl,
+        tags: opts.tags,
+        trending: opts.trending ? 1 : 0,
+        url: opts.url,
+        location: opts.url,
+      })
+      .where(eq(server.id, serverId));
     return true;
   } catch {
     return false;

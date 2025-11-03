@@ -34,10 +34,10 @@
 	import * as Dialog from '@/components/ui/dialog';
 	import { Label } from '@/components/ui/label';
 	import { toast } from 'svelte-sonner';
-	import { createServer, removeServer } from './data.remote';
+	import { createServer, removeServer, updateServer } from './data.remote';
 	import { Textarea } from '@/components/ui/textarea';
 	import Checkbox from '@/components/ui/checkbox/checkbox.svelte';
-	import type { ServerAdd } from './types';
+	import type { ServerAdd, ServerEdit } from './types';
 
 	const props: PageProps = $props();
 
@@ -58,6 +58,19 @@
 		trending: false,
 		url: '',
 		location: ''
+	});
+
+	let editServerDialogOpen = $state(false);
+	let editServerLoading = $state(false);
+	let editServerObject = $state<ServerEdit>({
+		id: -1,
+		name: '',
+		description: '',
+		iconUrl: '',
+		tags: '',
+		location: '',
+		trending: false,
+		url: ''
 	});
 
 	const columns: ColumnDef<ServerFull>[] = [
@@ -106,7 +119,17 @@
 						deleteServerDialogOpen = true;
 					},
 					onclick_edit: () => {
-						alert('edit');
+						editServerObject = {
+							id: row.original.id,
+							description: row.original.description ?? '',
+							iconUrl: row.original.iconUrl,
+							location: row.original.location ?? '',
+							name: row.original.name,
+							tags: row.original.tags ?? '',
+							trending: row.original.trending === 1 ? true : false,
+							url: row.original.url
+						};
+						editServerDialogOpen = true;
 					}
 				})
 		}
@@ -160,7 +183,7 @@
 	});
 
 	const deleteServer = async () => {
-		if (!selectedServer || deleteServerLoading) return;
+		if (!selectedServer || deleteServerLoading || !props.data.session?.manage.systemAdmin) return;
 		if (selectedServer.name !== deleteServerConfirmation) {
 			toast.error('Delete confirmation does not match');
 			return;
@@ -178,7 +201,7 @@
 	};
 
 	const addServer = async () => {
-		if (addServerLoading) return;
+		if (addServerLoading || !props.data.session?.manage.systemAdmin) return;
 		if (addServerObject.name.trim().length <= 0) {
 			toast.error('Name cannot be empty');
 			return;
@@ -204,6 +227,49 @@
 		addServerLoading = false;
 		addServerDialogOpen = false;
 		addServerObject = {
+			name: '',
+			description: '',
+			iconUrl: '',
+			tags: '',
+			trending: false,
+			url: '',
+			location: ''
+		};
+	};
+
+	const editServer = async () => {
+		if (
+			editServerLoading ||
+			!props.data.session?.manage.systemAdmin ||
+			!props.data.session.manage.manageServers.find((userver) => userver.id === editServerObject.id)
+		)
+			return;
+		if (editServerObject.name.trim().length <= 0) {
+			toast.error('Name cannot be empty');
+			return;
+		}
+		if (editServerObject.url.trim().length <= 0) {
+			toast.error('URL cannot be empty');
+			return;
+		}
+		if (editServerObject.iconUrl.trim().length <= 0) {
+			toast.error('Icon URL cannot be empty');
+			return;
+		}
+		if (editServerObject.tags.trim().length <= 0) {
+			toast.error('Tags cannot be empty');
+			return;
+		}
+		editServerLoading = true;
+		const editResult = await updateServer(editServerObject);
+		if (editResult.code === 200) {
+			toast.success(editResult.message);
+			data = editResult.servers;
+		} else toast.error(editResult.message);
+		editServerLoading = false;
+		editServerDialogOpen = false;
+		editServerObject = {
+			id: -1,
 			name: '',
 			description: '',
 			iconUrl: '',
@@ -298,7 +364,11 @@
 				<Input id="location" bind:value={addServerObject.location} />
 			</div>
 			<div class="flex flex-row items-center gap-1.5">
-				<Checkbox id="trending" bind:checked={addServerObject.trending} />
+				<Checkbox
+					id="trending"
+					bind:checked={addServerObject.trending}
+					disabled={!props.data.session?.manage.systemAdmin}
+				/>
 				<Label for="trending">Trending</Label>
 			</div>
 		</div>
@@ -310,6 +380,73 @@
 				}}>Cancel</Button
 			>
 			<Button onclick={addServer} disabled={addServerLoading}>Add Server</Button>
+		</Dialog.Footer>
+	</Dialog.Content>
+</Dialog.Root>
+
+<!-- Server edit dialog -->
+<Dialog.Root
+	bind:open={editServerDialogOpen}
+	onOpenChangeComplete={(val) => {
+		if (!val)
+			editServerObject = {
+				id: -1,
+				name: '',
+				description: '',
+				iconUrl: '',
+				tags: '',
+				trending: false,
+				url: '',
+				location: ''
+			};
+	}}
+>
+	<Dialog.Content class="md:max-w-3xl">
+		<Dialog.Header>
+			<Dialog.Title>Edit {editServerObject.name}</Dialog.Title>
+		</Dialog.Header>
+		<div class="flex flex-col gap-3">
+			<div class="flex flex-col gap-1.5">
+				<Label for="name">Name</Label>
+				<Input id="name" bind:value={editServerObject.name} />
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="description">Description</Label>
+				<Textarea id="description" bind:value={editServerObject.description} />
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="url">URL</Label>
+				<Input id="url" bind:value={editServerObject.url} />
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="icon_url">Icon URL</Label>
+				<Input id="icon_url" bind:value={editServerObject.iconUrl} />
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="tags">Tags</Label>
+				<Input id="tags" bind:value={editServerObject.tags} />
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="location">Location</Label>
+				<Input id="location" bind:value={editServerObject.location} />
+			</div>
+			<div class="flex flex-row items-center gap-1.5">
+				<Checkbox
+					id="trending"
+					bind:checked={editServerObject.trending}
+					disabled={!props.data.session?.manage.systemAdmin}
+				/>
+				<Label for="trending">Trending</Label>
+			</div>
+		</div>
+		<Dialog.Footer>
+			<Button
+				variant="outline"
+				onclick={() => {
+					editServerDialogOpen = false;
+				}}>Cancel</Button
+			>
+			<Button onclick={editServer} disabled={editServerLoading}>Save Server</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>
@@ -327,9 +464,11 @@
 					}}
 					class="max-w-sm"
 				/>
-				<Button class="ml-auto" onclick={() => (addServerDialogOpen = true)}
-					><Plus />Add Server</Button
-				>
+				{#if props.data.session?.manage.systemAdmin}
+					<Button class="ml-auto" onclick={() => (addServerDialogOpen = true)}
+						><Plus />Add Server</Button
+					>
+				{/if}
 			</div>
 			<div class="rounded-md border">
 				<Table.Root>
