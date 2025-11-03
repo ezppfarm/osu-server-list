@@ -22,6 +22,7 @@ export const removeServer = query(v.number(), async (serverId) => {
 export const createServer = query(
 	v.object({
 		name: v.string(),
+		type: v.string(),
 		description: v.string(),
 		iconUrl: v.string(),
 		tags: v.string(),
@@ -43,6 +44,7 @@ export const createServer = query(
 		}
 		const addResult = await addServer(
 			server.name,
+			server.type as 'RIPPLE' | 'BANCHOPY' | 'TITANIC' | 'CUSTOM',
 			server.description,
 			server.iconUrl,
 			server.tags,
@@ -70,6 +72,7 @@ export const updateServer = query(
 	v.object({
 		id: v.number(),
 		name: v.string(),
+		type: v.string(),
 		description: v.string(),
 		iconUrl: v.string(),
 		tags: v.string(),
@@ -91,6 +94,7 @@ export const updateServer = query(
 		}
 		const addResult = await editServer(server.id, {
 			name: server.name,
+			type: server.type as 'RIPPLE' | 'BANCHOPY' | 'TITANIC' | 'CUSTOM',
 			description: server.description,
 			iconUrl: server.iconUrl,
 			tags: server.tags,
@@ -102,13 +106,13 @@ export const updateServer = query(
 			const allServers = await getAllServers();
 			return {
 				code: 200,
-				message: 'Server created!',
+				message: 'Server edited!',
 				servers: allServers
 			};
 		}
 		return {
 			code: 400,
-			message: 'Failed to create server.',
+			message: 'Failed to edit server.',
 			servers: []
 		};
 	}

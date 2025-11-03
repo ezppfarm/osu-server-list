@@ -1,5 +1,6 @@
 export type ServerAdd = {
 	name: string;
+	type: 'RIPPLE' | 'BANCHOPY' | 'TITANIC' | 'CUSTOM';
 	description: string;
 	iconUrl: string;
 	tags: string;
@@ -11,6 +12,7 @@ export type ServerAdd = {
 export type ServerEdit = {
 	id: number;
 	name: string;
+	type: 'RIPPLE' | 'BANCHOPY' | 'TITANIC' | 'CUSTOM';
 	description: string;
 	iconUrl: string;
 	tags: string;

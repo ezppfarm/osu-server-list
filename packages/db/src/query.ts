@@ -439,6 +439,7 @@ export const deleteServer = async (serverId: number) => {
 
 export const addServer = async (
   name: string,
+  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "CUSTOM",
   description: string,
   iconUrl: string,
   tags: string,
@@ -449,6 +450,7 @@ export const addServer = async (
   try {
     await db.insert(server).values({
       name,
+      type,
       description,
       iconUrl,
       tags,
@@ -467,6 +469,7 @@ export const editServer = async (
   serverId: number,
   opts: {
     name: string;
+    type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "CUSTOM";
     description: string;
     iconUrl: string;
     tags: string;
@@ -480,6 +483,7 @@ export const editServer = async (
       .update(server)
       .set({
         name: opts.name,
+        type: opts.type,
         description: opts.description,
         iconUrl: opts.iconUrl,
         tags: opts.tags,

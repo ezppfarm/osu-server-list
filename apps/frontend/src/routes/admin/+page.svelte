@@ -38,6 +38,8 @@
 	import { Textarea } from '@/components/ui/textarea';
 	import Checkbox from '@/components/ui/checkbox/checkbox.svelte';
 	import type { ServerAdd, ServerEdit } from './types';
+	import * as Select from '@/components/ui/select';
+	import { value } from 'valibot';
 
 	const props: PageProps = $props();
 
@@ -52,6 +54,7 @@
 	let addServerLoading = $state(false);
 	let addServerObject = $state<ServerAdd>({
 		name: '',
+		type: 'BANCHOPY',
 		description: '',
 		iconUrl: '',
 		tags: '',
@@ -65,6 +68,7 @@
 	let editServerObject = $state<ServerEdit>({
 		id: -1,
 		name: '',
+		type: 'BANCHOPY',
 		description: '',
 		iconUrl: '',
 		tags: '',
@@ -72,6 +76,21 @@
 		trending: false,
 		url: ''
 	});
+
+	const serverTypes = [
+		{
+			value: 'BANCHOPY',
+			label: 'BANCHOPY'
+		},
+		{
+			value: 'RIPPLE',
+			label: 'RIPPLE'
+		},
+		{
+			value: 'TITANIC',
+			label: 'TITANIC'
+		}
+	];
 
 	const columns: ColumnDef<ServerFull>[] = [
 		{
@@ -121,6 +140,7 @@
 					onclick_edit: () => {
 						editServerObject = {
 							id: row.original.id,
+							type: row.original.type,
 							description: row.original.description ?? '',
 							iconUrl: row.original.iconUrl,
 							location: row.original.location ?? '',
@@ -228,6 +248,7 @@
 		addServerDialogOpen = false;
 		addServerObject = {
 			name: '',
+			type: 'BANCHOPY',
 			description: '',
 			iconUrl: '',
 			tags: '',
@@ -271,6 +292,7 @@
 		editServerObject = {
 			id: -1,
 			name: '',
+			type: 'BANCHOPY',
 			description: '',
 			iconUrl: '',
 			tags: '',
@@ -325,6 +347,7 @@
 		if (!val)
 			addServerObject = {
 				name: '',
+				type: 'BANCHOPY',
 				description: '',
 				iconUrl: '',
 				tags: '',
@@ -342,6 +365,23 @@
 			<div class="flex flex-col gap-1.5">
 				<Label for="name">Name</Label>
 				<Input id="name" bind:value={addServerObject.name} />
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="type">Type</Label>
+				<Select.Root type="single" name="type" bind:value={addServerObject.type}>
+					<Select.Trigger>
+						{addServerObject.type}
+					</Select.Trigger>
+					<Select.Content>
+						<Select.Group>
+							{#each serverTypes as serverType}
+								<Select.Item value={serverType.value} label={serverType.label}>
+									{serverType.label}
+								</Select.Item>
+							{/each}
+						</Select.Group>
+					</Select.Content>
+				</Select.Root>
 			</div>
 			<div class="flex flex-col gap-1.5">
 				<Label for="description">Description</Label>
@@ -392,6 +432,7 @@
 			editServerObject = {
 				id: -1,
 				name: '',
+				type: 'BANCHOPY',
 				description: '',
 				iconUrl: '',
 				tags: '',
@@ -409,6 +450,23 @@
 			<div class="flex flex-col gap-1.5">
 				<Label for="name">Name</Label>
 				<Input id="name" bind:value={editServerObject.name} />
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="type">Type</Label>
+				<Select.Root type="single" name="type" bind:value={editServerObject.type}>
+					<Select.Trigger>
+						{editServerObject.type}
+					</Select.Trigger>
+					<Select.Content>
+						<Select.Group>
+							{#each serverTypes as serverType}
+								<Select.Item value={serverType.value} label={serverType.label}>
+									{serverType.label}
+								</Select.Item>
+							{/each}
+						</Select.Group>
+					</Select.Content>
+				</Select.Root>
 			</div>
 			<div class="flex flex-col gap-1.5">
 				<Label for="description">Description</Label>
