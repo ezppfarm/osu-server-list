@@ -287,7 +287,11 @@
 		const editResult = await updateServer(editServerObject);
 		if (editResult.code === 200) {
 			toast.success(editResult.message);
-			data = editResult.servers;
+			if (props.data.session.manage.systemAdmin) data = editResult.servers;
+			else
+				data = editResult.servers.filter((server) =>
+					props.data.session?.manage.manageServers.some((userver) => userver.id === server.id)
+				);
 		} else toast.error(editResult.message);
 		editServerLoading = false;
 		editServerDialogOpen = false;
