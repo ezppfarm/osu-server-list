@@ -57,13 +57,13 @@
 			</DropdownMenu.Trigger>
 			<DropdownMenu.Content>
 				{#if props.session}
-					{#if props.session.manage.systemAdmin}
+					{#if props.session.manage.systemAdmin || props.session.manage.manageServers.length > 0}
 						<DropdownMenu.Item
 							class="flex cursor-pointer items-center"
 							onclick={() => goto('/admin')}
 						>
 							<Shield class="text-white" />
-							Manage all servers
+							Manage {props.session.manage.systemAdmin ? 'all' : 'your'} servers
 						</DropdownMenu.Item>
 						<DropdownMenu.Separator />
 					{/if}
