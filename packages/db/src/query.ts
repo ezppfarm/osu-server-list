@@ -489,7 +489,7 @@ export const editServer = async (
         tags: opts.tags,
         trending: opts.trending ? 1 : 0,
         url: opts.url,
-        location: opts.url,
+        location: opts.location,
       })
       .where(eq(server.id, serverId));
     return true;

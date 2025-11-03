@@ -92,7 +92,7 @@ export const updateServer = query(
 				servers: allServers
 			};
 		}
-		const addResult = await editServer(server.id, {
+		const editResult = await editServer(server.id, {
 			name: server.name,
 			type: server.type as 'RIPPLE' | 'BANCHOPY' | 'TITANIC' | 'CUSTOM',
 			description: server.description,
@@ -102,7 +102,7 @@ export const updateServer = query(
 			url: server.url,
 			location: server.location
 		});
-		if (addResult) {
+		if (editResult) {
 			const allServers = await getAllServers();
 			return {
 				code: 200,

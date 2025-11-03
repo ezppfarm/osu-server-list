@@ -453,38 +453,42 @@
 			<Dialog.Title>Edit {editServerObject.name}</Dialog.Title>
 		</Dialog.Header>
 		<div class="flex flex-col gap-3">
-			<div class="flex flex-col gap-1.5">
-				<Label for="name">Name</Label>
-				<Input id="name" bind:value={editServerObject.name} />
-			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="type">Type</Label>
-				<Select.Root type="single" name="type" bind:value={editServerObject.type}>
-					<Select.Trigger class="w-full">
-						{editServerObject.type}
-					</Select.Trigger>
-					<Select.Content>
-						<Select.Group>
-							{#each serverTypes as serverType}
-								<Select.Item value={serverType.value} label={serverType.label}>
-									{serverType.label}
-								</Select.Item>
-							{/each}
-						</Select.Group>
-					</Select.Content>
-				</Select.Root>
+			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
+				<div class="flex flex-col gap-1.5">
+					<Label for="name">Name</Label>
+					<Input id="name" bind:value={editServerObject.name} />
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<Label for="type">Type</Label>
+					<Select.Root type="single" name="type" bind:value={editServerObject.type}>
+						<Select.Trigger class="w-full">
+							{editServerObject.type}
+						</Select.Trigger>
+						<Select.Content>
+							<Select.Group>
+								{#each serverTypes as serverType}
+									<Select.Item value={serverType.value} label={serverType.label}>
+										{serverType.label}
+									</Select.Item>
+								{/each}
+							</Select.Group>
+						</Select.Content>
+					</Select.Root>
+				</div>
 			</div>
 			<div class="flex flex-col gap-1.5">
 				<Label for="description">Description</Label>
 				<Textarea id="description" bind:value={editServerObject.description} />
 			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="url">URL</Label>
-				<Input id="url" bind:value={editServerObject.url} />
-			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="icon_url">Icon URL</Label>
-				<Input id="icon_url" bind:value={editServerObject.iconUrl} />
+			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
+				<div class="flex flex-col gap-1.5">
+					<Label for="url">URL</Label>
+					<Input id="url" bind:value={editServerObject.url} />
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<Label for="icon_url">Icon URL</Label>
+					<Input id="icon_url" bind:value={editServerObject.iconUrl} />
+				</div>
 			</div>
 			<div class="flex flex-col gap-1.5">
 				<Label for="tags">Tags</Label>
