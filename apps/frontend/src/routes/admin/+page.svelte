@@ -261,8 +261,10 @@
 	const editServer = async () => {
 		if (
 			editServerLoading ||
-			!props.data.session?.manage.systemAdmin ||
-			!props.data.session.manage.manageServers.find((userver) => userver.id === editServerObject.id)
+			(!props.data.session?.manage.systemAdmin &&
+				!props.data.session?.manage.manageServers.find(
+					(userver) => userver.id === editServerObject.id
+				))
 		)
 			return;
 		if (editServerObject.name.trim().length <= 0) {
@@ -369,7 +371,7 @@
 			<div class="flex flex-col gap-1.5">
 				<Label for="type">Type</Label>
 				<Select.Root type="single" name="type" bind:value={addServerObject.type}>
-					<Select.Trigger>
+					<Select.Trigger class="w-full">
 						{addServerObject.type}
 					</Select.Trigger>
 					<Select.Content>
@@ -454,7 +456,7 @@
 			<div class="flex flex-col gap-1.5">
 				<Label for="type">Type</Label>
 				<Select.Root type="single" name="type" bind:value={editServerObject.type}>
-					<Select.Trigger>
+					<Select.Trigger class="w-full">
 						{editServerObject.type}
 					</Select.Trigger>
 					<Select.Content>

@@ -83,12 +83,12 @@ export const updateServer = query(
 	async (server) => {
 		const allServers = await getAllServers();
 		if (
-			allServers.find((s) => s.url === server.url) ||
-			allServers.find((s) => s.name === server.name)
+			allServers.find((s) => s.url === server.url && s.id != server.id) ||
+			allServers.find((s) => s.name === server.name && s.id != server.id)
 		) {
 			return {
 				code: 400,
-				message: 'A Server with that name already exists.',
+				message: 'A Server with that name/url already exists.',
 				servers: allServers
 			};
 		}
