@@ -47,7 +47,8 @@ export const createServer = query(
 			server.iconUrl,
 			server.tags,
 			server.trending,
-			server.url
+			server.url,
+			server.location
 		);
 		if (addResult) {
 			const allServers = await getAllServers();
