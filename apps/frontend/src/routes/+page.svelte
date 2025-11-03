@@ -22,7 +22,7 @@
 	const props: PageProps = $props();
 
 	let servers = $state<ServerFull[]>([]);
-	let sort = $state('onlinePlayers');
+	let sort = $state('votes');
 
 	function updateSort(value: string) {
 		if (!servers) return;
@@ -34,7 +34,7 @@
 	}
 
 	onMount(() => {
-		sort = localStorage.getItem('sort') ?? 'onlinePlayers';
+		sort = localStorage.getItem('sort') ?? 'votes';
 		servers = sortServers(props.data.servers ?? [], sort);
 	});
 </script>
