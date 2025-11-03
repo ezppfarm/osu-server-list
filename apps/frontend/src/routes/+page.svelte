@@ -18,6 +18,7 @@
 	import ArrowDown from '@lucide/svelte/icons/arrow-down';
 	import { onMount } from 'svelte';
 	import type { ServerFull } from '@osu-server-list/db/types';
+	import TrendingWrapper from '@/components/ui/effects/TrendingWrapper.svelte';
 
 	const props: PageProps = $props();
 
@@ -163,18 +164,40 @@
 
 	<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 		{#each servers as server, idx}
-			<Card.Root class="gap-4 border-card-foreground/15 bg-card/50">
+			<Card.Root
+				class="gap-4 {server.trending
+					? 'border-orange-300/15 bg-orange-900/30'
+					: 'border-card-foreground/15 bg-card/50'}"
+			>
 				<Card.Header>
 					<div class="mb-2 w-fit rounded-lg bg-card-foreground/10 px-2 py-1 font-mono text-sm">
 						#{idx + 1}
 					</div>
 					<a href="/server/{server.id}" class="block">
 						<div class="mb-4 flex items-center gap-4">
-							<div
-								class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border bg-primary/10 p-1"
-							>
-								<img src={server.iconUrl} alt={server.name} class="h-full w-full object-contain" />
-							</div>
+							{#if server.trending}
+								<TrendingWrapper>
+									<div
+										class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border bg-primary/10 p-1"
+									>
+										<img
+											src={server.iconUrl}
+											alt={server.name}
+											class="h-full w-full object-contain"
+										/>
+									</div>
+								</TrendingWrapper>
+							{:else}
+								<div
+									class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border bg-primary/10 p-1"
+								>
+									<img
+										src={server.iconUrl}
+										alt={server.name}
+										class="h-full w-full object-contain"
+									/>
+								</div>
+							{/if}
 							<div class="min-w-0 flex-1">
 								<h3
 									class="truncate text-xl font-bold text-foreground transition-colors group-hover:text-primary"
