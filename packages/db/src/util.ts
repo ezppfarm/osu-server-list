@@ -7,6 +7,9 @@ export const sumAsIntWithFallback = (expr: MySqlColumn, fallback: number) =>
 export const intWithFallback = (expr: MySqlColumn, fallback: number) =>
   sql<number>`COALESCE(${expr}, ${fallback})`;
 
+export const stringWithFallback = (expr: MySqlColumn, fallback: string) =>
+  sql<string>`COALESCE(${expr}, ${fallback})`;
+
 export const countDistinctWithFallback = (
   expr: MySqlColumn,
   fallback: number,
