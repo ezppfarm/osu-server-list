@@ -25,9 +25,9 @@ import {
   stringWithFallback,
   sumAsIntWithFallback,
 } from "./util";
-import type { ServerManage } from "./types";
+import type { Server, ServerFull, ServerFullHook, ServerManage } from "./types";
 
-export const getAllServers = async () => {
+export const getAllServers = async (): Promise<ServerFull[]> => {
   const latestStatus = db
     .select({
       serverId: serverStatus.serverId,
@@ -85,11 +85,11 @@ export const getAllServers = async () => {
     .orderBy(desc(serverStatus.timestamp));
 };
 
-export const getAllServersRaw = async () => {
+export const getAllServersRaw = async (): Promise<Server[]> => {
   return await db.select().from(server);
 };
 
-export const getAllServersWithHooks = async () => {
+export const getAllServersWithHooks = async (): Promise<ServerFullHook[]> => {
   const latestStatus = db
     .select({
       serverId: serverStatus.serverId,
