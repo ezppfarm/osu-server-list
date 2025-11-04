@@ -12,6 +12,7 @@
 	import { navigationState, user } from '@/global';
 	import PageLoader from '@/components/ui/page-loader/PageLoader.svelte';
 	import { setupViewTransitions } from '@/viewTransition';
+	import { title } from '@/title';
 
 	setupViewTransitions();
 
@@ -33,6 +34,7 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
+	<title>{$title}</title>
 </svelte:head>
 
 <Toaster position="top-right" richColors closeButton />

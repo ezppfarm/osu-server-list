@@ -19,6 +19,7 @@
 	import { onMount } from 'svelte';
 	import type { ServerFull } from '@osu-server-list/db/types';
 	import TrendingWrapper from '@/components/ui/effects/TrendingWrapper.svelte';
+	import { title } from '@/title';
 
 	const props: PageProps = $props();
 
@@ -37,6 +38,7 @@
 	onMount(() => {
 		sort = localStorage.getItem('sort') ?? 'votes';
 		servers = sortServers(props.data.servers ?? [], sort);
+		title.set('browse servers');
 	});
 </script>
 

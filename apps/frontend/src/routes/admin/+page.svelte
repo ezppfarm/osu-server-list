@@ -9,7 +9,7 @@
 		getPaginationRowModel,
 		getSortedRowModel
 	} from '@tanstack/table-core';
-	import { createRawSnippet } from 'svelte';
+	import { createRawSnippet, onMount } from 'svelte';
 	import * as Table from '$lib/components/ui/table';
 	import * as Pagination from '$lib/components/ui/pagination';
 	import { Button } from '$lib/components/ui/button/index.js';
@@ -39,6 +39,7 @@
 	import Checkbox from '@/components/ui/checkbox/checkbox.svelte';
 	import type { ServerAdd, ServerEdit } from './types';
 	import * as Select from '@/components/ui/select';
+	import { title } from '@/title';
 
 	const props: PageProps = $props();
 
@@ -321,6 +322,10 @@
 			discordWebhookContent: ''
 		};
 	};
+
+	onMount(() => {
+		title.set('server management');
+	});
 </script>
 
 <!-- Server delete dialog-->

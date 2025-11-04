@@ -17,6 +17,7 @@
 	import { Turnstile } from 'svelte-turnstile';
 	import getBrowserFingerprint from 'get-browser-fingerprint';
 	import { PowerGlitch } from 'powerglitch';
+	import { title } from '@/title';
 
 	const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
 	const turnstileEnabled = turnstileSiteKey.length > 0;
@@ -31,6 +32,11 @@
 	let glitchElement: HTMLElement | undefined = $state();
 
 	onMount(async () => {
+		if (!server) {
+			title.set('server not found');
+		} else {
+			title.set(server.name);
+		}
 		if (glitchElement) {
 			PowerGlitch.glitch(glitchElement, {
 				timing: {
