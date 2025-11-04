@@ -34,7 +34,7 @@
     "prettier-plugin-svelte": "3",
     "prettier-plugin-tailwindcss": "^0.7.0",
     "tsdown": "^0.15.6",
-    "turbo": "^2.5.8",
+    "turbo": "^2.6.0",
     "valibot": "^1.1.0"
   }
 }
