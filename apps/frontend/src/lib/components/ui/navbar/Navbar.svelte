@@ -101,7 +101,6 @@
 	</Sheet.Root>
 	<div class="hidden w-full items-center gap-6 lg:flex">
 		<a href="/" class="hidden items-center gap-3 text-2xl lg:flex">
-			<!-- <img src={Logo} alt="Logo" class="{smallerBar ? 'h-10 w-10' : 'h-14 w-14'} transition-all" /> -->
 			<div
 				class="flex {smallerBar
 					? 'size-8'
