@@ -40,7 +40,7 @@
 <PageLoader />
 
 <div class="flex min-h-screen flex-col bg-background">
-	<Navbar session={data.session} />
+	<Navbar pathName={data.pathName} session={data.session} />
 
 	<main class="flex-1">
 		{@render children?.()}
