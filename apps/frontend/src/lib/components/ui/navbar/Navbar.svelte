@@ -38,7 +38,7 @@
 	});
 </script>
 
-<svelte:window onscroll={handleScroll} />
+<svelte:window onscroll={handleScroll} onresize={() => (sheetOpen = false)} />
 
 <header
 	class="fixed top-0 left-0 flex {smallerBar
