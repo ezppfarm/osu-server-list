@@ -6,13 +6,15 @@
 	import utc from 'dayjs/plugin/utc';
 	import Navbar from '@/components/ui/navbar/Navbar.svelte';
 	import { beforeNavigate } from '$app/navigation';
-	import { updated } from '$app/state';
+	import { page, updated } from '$app/state';
 	import { Toaster } from '@/components/ui/sonner';
 	import { onMount } from 'svelte';
-	import { navigationState, user } from '@/global';
+	import { navigationState } from '@/global';
 	import PageLoader from '@/components/ui/page-loader/PageLoader.svelte';
 	import { setupViewTransitions } from '@/viewTransition';
 	import { title } from '@/title';
+	import extend from 'just-extend';
+	import { MetaTags } from 'svelte-meta-tags';
 
 	setupViewTransitions();
 
@@ -20,6 +22,8 @@
 	dayjs.extend(utc);
 
 	let { children, data } = $props();
+
+	let metaTags = $derived(extend(true, {}, data.baseMetaTags, page.data.pageMetaTags ?? {}));
 
 	beforeNavigate(({ willUnload, to }) => {
 		if (updated.current && !willUnload && to?.url) {
@@ -36,6 +40,8 @@
 	<link rel="icon" href={favicon} />
 	<title>{$title}</title>
 </svelte:head>
+
+<MetaTags {...metaTags} />
 
 <Toaster position="top-right" richColors closeButton />
 
