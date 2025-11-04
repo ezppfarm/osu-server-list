@@ -59,7 +59,10 @@
 		tags: '',
 		trending: false,
 		url: '',
-		location: ''
+		location: '',
+		postbackUrl: '',
+		discordWebhookUrl: '',
+		discordWebhookContent: ''
 	});
 
 	let editServerDialogOpen = $state(false);
@@ -73,7 +76,10 @@
 		tags: '',
 		location: '',
 		trending: false,
-		url: ''
+		url: '',
+		postbackUrl: '',
+		discordWebhookUrl: '',
+		discordWebhookContent: ''
 	});
 
 	const serverTypes = [
@@ -146,7 +152,10 @@
 							name: row.original.name,
 							tags: row.original.tags ?? '',
 							trending: row.original.trending === 1 ? true : false,
-							url: row.original.url
+							url: row.original.url,
+							postbackUrl: row.original.postbackUrl,
+							discordWebhookUrl: row.original.discordWebhookUrl,
+							discordWebhookContent: row.original.discordWebhookContent
 						};
 						editServerDialogOpen = true;
 					}
@@ -253,7 +262,10 @@
 			tags: '',
 			trending: false,
 			url: '',
-			location: ''
+			location: '',
+			postbackUrl: '',
+			discordWebhookUrl: '',
+			discordWebhookContent: ''
 		};
 	};
 
@@ -303,7 +315,10 @@
 			tags: '',
 			trending: false,
 			url: '',
-			location: ''
+			location: '',
+			postbackUrl: '',
+			discordWebhookUrl: '',
+			discordWebhookContent: ''
 		};
 	};
 </script>
@@ -358,7 +373,10 @@
 				tags: '',
 				trending: false,
 				url: '',
-				location: ''
+				location: '',
+				postbackUrl: '',
+				discordWebhookUrl: '',
+				discordWebhookContent: ''
 			};
 	}}
 >
@@ -414,6 +432,20 @@
 					<Input id="location" bind:value={addServerObject.location} />
 				</div>
 			</div>
+			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
+				<div class="flex flex-col gap-1.5">
+					<Label for="postback_url">POSTBack URL</Label>
+					<Input id="postback_url" bind:value={editServerObject.postbackUrl} />
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<Label for="discord_webhook_url">Discord Webhook URL</Label>
+					<Input id="discord_webhook_url" bind:value={editServerObject.discordWebhookUrl} />
+				</div>
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="description">Discord Webhook Content</Label>
+				<Textarea id="description" bind:value={editServerObject.discordWebhookContent} />
+			</div>
 			<div class="flex flex-row items-center gap-1.5">
 				<Checkbox
 					id="trending"
@@ -449,7 +481,10 @@
 				tags: '',
 				trending: false,
 				url: '',
-				location: ''
+				location: '',
+				postbackUrl: '',
+				discordWebhookUrl: '',
+				discordWebhookContent: ''
 			};
 	}}
 >
@@ -504,6 +539,20 @@
 					<Label for="location">Location</Label>
 					<Input id="location" bind:value={editServerObject.location} />
 				</div>
+			</div>
+			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
+				<div class="flex flex-col gap-1.5">
+					<Label for="postback_url">POSTBack URL</Label>
+					<Input id="postback_url" bind:value={editServerObject.postbackUrl} />
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<Label for="discord_webhook_url">Discord Webhook URL</Label>
+					<Input id="discord_webhook_url" bind:value={editServerObject.discordWebhookUrl} />
+				</div>
+			</div>
+			<div class="flex flex-col gap-1.5">
+				<Label for="description">Discord Webhook Content</Label>
+				<Textarea id="description" bind:value={editServerObject.discordWebhookContent} />
 			</div>
 			<div class="flex flex-row items-center gap-1.5">
 				<Checkbox

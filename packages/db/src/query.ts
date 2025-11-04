@@ -516,6 +516,9 @@ export const addServer = async (
   trending: boolean,
   url: string,
   location: string,
+  postbackUrl: string,
+  discordWebhookUrl: string,
+  discordWebhookContent: string,
 ) => {
   try {
     await db.transaction(async (tx) => {
@@ -537,9 +540,21 @@ export const addServer = async (
         tx.rollback();
         return;
       }
-      await db.insert(serverVoteHook).values({
-        server_id: serverId[0]?.id,
-      });
+      await db
+        .insert(serverVoteHook)
+        .values({
+          server_id: serverId[0]?.id,
+          discord_webhook_content: discordWebhookContent,
+          discord_webhook_url: discordWebhookUrl,
+          postback_url: postbackUrl,
+        })
+        .onDuplicateKeyUpdate({
+          set: {
+            postback_url: postbackUrl,
+            discord_webhook_content: discordWebhookContent,
+            discord_webhook_url: discordWebhookUrl,
+          },
+        });
     });
 
     return true;
@@ -559,22 +574,43 @@ export const editServer = async (
     trending: boolean;
     url: string;
     location: string;
+    postbackUrl: string;
+    discordWebhookUrl: string;
+    discordWebhookContent: string;
   },
 ) => {
   try {
-    await db
-      .update(server)
-      .set({
-        name: opts.name,
-        type: opts.type,
-        description: opts.description,
-        iconUrl: opts.iconUrl,
-        tags: opts.tags,
-        trending: opts.trending ? 1 : 0,
-        url: opts.url,
-        location: opts.location,
-      })
-      .where(eq(server.id, serverId));
+    await db.transaction(async (tx) => {
+      await db
+        .update(server)
+        .set({
+          name: opts.name,
+          type: opts.type,
+          description: opts.description,
+          iconUrl: opts.iconUrl,
+          tags: opts.tags,
+          trending: opts.trending ? 1 : 0,
+          url: opts.url,
+          location: opts.location,
+        })
+        .where(eq(server.id, serverId));
+
+      await db
+        .insert(serverVoteHook)
+        .values({
+          server_id: serverId,
+          discord_webhook_content: opts.discordWebhookContent,
+          discord_webhook_url: opts.discordWebhookUrl,
+          postback_url: opts.postbackUrl,
+        })
+        .onDuplicateKeyUpdate({
+          set: {
+            discord_webhook_content: opts.discordWebhookContent,
+            discord_webhook_url: opts.discordWebhookUrl,
+            postback_url: opts.postbackUrl,
+          },
+        });
+    });
     return true;
   } catch {
     return false;

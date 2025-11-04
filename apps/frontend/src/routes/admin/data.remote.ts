@@ -1,5 +1,10 @@
 import { query } from '$app/server';
-import { addServer, deleteServer, editServer, getAllServersWithHooks } from '@osu-server-list/db/query';
+import {
+	addServer,
+	deleteServer,
+	editServer,
+	getAllServersWithHooks
+} from '@osu-server-list/db/query';
 import * as v from 'valibot';
 
 export const removeServer = query(v.number(), async (serverId) => {
@@ -28,7 +33,10 @@ export const createServer = query(
 		tags: v.string(),
 		trending: v.boolean(),
 		url: v.string(),
-		location: v.string()
+		location: v.string(),
+		postbackUrl: v.string(),
+		discordWebhookUrl: v.string(),
+		discordWebhookContent: v.string()
 	}),
 	async (server) => {
 		const allServers = await getAllServersWithHooks();
@@ -42,6 +50,7 @@ export const createServer = query(
 				servers: allServers
 			};
 		}
+		//TODO: validation
 		const addResult = await addServer(
 			server.name,
 			server.type as 'RIPPLE' | 'BANCHOPY' | 'TITANIC' | 'CUSTOM',
@@ -50,7 +59,10 @@ export const createServer = query(
 			server.tags,
 			server.trending,
 			server.url,
-			server.location
+			server.location,
+			server.postbackUrl,
+			server.discordWebhookUrl,
+			server.discordWebhookContent
 		);
 		if (addResult) {
 			const allServers = await getAllServersWithHooks();
@@ -78,7 +90,10 @@ export const updateServer = query(
 		tags: v.string(),
 		trending: v.boolean(),
 		url: v.string(),
-		location: v.string()
+		location: v.string(),
+		postbackUrl: v.string(),
+		discordWebhookUrl: v.string(),
+		discordWebhookContent: v.string()
 	}),
 	async (server) => {
 		const allServers = await getAllServersWithHooks();
@@ -92,6 +107,7 @@ export const updateServer = query(
 				servers: allServers
 			};
 		}
+		//TODO: validation
 		const editResult = await editServer(server.id, {
 			name: server.name,
 			type: server.type as 'RIPPLE' | 'BANCHOPY' | 'TITANIC' | 'CUSTOM',
@@ -100,7 +116,10 @@ export const updateServer = query(
 			tags: server.tags,
 			trending: server.trending,
 			url: server.url,
-			location: server.location
+			location: server.location,
+			postbackUrl: server.postbackUrl,
+			discordWebhookUrl: server.discordWebhookUrl,
+			discordWebhookContent: server.discordWebhookContent
 		});
 		if (editResult) {
 			const allServers = await getAllServersWithHooks();

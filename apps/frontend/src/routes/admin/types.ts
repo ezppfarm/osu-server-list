@@ -7,6 +7,9 @@ export type ServerAdd = {
 	trending: boolean;
 	url: string;
 	location: string;
+	postbackUrl: string;
+	discordWebhookUrl: string;
+	discordWebhookContent: string;
 };
 
 export type ServerEdit = {
@@ -19,4 +22,7 @@ export type ServerEdit = {
 	trending: boolean;
 	url: string;
 	location: string;
+	postbackUrl: string;
+	discordWebhookUrl: string;
+	discordWebhookContent: string;
 };
