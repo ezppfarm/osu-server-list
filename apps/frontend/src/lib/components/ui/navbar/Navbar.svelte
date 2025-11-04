@@ -9,7 +9,7 @@
 	import * as DropdownMenu from '@/components/ui/dropdown-menu';
 	import type { APIUser } from 'discord-api-types/v10';
 	import { goto } from '$app/navigation';
-	import type { ServerManage } from '@osu-server-list/db/types-C9BBRE4F';
+	import type { ServerManage } from '@osu-server-list/db/types';
 
 	let props: { session?: { user: APIUser; manage: ServerManage } } = $props();
 </script>

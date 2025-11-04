@@ -1,5 +1,5 @@
-import { getAllServers } from '@osu-server-list/db/query';
-import type { ServerFull } from '@osu-server-list/db/types-C9BBRE4F';
+import { getAllServersWithHooks } from '@osu-server-list/db/query';
+import type { ServerFullHook } from '@osu-server-list/db/types';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ locals }) => {
@@ -8,9 +8,9 @@ export const load = async ({ locals }) => {
 		(locals.session.manage.manageServers.length <= 0 && !locals.session.manage.systemAdmin)
 	)
 		return redirect(302, '/');
-	const servers: ServerFull[] = await getAllServers();
+	const servers: ServerFullHook[] = await getAllServersWithHooks();
 
-	const serversToManage: ServerFull[] = [];
+	const serversToManage: ServerFullHook[] = [];
 
 	if (locals.session.manage.systemAdmin) serversToManage.push(...servers);
 	else {

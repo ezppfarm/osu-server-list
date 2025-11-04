@@ -20,7 +20,7 @@
 		renderComponent,
 		renderSnippet
 	} from '$lib/components/ui/data-table/index.js';
-	import type { ServerFull, Server } from '@osu-server-list/db/types';
+	import type { ServerFullHook } from '@osu-server-list/db/types';
 	import type { PageProps } from './$types';
 	import DataTableOnlineStatusBadge from './data-table-online-status-badge.svelte';
 	import * as Card from '@/components/ui/card';
@@ -39,13 +39,12 @@
 	import Checkbox from '@/components/ui/checkbox/checkbox.svelte';
 	import type { ServerAdd, ServerEdit } from './types';
 	import * as Select from '@/components/ui/select';
-	import { value } from 'valibot';
 
 	const props: PageProps = $props();
 
-	let data: ServerFull[] = $state(props.data.servers);
+	let data: ServerFullHook[] = $state(props.data.servers);
 
-	let selectedServer = $state<ServerFull | undefined>(undefined);
+	let selectedServer = $state<ServerFullHook | undefined>(undefined);
 	let deleteServerConfirmation = $state('');
 	let deleteServerDialogOpen = $state(false);
 	let deleteServerLoading = $state(false);
@@ -92,7 +91,7 @@
 		}
 	];
 
-	const columns: ColumnDef<ServerFull>[] = [
+	const columns: ColumnDef<ServerFullHook>[] = [
 		{
 			accessorKey: 'name',
 			header: 'Server Name'
