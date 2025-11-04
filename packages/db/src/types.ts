@@ -1,6 +1,7 @@
 export type Server = {
   id: number;
   name: string;
+  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "CUSTOM";
   description: string | null;
   url: string;
   iconUrl: string;

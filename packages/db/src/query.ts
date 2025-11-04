@@ -472,6 +472,7 @@ export const getUserManagePermissions = async (
     .select({
       id: server.id,
       name: server.name,
+      type: server.type,
       description: server.description,
       url: server.url,
       iconUrl: server.iconUrl,
