@@ -40,6 +40,8 @@
 	import * as Select from '@/components/ui/select';
 	import { title } from '@/title';
 	import Switch from '@/components/ui/switch/switch.svelte';
+	import * as Tabs from '@/components/ui/tabs';
+	import * as InputGroup from '@/components/ui/input-group';
 
 	const props: PageProps = $props();
 
@@ -385,81 +387,106 @@
 			};
 	}}
 >
-	<Dialog.Content class="md:max-w-3xl">
+	<Dialog.Content class="max-w-fit md:max-w-3xl">
 		<Dialog.Header>
 			<Dialog.Title>Add Server</Dialog.Title>
 		</Dialog.Header>
-		<div class="flex flex-col gap-3">
-			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
-				<div class="flex flex-col gap-1.5">
-					<Label for="name">Name</Label>
-					<Input id="name" bind:value={addServerObject.name} />
+		<Tabs.Root value="info">
+			<Tabs.List class="w-full bg-accent/20">
+				<Tabs.Trigger value="info">Basic Info</Tabs.Trigger>
+				<Tabs.Trigger value="details">Details</Tabs.Trigger>
+				<Tabs.Trigger value="webhook">POSTBack / Webhook</Tabs.Trigger>
+			</Tabs.List>
+			<Tabs.Content value="info">
+				<div class="grid gap-4 py-4">
+					<div class="grid grid-cols-1 gap-2 lg:grid-cols-[1fr_0.5fr]">
+						<div class="grid grid-cols-1 items-center gap-2">
+							<Label for="name">Name</Label>
+							<Input id="name" bind:value={addServerObject.name} class="col-span-3" />
+						</div>
+						<div class="grid grid-cols-1 items-center gap-2">
+							<Label for="name">Type</Label>
+							<Select.Root type="single" name="type" bind:value={addServerObject.type}>
+								<Select.Trigger class="w-full">
+									{addServerObject.type}
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Group>
+										{#each serverTypes as serverType}
+											<Select.Item value={serverType.value} label={serverType.label}>
+												{serverType.label}
+											</Select.Item>
+										{/each}
+									</Select.Group>
+								</Select.Content>
+							</Select.Root>
+						</div>
+					</div>
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="description">Description</Label>
+						<Textarea
+							id="description"
+							bind:value={addServerObject.description}
+							class="col-span-3 min-h-36"
+						/>
+					</div>
 				</div>
-				<div class="flex flex-col gap-1.5">
-					<Label for="type">Type</Label>
-					<Select.Root type="single" name="type" bind:value={addServerObject.type}>
-						<Select.Trigger class="w-full">
-							{addServerObject.type}
-						</Select.Trigger>
-						<Select.Content>
-							<Select.Group>
-								{#each serverTypes as serverType}
-									<Select.Item value={serverType.value} label={serverType.label}>
-										{serverType.label}
-									</Select.Item>
-								{/each}
-							</Select.Group>
-						</Select.Content>
-					</Select.Root>
+			</Tabs.Content>
+			<Tabs.Content value="details">
+				<div class="grid gap-4 py-4">
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="url">URL</Label>
+						<Input class="col-span-3" id="url" bind:value={addServerObject.url} />
+					</div>
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="icon_url">Icon URL</Label>
+						<Input class="col-span-3" id="icon_url" bind:value={addServerObject.iconUrl} />
+					</div>
+					<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
+						<div class="grid grid-cols-1 items-center gap-2">
+							<Label for="tags">Tags</Label>
+							<Input class="col-span-3" id="tags" bind:value={addServerObject.tags} />
+						</div>
+						<div class="grid grid-cols-1 items-center gap-2">
+							<Label for="location">Location</Label>
+							<Input class="col-span-3" id="location" bind:value={addServerObject.location} />
+						</div>
+					</div>
+					<div class="flex flex-row items-center gap-1.5">
+						<Switch
+							id="trending"
+							bind:checked={addServerObject.trending}
+							disabled={!props.data.session?.manage.systemAdmin}
+						/>
+						<Label for="trending">Trending</Label>
+					</div>
 				</div>
-			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="description">Description</Label>
-				<Textarea id="description" bind:value={addServerObject.description} />
-			</div>
-			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
-				<div class="flex flex-col gap-1.5">
-					<Label for="url">URL</Label>
-					<Input id="url" bind:value={addServerObject.url} />
+			</Tabs.Content>
+			<Tabs.Content value="webhook">
+				<div class="grid gap-4 py-4">
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="postback_url">POSTBack URL</Label>
+						<Input class="col-span-3" id="postback_url" bind:value={addServerObject.postbackUrl} />
+					</div>
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="discord_webhook_url">Discord Webhook URL</Label>
+						<Input
+							class="col-span-3"
+							id="discord_webhook_url"
+							bind:value={addServerObject.discordWebhookUrl}
+						/>
+					</div>
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="description">Discord Webhook Content</Label>
+						<Textarea
+							class="col-span-3 min-h-20"
+							id="description"
+							bind:value={addServerObject.discordWebhookContent}
+						/>
+					</div>
 				</div>
-				<div class="flex flex-col gap-1.5">
-					<Label for="icon_url">Icon URL</Label>
-					<Input id="icon_url" bind:value={addServerObject.iconUrl} />
-				</div>
-			</div>
-			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
-				<div class="flex flex-col gap-1.5">
-					<Label for="tags">Tags</Label>
-					<Input id="tags" bind:value={addServerObject.tags} />
-				</div>
-				<div class="flex flex-col gap-1.5">
-					<Label for="location">Location</Label>
-					<Input id="location" bind:value={addServerObject.location} />
-				</div>
-			</div>
-			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
-				<div class="flex flex-col gap-1.5">
-					<Label for="postback_url">POSTBack URL</Label>
-					<Input id="postback_url" bind:value={editServerObject.postbackUrl} />
-				</div>
-				<div class="flex flex-col gap-1.5">
-					<Label for="discord_webhook_url">Discord Webhook URL</Label>
-					<Input id="discord_webhook_url" bind:value={editServerObject.discordWebhookUrl} />
-				</div>
-			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="description">Discord Webhook Content</Label>
-				<Textarea id="description" bind:value={editServerObject.discordWebhookContent} />
-			</div>
-			<div class="flex flex-row items-center gap-1.5">
-				<Switch
-					id="trending"
-					bind:checked={addServerObject.trending}
-					disabled={!props.data.session?.manage.systemAdmin}
-				/>
-				<Label for="trending">Trending</Label>
-			</div>
-		</div>
+			</Tabs.Content>
+		</Tabs.Root>
 		<Dialog.Footer>
 			<Button
 				variant="outline"
@@ -493,81 +520,106 @@
 			};
 	}}
 >
-	<Dialog.Content class="md:max-w-3xl">
+	<Dialog.Content class="max-w-fit md:max-w-3xl">
 		<Dialog.Header>
 			<Dialog.Title>Edit {editServerObject.name}</Dialog.Title>
 		</Dialog.Header>
-		<div class="flex flex-col gap-3">
-			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
-				<div class="flex flex-col gap-1.5">
-					<Label for="name">Name</Label>
-					<Input id="name" bind:value={editServerObject.name} />
+		<Tabs.Root value="info">
+			<Tabs.List class="w-full bg-accent/20">
+				<Tabs.Trigger value="info">Basic Info</Tabs.Trigger>
+				<Tabs.Trigger value="details">Details</Tabs.Trigger>
+				<Tabs.Trigger value="webhook">POSTBack / Webhook</Tabs.Trigger>
+			</Tabs.List>
+			<Tabs.Content value="info">
+				<div class="grid gap-4 py-4">
+					<div class="grid grid-cols-1 gap-2 lg:grid-cols-[1fr_0.5fr]">
+						<div class="grid grid-cols-1 items-center gap-2">
+							<Label for="name">Name</Label>
+							<Input id="name" bind:value={editServerObject.name} class="col-span-3" />
+						</div>
+						<div class="grid grid-cols-1 items-center gap-2">
+							<Label for="name">Type</Label>
+							<Select.Root type="single" name="type" bind:value={editServerObject.type}>
+								<Select.Trigger class="w-full">
+									{editServerObject.type}
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Group>
+										{#each serverTypes as serverType}
+											<Select.Item value={serverType.value} label={serverType.label}>
+												{serverType.label}
+											</Select.Item>
+										{/each}
+									</Select.Group>
+								</Select.Content>
+							</Select.Root>
+						</div>
+					</div>
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="description">Description</Label>
+						<Textarea
+							id="description"
+							bind:value={editServerObject.description}
+							class="col-span-3 min-h-36"
+						/>
+					</div>
 				</div>
-				<div class="flex flex-col gap-1.5">
-					<Label for="type">Type</Label>
-					<Select.Root type="single" name="type" bind:value={editServerObject.type}>
-						<Select.Trigger class="w-full">
-							{editServerObject.type}
-						</Select.Trigger>
-						<Select.Content>
-							<Select.Group>
-								{#each serverTypes as serverType}
-									<Select.Item value={serverType.value} label={serverType.label}>
-										{serverType.label}
-									</Select.Item>
-								{/each}
-							</Select.Group>
-						</Select.Content>
-					</Select.Root>
+			</Tabs.Content>
+			<Tabs.Content value="details">
+				<div class="grid gap-4 py-4">
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="url">URL</Label>
+						<Input class="col-span-3" id="url" bind:value={editServerObject.url} />
+					</div>
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="icon_url">Icon URL</Label>
+						<Input class="col-span-3" id="icon_url" bind:value={editServerObject.iconUrl} />
+					</div>
+					<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
+						<div class="grid grid-cols-1 items-center gap-2">
+							<Label for="tags">Tags</Label>
+							<Input class="col-span-3" id="tags" bind:value={editServerObject.tags} />
+						</div>
+						<div class="grid grid-cols-1 items-center gap-2">
+							<Label for="location">Location</Label>
+							<Input class="col-span-3" id="location" bind:value={editServerObject.location} />
+						</div>
+					</div>
+					<div class="flex flex-row items-center gap-1.5">
+						<Switch
+							id="trending"
+							bind:checked={editServerObject.trending}
+							disabled={!props.data.session?.manage.systemAdmin}
+						/>
+						<Label for="trending">Trending</Label>
+					</div>
 				</div>
-			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="description">Description</Label>
-				<Textarea id="description" bind:value={editServerObject.description} />
-			</div>
-			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
-				<div class="flex flex-col gap-1.5">
-					<Label for="url">URL</Label>
-					<Input id="url" bind:value={editServerObject.url} />
+			</Tabs.Content>
+			<Tabs.Content value="webhook">
+				<div class="grid gap-4 py-4">
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="postback_url">POSTBack URL</Label>
+						<Input class="col-span-3" id="postback_url" bind:value={editServerObject.postbackUrl} />
+					</div>
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="discord_webhook_url">Discord Webhook URL</Label>
+						<Input
+							class="col-span-3"
+							id="discord_webhook_url"
+							bind:value={editServerObject.discordWebhookUrl}
+						/>
+					</div>
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="description">Discord Webhook Content</Label>
+						<Textarea
+							class="col-span-3 min-h-20"
+							id="description"
+							bind:value={editServerObject.discordWebhookContent}
+						/>
+					</div>
 				</div>
-				<div class="flex flex-col gap-1.5">
-					<Label for="icon_url">Icon URL</Label>
-					<Input id="icon_url" bind:value={editServerObject.iconUrl} />
-				</div>
-			</div>
-			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
-				<div class="flex flex-col gap-1.5">
-					<Label for="tags">Tags</Label>
-					<Input id="tags" bind:value={editServerObject.tags} />
-				</div>
-				<div class="flex flex-col gap-1.5">
-					<Label for="location">Location</Label>
-					<Input id="location" bind:value={editServerObject.location} />
-				</div>
-			</div>
-			<div class="grid grid-cols-1 gap-2 lg:grid-cols-2">
-				<div class="flex flex-col gap-1.5">
-					<Label for="postback_url">POSTBack URL</Label>
-					<Input id="postback_url" bind:value={editServerObject.postbackUrl} />
-				</div>
-				<div class="flex flex-col gap-1.5">
-					<Label for="discord_webhook_url">Discord Webhook URL</Label>
-					<Input id="discord_webhook_url" bind:value={editServerObject.discordWebhookUrl} />
-				</div>
-			</div>
-			<div class="flex flex-col gap-1.5">
-				<Label for="description">Discord Webhook Content</Label>
-				<Textarea id="description" bind:value={editServerObject.discordWebhookContent} />
-			</div>
-			<div class="flex flex-row items-center gap-1.5">
-				<Switch
-					id="trending"
-					bind:checked={editServerObject.trending}
-					disabled={!props.data.session?.manage.systemAdmin}
-				/>
-				<Label for="trending">Trending</Label>
-			</div>
-		</div>
+			</Tabs.Content>
+		</Tabs.Root>
 		<Dialog.Footer>
 			<Button
 				variant="outline"
