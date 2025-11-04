@@ -146,7 +146,7 @@
 	</div>
 	<div class="flex flex-row gap-6">
 		<DropdownMenu.Root>
-			<DropdownMenu.Trigger>
+			<DropdownMenu.Trigger class="rounded-full bg-white/40 p-[1px] transition hover:bg-white/60">
 				{#if session}
 					<Avatar.Root style="view-transition-name: user-menu;">
 						<Avatar.Image
@@ -160,7 +160,7 @@
 				{:else}
 					<Avatar.Root style="view-transition-name: user-menu;">
 						<Avatar.Fallback>
-							<User class="animate-spin" />
+							<User class="size-4" />
 						</Avatar.Fallback>
 					</Avatar.Root>
 				{/if}
@@ -179,10 +179,7 @@
 						{/if}
 						<DropdownMenu.Item
 							class="cursor-pointer"
-							onclick={() => {
-								if (session) goto('/api/v1/session/logout');
-								else goto('/api/v1/session/authorize');
-							}}
+							onclick={() => goto('/api/v1/session/logout')}
 						>
 							<LogOut />
 							Logout
@@ -190,12 +187,13 @@
 					</div>
 				{:else}
 					<div class="p-1">
-						<a href="/login">
-							<DropdownMenu.Item class="cursor-pointer">Login</DropdownMenu.Item>
-						</a>
-						<a href="/register"
-							><DropdownMenu.Item class="cursor-pointer">Register</DropdownMenu.Item></a
+						<DropdownMenu.Item
+							class="cursor-pointer"
+							onclick={() => goto('/api/v1/session/authorize')}
 						>
+							<Discord />
+							Login
+						</DropdownMenu.Item>
 					</div>
 				{/if}
 			</DropdownMenu.Content>
