@@ -53,13 +53,13 @@
 			</Button>
 		</Sheet.Trigger>
 		<Sheet.Content side="left">
-			<a href="/" class="mr-6 flex items-center gap-2 text-2xl lg:hidden p-5">
+			<a href="/" class="mr-6 flex items-center gap-2 p-5 text-2xl lg:hidden">
 				<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
 					<Activity class="h-5 w-5 text-primary-foreground" />
 				</div>
 				<span class="text-lg font-semibold tracking-tight">{env.PUBLIC_APP_NAME}</span>
 			</a>
-			<div class="grid gap-2 py-2 px-3">
+			<div class="grid gap-2 px-3 py-2">
 				{#if !isAdminPanel}
 					{#each navEntries as navEntry (navEntry)}
 						{@const isActive = navEntry.activeRegex.some((regex) => pathName.match(regex))}
@@ -102,10 +102,16 @@
 	<div class="hidden w-full items-center gap-6 lg:flex">
 		<a href="/" class="hidden items-center gap-3 text-2xl lg:flex">
 			<!-- <img src={Logo} alt="Logo" class="{smallerBar ? 'h-10 w-10' : 'h-14 w-14'} transition-all" /> -->
-			<div class="flex !size-10 items-center justify-center rounded-lg bg-primary">
-				<Activity class="h-5 w-5 text-primary-foreground" />
+			<div
+				class="flex {smallerBar
+					? 'size-8'
+					: 'size-9'} items-center justify-center rounded-lg bg-primary"
+			>
+				<Activity
+					class="{smallerBar ? 'size-5' : 'size-6'} text-primary-foreground transition-all"
+				/>
 			</div>
-			<span class="text-nowrap text-lg font-semibold tracking-tight">{env.PUBLIC_APP_NAME}</span>
+			<span class="text-lg font-semibold tracking-tight text-nowrap">{env.PUBLIC_APP_NAME}</span>
 		</a>
 		<nav class="ml hidden w-full flex-row justify-between lg:flex">
 			<div class="flex gap-3">
@@ -115,7 +121,7 @@
 						{#if navEntry.subEntries}
 							<DropdownMenu.Root>
 								<DropdownMenu.Trigger>
-									<Button class={isActive ? 'bg-theme-800' : ''} variant="ghost">
+									<Button class={isActive ? 'bg-accent' : ''} variant="ghost">
 										{navEntry.name}
 									</Button>
 								</DropdownMenu.Trigger>
@@ -130,7 +136,7 @@
 								</DropdownMenu.Content>
 							</DropdownMenu.Root>
 						{:else}
-							<Button class={isActive ? 'bg-theme-800' : ''} href={navEntry.href} variant="ghost">
+							<Button class={isActive ? 'bg-accent' : ''} href={navEntry.href} variant="ghost">
 								{navEntry.name}
 							</Button>
 						{/if}
@@ -166,7 +172,7 @@
 						{#if session.manage.systemAdmin || session.manage.manageServers.length > 0}
 							<a href="/admin">
 								<DropdownMenu.Item class="cursor-pointer">
-									<Shield class="text-white" />
+									<Shield />
 									Manage {session?.manage.systemAdmin ? 'all' : 'your'} servers
 								</DropdownMenu.Item>
 							</a>
