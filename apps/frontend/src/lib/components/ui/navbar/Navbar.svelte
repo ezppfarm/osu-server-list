@@ -43,7 +43,7 @@
 <header
 	class="fixed top-0 left-0 flex {smallerBar
 		? 'h-16'
-		: 'h-20'} bg-theme-900/50 z-20 w-full shrink-0 items-center justify-between gap-6 px-4 backdrop-blur transition-all md:px-6"
+		: 'h-20'} z-20 w-full shrink-0 items-center justify-between gap-6 border-b border-b-gray-900/50 bg-gray-950/50 px-4 backdrop-blur transition-all md:px-6"
 >
 	<Sheet.Root bind:open={sheetOpen}>
 		<Sheet.Trigger>
