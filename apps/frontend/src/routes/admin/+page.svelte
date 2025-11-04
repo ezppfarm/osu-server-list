@@ -424,11 +424,23 @@
 					</div>
 					<div class="grid grid-cols-1 items-center gap-2">
 						<Label for="description">Description</Label>
-						<Textarea
-							id="description"
-							bind:value={addServerObject.description}
-							class="col-span-3 min-h-36"
-						/>
+						<InputGroup.Root>
+							<InputGroup.Textarea
+								class="col-span-3 min-h-36"
+								id="description"
+								bind:value={addServerObject.description}
+								maxlength={2000}
+							/>
+							<InputGroup.Addon align="block-end">
+								<InputGroup.Text
+									class="ml-auto {addServerObject.description.length >= 2000
+										? 'text-red-500/50'
+										: addServerObject.description.length >= 1800
+											? 'text-orange-500/50'
+											: ''}">{addServerObject.description.length}/2000</InputGroup.Text
+								>
+							</InputGroup.Addon>
+						</InputGroup.Root>
 					</div>
 				</div>
 			</Tabs.Content>
@@ -477,12 +489,24 @@
 						/>
 					</div>
 					<div class="grid grid-cols-1 items-center gap-2">
-						<Label for="description">Discord Webhook Content</Label>
-						<Textarea
-							class="col-span-3 min-h-20"
-							id="description"
-							bind:value={addServerObject.discordWebhookContent}
-						/>
+						<Label for="discord_webhook_content">Discord Webhook Content</Label>
+						<InputGroup.Root>
+							<InputGroup.Textarea
+								class="col-span-3 min-h-20"
+								id="discord_webhook_content"
+								bind:value={addServerObject.discordWebhookContent}
+								maxlength={4000}
+							/>
+							<InputGroup.Addon align="block-end">
+								<InputGroup.Text
+									class="ml-auto {addServerObject.discordWebhookContent.length >= 4000
+										? 'text-red-500/50'
+										: addServerObject.discordWebhookContent.length >= 3800
+											? 'text-orange-500/50'
+											: ''}">{addServerObject.discordWebhookContent.length}/4000</InputGroup.Text
+								>
+							</InputGroup.Addon>
+						</InputGroup.Root>
 					</div>
 				</div>
 			</Tabs.Content>
@@ -557,11 +581,23 @@
 					</div>
 					<div class="grid grid-cols-1 items-center gap-2">
 						<Label for="description">Description</Label>
-						<Textarea
-							id="description"
-							bind:value={editServerObject.description}
-							class="col-span-3 min-h-36"
-						/>
+						<InputGroup.Root>
+							<InputGroup.Textarea
+								class="col-span-3 min-h-36"
+								id="description"
+								bind:value={editServerObject.description}
+								maxlength={2000}
+							/>
+							<InputGroup.Addon align="block-end">
+								<InputGroup.Text
+									class="ml-auto {editServerObject.description.length >= 2000
+										? 'text-red-500/50'
+										: editServerObject.description.length >= 1800
+											? 'text-orange-500/50'
+											: ''}">{editServerObject.description.length}/2000</InputGroup.Text
+								>
+							</InputGroup.Addon>
+						</InputGroup.Root>
 					</div>
 				</div>
 			</Tabs.Content>
@@ -610,12 +646,24 @@
 						/>
 					</div>
 					<div class="grid grid-cols-1 items-center gap-2">
-						<Label for="description">Discord Webhook Content</Label>
-						<Textarea
-							class="col-span-3 min-h-20"
-							id="description"
-							bind:value={editServerObject.discordWebhookContent}
-						/>
+						<Label for="discord_webhook_content">Discord Webhook Content</Label>
+						<InputGroup.Root>
+							<InputGroup.Textarea
+								class="col-span-3 min-h-20"
+								id="discord_webhook_content"
+								bind:value={editServerObject.discordWebhookContent}
+								maxlength={4000}
+							/>
+							<InputGroup.Addon align="block-end">
+								<InputGroup.Text
+									class="ml-auto {editServerObject.discordWebhookContent.length >= 4000
+										? 'text-red-500/50'
+										: editServerObject.discordWebhookContent.length >= 3800
+											? 'text-orange-500/50'
+											: ''}">{editServerObject.discordWebhookContent.length}/4000</InputGroup.Text
+								>
+							</InputGroup.Addon>
+						</InputGroup.Root>
 					</div>
 				</div>
 			</Tabs.Content>
