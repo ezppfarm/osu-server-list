@@ -36,10 +36,10 @@
 	import { toast } from 'svelte-sonner';
 	import { createServer, removeServer, updateServer } from './data.remote';
 	import { Textarea } from '@/components/ui/textarea';
-	import Checkbox from '@/components/ui/checkbox/checkbox.svelte';
 	import type { ServerAdd, ServerEdit } from './types';
 	import * as Select from '@/components/ui/select';
 	import { title } from '@/title';
+	import Switch from '@/components/ui/switch/switch.svelte';
 
 	const props: PageProps = $props();
 
@@ -452,7 +452,7 @@
 				<Textarea id="description" bind:value={editServerObject.discordWebhookContent} />
 			</div>
 			<div class="flex flex-row items-center gap-1.5">
-				<Checkbox
+				<Switch
 					id="trending"
 					bind:checked={addServerObject.trending}
 					disabled={!props.data.session?.manage.systemAdmin}
@@ -560,7 +560,7 @@
 				<Textarea id="description" bind:value={editServerObject.discordWebhookContent} />
 			</div>
 			<div class="flex flex-row items-center gap-1.5">
-				<Checkbox
+				<Switch
 					id="trending"
 					bind:checked={editServerObject.trending}
 					disabled={!props.data.session?.manage.systemAdmin}
