@@ -2,23 +2,31 @@ import * as path from 'path';
 import * as fs from 'fs';
 import type { RequestEvent } from '../$types.js';
 import { getServerById } from '@osu-server-list/db/query';
-import { text } from '@sveltejs/kit';
 
 const iconsPath = path.join(process.cwd(), 'server_icon_cache');
 if (!fs.existsSync(iconsPath)) fs.mkdirSync(iconsPath);
+
+const fallbackImage = Bun.file(path.join(iconsPath, 'fallback.png'));
+const fallbackImageData = await fallbackImage.arrayBuffer();
 
 export const GET = async (req: RequestEvent) => {
 	const serverId = req.params.id;
 	const server = await getServerById(Number(serverId));
 
 	if (!server) {
-		console.log('Server not found');
-		return text('Server not found');
+		return new Response(fallbackImageData, {
+			headers: {
+				'Content-Type': 'image/png'
+			}
+		});
 	}
 
 	if (!server.iconUrl || server.iconUrl.trim().length <= 0) {
-		console.log('Server has no icon');
-		return text('Server has no icon');
+		return new Response(fallbackImageData, {
+			headers: {
+				'Content-Type': 'image/png'
+			}
+		});
 	}
 
 	const fileList = fs.readdirSync(iconsPath);
@@ -49,7 +57,11 @@ export const GET = async (req: RequestEvent) => {
 			!response.ok ||
 			!response.headers.get('Content-Type')?.includes('image')
 		)
-			return text('Server has no icon');
+			return new Response(fallbackImageData, {
+				headers: {
+					'Content-Type': 'image/png'
+				}
+			});
 		const imageData = await response.arrayBuffer();
 		await Bun.write(path.join(iconsPath, fileName), imageData);
 		console.log('Recached server icon');
@@ -59,7 +71,10 @@ export const GET = async (req: RequestEvent) => {
 			}
 		});
 	} catch {
-		console.log('Failed to fetch server icon');
-		return text('Server has no icon');
+		return new Response(fallbackImageData, {
+			headers: {
+				'Content-Type': 'image/png'
+			}
+		});
 	}
 };

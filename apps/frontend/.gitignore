@@ -30,4 +30,5 @@ vite.config.ts.timestamp-*
 .turbo
 
 # server icon cache, wow
-server_icon_cache
+server_icon_cache/**/*
+!server_icon_cache/fallback.png
