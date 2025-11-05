@@ -6,6 +6,11 @@ import {
 	getAllServersWithHooks
 } from '@osu-server-list/db/query';
 import * as v from 'valibot';
+import * as path from 'path';
+import * as fs from 'fs';
+
+const iconsPath = path.join(process.cwd(), 'server_icon_cache');
+if (!fs.existsSync(iconsPath)) fs.mkdirSync(iconsPath);
 
 export const removeServer = query(v.number(), async (serverId) => {
 	const deleteResult = await deleteServer(serverId);
@@ -123,6 +128,13 @@ export const updateServer = query(
 		});
 		if (editResult) {
 			const allServers = await getAllServersWithHooks();
+
+			const fileList = fs.readdirSync(iconsPath);
+			const cachedServerIcon = fileList.find((icon) => icon.startsWith(`${server.id}_`));
+			if (cachedServerIcon) {
+				await fs.promises.unlink(path.join(iconsPath, cachedServerIcon));
+			}
+
 			return {
 				code: 200,
 				message: 'Server edited!',

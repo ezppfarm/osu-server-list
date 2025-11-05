@@ -30,7 +30,6 @@ export const GET = async (req: RequestEvent) => {
 	}
 
 	const fileList = fs.readdirSync(iconsPath);
-
 	const cachedServerIcon = fileList.find((icon) => icon.startsWith(`${serverId}_`));
 
 	if (cachedServerIcon) {
