@@ -28,3 +28,6 @@ vite.config.ts.timestamp-*
 
 # turborepo
 .turbo
+
+# server icon cache, wow
+server_icon_cache
