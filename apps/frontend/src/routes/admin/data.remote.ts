@@ -1,11 +1,16 @@
 import { query } from '$app/server';
-import { addServer, deleteServer, editServer, getAllServers } from '@osu-server-list/db/query';
+import {
+	addServer,
+	deleteServer,
+	editServer,
+	getAllServersWithHooks
+} from '@osu-server-list/db/query';
 import * as v from 'valibot';
 
 export const removeServer = query(v.number(), async (serverId) => {
 	const deleteResult = await deleteServer(serverId);
 	if (deleteResult) {
-		const allServers = await getAllServers();
+		const allServers = await getAllServersWithHooks();
 		return {
 			code: 200,
 			message: 'Server deleted!',
@@ -28,10 +33,13 @@ export const createServer = query(
 		tags: v.string(),
 		trending: v.boolean(),
 		url: v.string(),
-		location: v.string()
+		location: v.string(),
+		postbackUrl: v.string(),
+		discordWebhookUrl: v.string(),
+		discordWebhookContent: v.string()
 	}),
 	async (server) => {
-		const allServers = await getAllServers();
+		const allServers = await getAllServersWithHooks();
 		if (
 			allServers.find((s) => s.url === server.url) ||
 			allServers.find((s) => s.name === server.name)
@@ -42,6 +50,7 @@ export const createServer = query(
 				servers: allServers
 			};
 		}
+		//TODO: validation
 		const addResult = await addServer(
 			server.name,
 			server.type as 'RIPPLE' | 'BANCHOPY' | 'TITANIC' | 'CUSTOM',
@@ -50,10 +59,13 @@ export const createServer = query(
 			server.tags,
 			server.trending,
 			server.url,
-			server.location
+			server.location,
+			server.postbackUrl,
+			server.discordWebhookUrl,
+			server.discordWebhookContent
 		);
 		if (addResult) {
-			const allServers = await getAllServers();
+			const allServers = await getAllServersWithHooks();
 			return {
 				code: 200,
 				message: 'Server created!',
@@ -78,10 +90,13 @@ export const updateServer = query(
 		tags: v.string(),
 		trending: v.boolean(),
 		url: v.string(),
-		location: v.string()
+		location: v.string(),
+		postbackUrl: v.string(),
+		discordWebhookUrl: v.string(),
+		discordWebhookContent: v.string()
 	}),
 	async (server) => {
-		const allServers = await getAllServers();
+		const allServers = await getAllServersWithHooks();
 		if (
 			allServers.find((s) => s.url === server.url && s.id != server.id) ||
 			allServers.find((s) => s.name === server.name && s.id != server.id)
@@ -92,6 +107,7 @@ export const updateServer = query(
 				servers: allServers
 			};
 		}
+		//TODO: validation
 		const editResult = await editServer(server.id, {
 			name: server.name,
 			type: server.type as 'RIPPLE' | 'BANCHOPY' | 'TITANIC' | 'CUSTOM',
@@ -100,10 +116,13 @@ export const updateServer = query(
 			tags: server.tags,
 			trending: server.trending,
 			url: server.url,
-			location: server.location
+			location: server.location,
+			postbackUrl: server.postbackUrl,
+			discordWebhookUrl: server.discordWebhookUrl,
+			discordWebhookContent: server.discordWebhookContent
 		});
 		if (editResult) {
-			const allServers = await getAllServers();
+			const allServers = await getAllServersWithHooks();
 			return {
 				code: 200,
 				message: 'Server edited!',

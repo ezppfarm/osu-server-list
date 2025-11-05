@@ -1,4 +1,5 @@
 import { addServerStatus, getAllServersRaw } from "@osu-server-list/db/query";
+import type { Server } from "@osu-server-list/db/types";
 import { getApiHandler } from "@osu-server-list/handlers";
 import type { UsersResponse } from "@osu-server-list/handlers/types";
 import Baker from "cronbake";
@@ -12,7 +13,7 @@ baker.add({
   overrunProtection: true,
   callback: async () => {
     try {
-      const servers = await getAllServersRaw();
+      const servers: Server[] = await getAllServersRaw();
 
       for (const server of servers) {
         console.log(`Fetching status for ${server.name}...`);
