@@ -2,7 +2,6 @@
 	import { Button } from '@/components/ui/button';
 	import * as Card from '@/components/ui/card';
 	import type { PageProps } from './$types';
-	import dayjs from 'dayjs';
 	import { browser } from '$app/environment';
 	import { getSortName, sortServers } from '@/helpers';
 	import * as DropdownMenu from '@/components/ui/dropdown-menu';
@@ -20,11 +19,20 @@
 	import type { ServerFull } from '@osu-server-list/db/types';
 	import TrendingWrapper from '@/components/ui/effects/TrendingWrapper.svelte';
 	import { title } from '@/title';
+	import * as Select from '@/components/ui/select';
 
 	const props: PageProps = $props();
 
 	let servers = $state<ServerFull[]>([]);
 	let sort = $state('votes');
+
+	type CategoryFilter = {
+		label: string;
+		value: string;
+	};
+
+	let categoryFilters = $state<string[]>([]);
+	let availableCategoryFilters = $state<CategoryFilter[]>([]);
 
 	function updateSort(value: string) {
 		if (!servers) return;
@@ -38,6 +46,16 @@
 	onMount(() => {
 		sort = localStorage.getItem('sort') ?? 'votes';
 		servers = sortServers(props.data.servers ?? [], sort);
+
+		if (servers) {
+			const allTags = servers.flatMap((server) => server.tags?.split(',') || []);
+			for (const tag of allTags) {
+				if (!availableCategoryFilters.find((f) => f.value === tag.toLowerCase())) {
+					availableCategoryFilters.push({ label: tag, value: tag.toLowerCase() });
+				}
+			}
+		}
+
 		title.set('browse servers');
 	});
 </script>
@@ -142,10 +160,24 @@
 			</h2>
 		</div>
 		<div class="flex gap-2">
-			<Button variant="outline" size="sm" class="hidden border-border/40 bg-transparent">
-				<Funnel class="h-4 w-4" />
-				All Categories
-			</Button>
+			<Select.Root type="multiple" name="favoriteFruit" bind:value={categoryFilters}>
+				<Select.Trigger class="">
+					<div class="flex items-center gap-2 font-bold text-white">
+						<Funnel class="h-4 w-4" />
+						Filter Categories
+					</div>
+				</Select.Trigger>
+				<Select.Content>
+					<Select.Group>
+						<Select.Label>Available Filters</Select.Label>
+						{#each availableCategoryFilters as filter (filter.value)}
+							<Select.Item value={filter.value} label={filter.label}>
+								{filter.label}
+							</Select.Item>
+						{/each}
+					</Select.Group>
+				</Select.Content>
+			</Select.Root>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
 					<Button variant="outline" size="sm" class="border-border/40 bg-transparent">
@@ -166,19 +198,34 @@
 
 	<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 		{#each servers as server, idx}
-			<Card.Root
-				class="gap-4 {server.trending
-					? 'border-orange-300/15 bg-orange-900/30'
-					: 'border-card-foreground/15 bg-card/50'}"
-			>
-				<Card.Header>
-					<div class="mb-2 w-fit rounded-lg bg-card-foreground/10 px-2 py-1 font-mono text-sm">
-						#{idx + 1}
-					</div>
-					<a href="/server/{server.id}" class="block">
-						<div class="mb-4 flex items-center gap-4">
-							{#if server.trending}
-								<TrendingWrapper>
+			{@const filterActive = categoryFilters.length > 0}
+			{#if !filterActive || server.tags
+					?.split(',')
+					.some((tag) => categoryFilters.includes(tag.toLowerCase()))}
+				<Card.Root
+					class="gap-4 {server.trending
+						? 'border-orange-300/15 bg-orange-900/30'
+						: 'border-card-foreground/15 bg-card/50'}"
+				>
+					<Card.Header>
+						<div class="mb-2 w-fit rounded-lg bg-card-foreground/10 px-2 py-1 font-mono text-sm">
+							#{idx + 1}
+						</div>
+						<a href="/server/{server.id}" class="block">
+							<div class="mb-4 flex items-center gap-4">
+								{#if server.trending}
+									<TrendingWrapper>
+										<div
+											class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border bg-primary/10 p-1"
+										>
+											<img
+												src="/server/{server.id}/logo"
+												alt={server.name}
+												class="h-full w-full object-contain"
+											/>
+										</div>
+									</TrendingWrapper>
+								{:else}
 									<div
 										class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border bg-primary/10 p-1"
 									>
@@ -188,104 +235,94 @@
 											class="h-full w-full object-contain"
 										/>
 									</div>
-								</TrendingWrapper>
-							{:else}
-								<div
-									class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border bg-primary/10 p-1"
-								>
-									<img
-										src="/server/{server.id}/logo"
-										alt={server.name}
-										class="h-full w-full object-contain"
-									/>
-								</div>
-							{/if}
-							<div class="min-w-0 flex-1">
-								<h3
-									class="truncate text-xl font-bold text-foreground transition-colors group-hover:text-primary"
-								>
-									{server.name}
-								</h3>
-								<div class="flex flex-row items-center gap-1">
-									<div
-										class="h-2.5 w-2.5 rounded-full {server.onlinePlayers < 0
-											? 'bg-red-500'
-											: 'bg-green-500'}"
-									></div>
-									<p class="text-sm">
-										{server.onlinePlayers < 0
-											? 'server offline'
-											: server.onlinePlayers.toLocaleString('en-US') + ' players online'}
-									</p>
+								{/if}
+								<div class="min-w-0 flex-1">
+									<h3
+										class="truncate text-xl font-bold text-foreground transition-colors group-hover:text-primary"
+									>
+										{server.name}
+									</h3>
+									<div class="flex flex-row items-center gap-1">
+										<div
+											class="h-2.5 w-2.5 rounded-full {server.onlinePlayers < 0
+												? 'bg-red-500'
+												: 'bg-green-500'}"
+										></div>
+										<p class="text-sm">
+											{server.onlinePlayers < 0
+												? 'server offline'
+												: server.onlinePlayers.toLocaleString('en-US') + ' players online'}
+										</p>
+									</div>
 								</div>
 							</div>
+						</a>
+						<div class="mb-1 line-clamp-1 px-1 text-sm text-muted-foreground">
+							<p class="truncate">{server.description}</p>
 						</div>
-					</a>
-					<div class="mb-1 line-clamp-1 px-1 text-sm text-muted-foreground">
-						<p class="truncate">{server.description}</p>
-					</div>
-				</Card.Header>
-				<Card.Content>
-					<div
-						class="mb-4 grid {server.registeredPlayers > -1
-							? 'grid-cols-3'
-							: 'grid-cols-2'} gap-2 rounded-lg border bg-secondary/50 p-3"
-					>
+					</Card.Header>
+					<Card.Content>
 						<div
-							class="text-center {server.registeredPlayers > -1 ? '' : 'border-r border-border'}"
+							class="mb-4 grid {server.registeredPlayers > -1
+								? 'grid-cols-3'
+								: 'grid-cols-2'} gap-2 rounded-lg border bg-secondary/50 p-3"
 						>
-							<p class="mb-1 text-xs text-muted-foreground">Online</p>
-							<p class="text-sm font-bold text-foreground">
-								{Math.max(server.onlinePlayers, 0).toLocaleString('en-US')}
-							</p>
-						</div>
-						{#if server.registeredPlayers > -1}
-							<div class="border-x border-border text-center">
-								<p class="mb-1 text-xs text-muted-foreground">Registered</p>
+							<div
+								class="text-center {server.registeredPlayers > -1 ? '' : 'border-r border-border'}"
+							>
+								<p class="mb-1 text-xs text-muted-foreground">Online</p>
 								<p class="text-sm font-bold text-foreground">
-									{Math.max(server.registeredPlayers, 0).toLocaleString('en-US')}
+									{Math.max(server.onlinePlayers, 0).toLocaleString('en-US')}
 								</p>
 							</div>
-						{/if}
-						<div class="text-center">
-							<p class="mb-1 text-xs text-muted-foreground">Votes</p>
-							<p class="text-sm font-bold text-foreground">
-								{server.votes.toLocaleString('en-US')}
-							</p>
+							{#if server.registeredPlayers > -1}
+								<div class="border-x border-border text-center">
+									<p class="mb-1 text-xs text-muted-foreground">Registered</p>
+									<p class="text-sm font-bold text-foreground">
+										{Math.max(server.registeredPlayers, 0).toLocaleString('en-US')}
+									</p>
+								</div>
+							{/if}
+							<div class="text-center">
+								<p class="mb-1 text-xs text-muted-foreground">Votes</p>
+								<p class="text-sm font-bold text-foreground">
+									{server.votes.toLocaleString('en-US')}
+								</p>
+							</div>
 						</div>
-					</div>
-					<div class="mb-2 flex flex-wrap gap-2">
-						{#each server.tags?.split(',') as tag}
-							<span
-								class="inline-block rounded-full border bg-gray-800 px-2 py-0.5 text-xs font-medium"
-								>{tag}</span
+						<div class="mb-2 flex flex-wrap gap-2">
+							{#each server.tags?.split(',') as tag}
+								<span
+									class="inline-block rounded-full border bg-gray-800 px-2 py-0.5 text-xs font-medium"
+									>{tag}</span
+								>
+							{/each}
+						</div>
+						<div class="grid grid-cols-1 gap-2 pt-3 xl:grid-cols-3">
+							<Button
+								variant="secondary"
+								class="border border-border"
+								size="sm"
+								href={server.url}
+								target="_blank"
+								rel="noopener noreferrer"
 							>
-						{/each}
-					</div>
-					<div class="grid grid-cols-1 gap-2 pt-3 xl:grid-cols-3">
-						<Button
-							variant="secondary"
-							class="border border-border"
-							size="sm"
-							href={server.url}
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							<Globe class="mr-1 h-3 w-3" />
-							Website
-							<ExternalLink class="size-2.5 -translate-x-0.5 -translate-y-[3px]" />
-						</Button>
-						<Button variant="outline" size="sm" href="/server/{server.id}">
-							<List class="mr-1 h-4 w-4" />
-							Details
-						</Button>
-						<Button variant="default" size="sm" href="/server/{server.id}?vote">
-							<Vote class="mr-1 h-4 w-4" />
-							Vote
-						</Button>
-					</div>
-				</Card.Content>
-			</Card.Root>
+								<Globe class="mr-1 h-3 w-3" />
+								Website
+								<ExternalLink class="size-2.5 -translate-x-0.5 -translate-y-[3px]" />
+							</Button>
+							<Button variant="outline" size="sm" href="/server/{server.id}">
+								<List class="mr-1 h-4 w-4" />
+								Details
+							</Button>
+							<Button variant="default" size="sm" href="/server/{server.id}?vote">
+								<Vote class="mr-1 h-4 w-4" />
+								Vote
+							</Button>
+						</div>
+					</Card.Content>
+				</Card.Root>
+			{/if}
 		{/each}
 	</div>
 </main>
