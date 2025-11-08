@@ -34,9 +34,10 @@ export const load = async ({ params, request, getClientAddress, url }) => {
 				description:
 					server.description ??
 					'Browse, compare, and join thriving osu! private servers. Find communities with custom features, unique gameplay modes, and active player bases.',
+
 				images: [
 					{
-						url: `${url.protocol}//${url.host}/server/${server.id}/logo`
+						url: `${url.protocol}//${url.host}/server/${server.id}/logo?.png`
 					}
 				]
 			}
