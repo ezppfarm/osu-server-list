@@ -10,7 +10,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { env } from '$env/dynamic/private';
 
-const iconsPath = path.join(env.SERVER_LOGO_CACHE_PATH ?? process.cwd(), 'server_icon_cache');
+const iconsPath = env.SERVER_LOGO_CACHE_PATH ?? path.join(process.cwd(), 'server_icon_cache');
 if (!fs.existsSync(iconsPath)) fs.mkdirSync(iconsPath);
 
 export const removeServer = query(v.number(), async (serverId) => {

@@ -52,9 +52,11 @@ services:
       - PUBLIC_APP_NAME=${FRONTEND_APP_NAME}
       - PUBLIC_DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
       - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET}
-      - SERVER_LOGO_CACHE_PATH=${SERVER_LOGO_CACHE_PATH}
+      - SERVER_LOGO_CACHE_PATH=/data/logos
     ports:
       - "${FRONTEND_PORT}:3000"
+    volumes:
+      - "${DATA_LOGO_CACHE_PATH}:/data/logos"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

@@ -4,7 +4,7 @@ import type { RequestEvent } from '../$types.js';
 import { getServerById } from '@osu-server-list/db/query';
 import { env } from '$env/dynamic/private';
 
-const iconsPath = path.join(env.SERVER_LOGO_CACHE_PATH ?? process.cwd(), 'server_icon_cache');
+const iconsPath = env.SERVER_LOGO_CACHE_PATH ?? path.join(process.cwd(), 'server_icon_cache');
 if (!fs.existsSync(iconsPath)) fs.mkdirSync(iconsPath);
 
 const fallbackImage = Bun.file(path.join(iconsPath, 'fallback.png'));
