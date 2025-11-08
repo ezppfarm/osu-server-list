@@ -2,8 +2,9 @@ import * as path from 'path';
 import * as fs from 'fs';
 import type { RequestEvent } from '../$types.js';
 import { getServerById } from '@osu-server-list/db/query';
+import { env } from '$env/dynamic/private';
 
-const iconsPath = path.join(process.cwd(), 'server_icon_cache');
+const iconsPath = path.join(env.SERVER_LOGO_CACHE_PATH ?? process.cwd(), 'server_icon_cache');
 if (!fs.existsSync(iconsPath)) fs.mkdirSync(iconsPath);
 
 const fallbackImage = Bun.file(path.join(iconsPath, 'fallback.png'));
@@ -38,7 +39,6 @@ export const GET = async (req: RequestEvent) => {
 		if (!shouldRecache) {
 			const imageFile = Bun.file(path.join(iconsPath, cachedServerIcon));
 			const imageData = await imageFile.arrayBuffer();
-			console.log('Used cached server icon');
 			return new Response(imageData, {
 				headers: {
 					'Content-Type': imageFile.type
@@ -63,7 +63,6 @@ export const GET = async (req: RequestEvent) => {
 			});
 		const imageData = await response.arrayBuffer();
 		await Bun.write(path.join(iconsPath, fileName), imageData);
-		console.log('Recached server icon');
 		return new Response(imageData, {
 			headers: {
 				'Content-Type': response.headers.get('Content-Type') ?? 'image/png' //use image/png as fallback for now
