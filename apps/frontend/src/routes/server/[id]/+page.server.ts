@@ -27,7 +27,8 @@ export const load = async ({ params, request, getClientAddress, url }) => {
 				title: `${server.name} - ${env.PUBLIC_APP_NAME}`,
 				description:
 					server.description ??
-					'Browse, compare, and join thriving osu! private servers. Find communities with custom features, unique gameplay modes, and active player bases.'
+					'Browse, compare, and join thriving osu! private servers. Find communities with custom features, unique gameplay modes, and active player bases.',
+				image: `${url.protocol}//${url.host}/server/${server.id}/logo?.png`
 			},
 			openGraph: {
 				title: `${server.name} - ${env.PUBLIC_APP_NAME}`,
