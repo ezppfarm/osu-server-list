@@ -4,6 +4,7 @@
 	import Home from '@lucide/svelte/icons/home';
 	import { onMount } from 'svelte';
 	import { PowerGlitch } from 'powerglitch';
+	import { title } from '@/title';
 
 	const errorTitles: { [key: number]: string } = {
 		404: 'Miss! Page Not Found',
@@ -17,6 +18,7 @@
 	let glitchElement: HTMLElement;
 
 	onMount(() => {
+		title.set(errorTitles[page.status] ?? 'something went wrong');
 		PowerGlitch.glitch(glitchElement, {
 			timing: {
 				duration: 2250
