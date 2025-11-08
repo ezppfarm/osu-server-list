@@ -1,5 +1,9 @@
+import { env } from '$env/dynamic/public';
 import { getClientIP } from '@/ip.js';
 import { getServerById, getServerStatusThisYear, getServerUptime } from '@osu-server-list/db/query';
+import { definePageMetaTags } from 'svelte-meta-tags';
+
+export const ssr = true;
 
 export const load = async ({ params, request, getClientAddress, url }) => {
 	const { id } = params;
@@ -13,6 +17,24 @@ export const load = async ({ params, request, getClientAddress, url }) => {
 		}
 		const uptime = await getServerUptime(Number(id), 1440);
 		const heatmap = await getServerStatusThisYear(Number(id));
+
+		const metaTags = definePageMetaTags({
+			title: `${server.name} - ${env.PUBLIC_APP_NAME}`,
+			description:
+				server.description ??
+				'Browse, compare, and join thriving osu! private servers. Find communities with custom features, unique gameplay modes, and active player bases.',
+			openGraph: {
+				title: `${server.name} - ${env.PUBLIC_APP_NAME}`,
+				description:
+					server.description ??
+					'Browse, compare, and join thriving osu! private servers. Find communities with custom features, unique gameplay modes, and active player bases.',
+				images: [
+					{
+						url: `${url.protocol}//${url.host}/server/${server.id}/logo`
+					}
+				]
+			}
+		});
 		return {
 			openVoteDialog: url.searchParams.has('vote'),
 			voteUser: url.searchParams.has('vote') ? url.searchParams.get('vote') : '',
@@ -35,7 +57,8 @@ export const load = async ({ params, request, getClientAddress, url }) => {
 				location: server.location,
 				uptime: uptime.uptime,
 				heatmap
-			}
+			},
+			pageMetaTags: metaTags.pageMetaTags
 		};
 	} catch (e) {
 		console.error(e);
