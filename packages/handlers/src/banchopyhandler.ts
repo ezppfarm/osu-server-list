@@ -70,7 +70,8 @@ export class BanchoPyApiHandler implements IServerApiHandler {
     const data = await this.makeRequest<BpyUsersResponse>("/get_player_count");
 
     if (!data) {
-      throw new Error("Failed to fetch user counts");
+      /* throw new Error("Failed to fetch user counts"); */
+      return { onlineCount: -1, totalCount: -1 };
     }
 
     return {

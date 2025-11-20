@@ -79,7 +79,8 @@ export class RippleApiHandler implements IServerApiHandler {
         );
 
       if (!data) {
-        throw new Error("Failed to fetch user counts");
+        /* throw new Error("Failed to fetch user counts"); */
+        return { onlineCount: -1, totalCount: -1 };
       }
     }
 

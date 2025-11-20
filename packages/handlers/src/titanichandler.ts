@@ -56,7 +56,8 @@ export class TitanicApiHandler implements IServerApiHandler {
     const data = await this.makeRequest<TitanicStatsResponse>("/stats");
 
     if (!data) {
-      throw new Error("Failed to fetch user counts");
+      /* throw new Error("Failed to fetch user counts"); */
+      return { onlineCount: -1, totalCount: -1 };
     }
 
     return {
