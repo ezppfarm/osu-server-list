@@ -30,35 +30,40 @@ export class BanchoPyApiHandler implements IServerApiHandler {
     endpoint: string,
     params?: any,
   ): Promise<T | null> {
-    const apiUrl = this.baseUrl.replace("https://", "https://api.");
+    try {
+      const apiUrl = this.baseUrl.replace("https://", "https://api.");
 
-    // who knows, maybe someone still uses this /shrug
-    let oldApiFormat = "/v1";
-    if (this.useOldApiFormat) {
-      oldApiFormat = "";
-    }
-
-    const url = `${apiUrl}${oldApiFormat}${endpoint}`;
-    const response = await betterFetch<T>(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      query: params,
-    });
-
-    if (response.error) {
-      if (response.error.status === 404) {
-        return null;
+      // who knows, maybe someone still uses this /shrug
+      let oldApiFormat = "/v1";
+      if (this.useOldApiFormat) {
+        oldApiFormat = "";
       }
 
-      throw new Error(
-        `Request to ${url} resulted in status code ${response.error.status} - ${response.error.statusText}`,
-      );
-    }
+      const url = `${apiUrl}${oldApiFormat}${endpoint}`;
+      const response = await betterFetch<T>(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        query: params,
+        throw: false,
+      });
 
-    return response.data;
+      if (response.error) {
+        if (response.error.status === 404) {
+          return null;
+        }
+
+        throw new Error(
+          `Request to ${url} resulted in status code ${response.error.status} - ${response.error.statusText}`,
+        );
+      }
+
+      return response.data;
+    } catch {
+      return null;
+    }
   }
 
   public async fetchUserCounts(): Promise<UsersResponse> {

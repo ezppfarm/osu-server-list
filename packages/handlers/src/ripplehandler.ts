@@ -21,26 +21,31 @@ export class RippleApiHandler implements IServerApiHandler {
   constructor(private baseUrl: string) {}
 
   private async makeRequest<T>(url: string, params?: any): Promise<T | null> {
-    const response = await betterFetch<T>(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      query: params,
-    });
+    try {
+      const response = await betterFetch<T>(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        query: params,
+        throw: false,
+      });
 
-    if (response.error) {
-      if (response.error.status === 404) {
-        return null;
+      if (response.error) {
+        if (response.error.status === 404) {
+          return null;
+        }
+
+        throw new Error(
+          `Request to ${url} resulted in status code ${response.error.status} - ${response.error.statusText}`,
+        );
       }
 
-      throw new Error(
-        `Request to ${url} resulted in status code ${response.error.status} - ${response.error.statusText}`,
-      );
+      return response.data;
+    } catch {
+      return null;
     }
-
-    return response.data;
   }
 
   private async makeBanchoRequest<T>(
