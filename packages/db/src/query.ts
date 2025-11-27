@@ -187,7 +187,7 @@ export const getServerById = async (serverId: number) => {
         "registeredPlayers",
       ),
       ping: intWithFallback(serverStatus.ping, -1).as("ping"),
-      votes: sumAsIntWithFallback(serverVote.id, 0).as("votes"),
+      votes: countDistinctWithFallback(serverVote.id, 0).as("votes"),
       last_update: serverStatus.timestamp,
       date_added: server.date_added,
       location: server.location,
