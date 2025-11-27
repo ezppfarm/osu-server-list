@@ -85,6 +85,7 @@ const sendDiscordVoteWebhook = async (
     .replace("{{ user_name }}", userName)
     .replace("{{ total_votes }}", totalVotes.toString())
     .replace("{{ server_name }}", server.name)
+    .replace("{{ server_url }}", server.url)
     // vote is added after data is sent
     .replace("{{ server_votes }}", (server.votes + 1).toString());
 
