@@ -81,6 +81,7 @@ export const getAllServers = async (): Promise<ServerFull[]> => {
       serverStatus.timestamp,
       serverStatus.onlinePlayers,
       serverStatus.registeredPlayers,
+      server.location,
     )
     .orderBy(desc(serverStatus.timestamp));
 };
@@ -155,6 +156,10 @@ export const getAllServersWithHooks = async (): Promise<ServerFullHook[]> => {
       serverStatus.timestamp,
       serverStatus.onlinePlayers,
       serverStatus.registeredPlayers,
+      server.location,
+      serverVoteHook.postback_url,
+      serverVoteHook.discord_webhook_url,
+      serverVoteHook.discord_webhook_content,
     )
     .orderBy(desc(serverStatus.timestamp));
 };
@@ -215,6 +220,7 @@ export const getServerById = async (serverId: number) => {
       serverStatus.timestamp,
       serverStatus.onlinePlayers,
       serverStatus.registeredPlayers,
+      server.location,
     )
     .orderBy(desc(serverStatus.timestamp))
     .limit(1);
