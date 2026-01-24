@@ -4,8 +4,8 @@ import {
   text,
   bigint,
   tinyint,
-  longtext,
   varchar,
+  index,
 } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("user", {
@@ -27,7 +27,7 @@ export const server = mysqlTable("server", {
   type: text({ enum: ["BANCHOPY", "RIPPLE", "TITANIC", "CUSTOM"] })
     .default("BANCHOPY")
     .notNull(),
-  name: text().notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
   description: text(),
   url: text().notNull(),
   iconUrl: text().notNull(),
@@ -35,6 +35,10 @@ export const server = mysqlTable("server", {
   trending: int().notNull(),
   date_added: bigint({ mode: "number" }).notNull(),
   location: text(),
+}, (table) => {
+  return {
+    nameIndex: index("name_idx").on(table.name),
+  }
 });
 
 export const serverStatus = mysqlTable("server_status", {
@@ -46,6 +50,11 @@ export const serverStatus = mysqlTable("server_status", {
   onlinePlayers: int().notNull(),
   registeredPlayers: int().notNull(),
   ping: int().notNull(),
+}, (table) => {
+  return {
+    serverTimestampIndex: index("server_timestamp_idx").on(table.serverId, table.timestamp),
+    onlinePlayersIndex: index("online_players_idx").on(table.onlinePlayers),
+  }
 });
 
 export const serverVote = mysqlTable("server_vote", {
@@ -57,6 +66,10 @@ export const serverVote = mysqlTable("server_vote", {
   ip: text().notNull(),
   browserFingerprint: bigint({ mode: "number" }).notNull(),
   timestamp: bigint({ mode: "number" }).notNull(),
+}, (table) => {
+  return {
+    serverIndex: index("server_idx").on(table.serverId),
+  }
 });
 
 export const serverVoteHook = mysqlTable("server_vote_hook", {
