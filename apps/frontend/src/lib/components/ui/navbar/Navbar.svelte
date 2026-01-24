@@ -145,6 +145,12 @@
 		</nav>
 	</div>
 	<div class="flex flex-row gap-6">
+		{#if env.PUBLIC_DISCORD_URL}
+			<Button href={env.PUBLIC_DISCORD_URL} target="_blank" rel="noopener noreferrer">
+				<Discord />
+				<span class="hidden md:block">Join our Discord</span>
+			</Button>
+		{/if}
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger class="rounded-full bg-white/40 p-[1px] transition hover:bg-white/60">
 				{#if session}
