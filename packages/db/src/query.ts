@@ -458,7 +458,7 @@ export const addUser = async (discordId: string) => {
       discordId,
       systemAdmin: 0,
     });
-  } catch {}
+  } catch { }
 };
 
 export const getUserManagePermissions = async (
@@ -516,7 +516,7 @@ export const deleteServer = async (serverId: number) => {
 
 export const addServer = async (
   name: string,
-  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "CUSTOM",
+  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "SUNRISE" | "CUSTOM",
   description: string,
   iconUrl: string,
   tags: string,
@@ -574,7 +574,7 @@ export const editServer = async (
   serverId: number,
   opts: {
     name: string;
-    type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "CUSTOM";
+    type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "SUNRISE" | "CUSTOM";
     description: string;
     iconUrl: string;
     tags: string;

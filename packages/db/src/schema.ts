@@ -6,6 +6,7 @@ import {
   tinyint,
   varchar,
   index,
+  mysqlEnum,
 } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("user", {
@@ -24,7 +25,7 @@ export const user_server_manage = mysqlTable("user_server_manage", {
 
 export const server = mysqlTable("server", {
   id: int().primaryKey().autoincrement().notNull(),
-  type: text({ enum: ["BANCHOPY", "RIPPLE", "TITANIC", "CUSTOM"] })
+  type: mysqlEnum("type", ["BANCHOPY", "RIPPLE", "TITANIC", "SUNRISE", "CUSTOM"])
     .default("BANCHOPY")
     .notNull(),
   name: varchar("name", { length: 255 }).notNull(),
@@ -35,11 +36,9 @@ export const server = mysqlTable("server", {
   trending: int().notNull(),
   date_added: bigint({ mode: "number" }).notNull(),
   location: text(),
-}, (table) => {
-  return {
-    nameIndex: index("name_idx").on(table.name),
-  }
-});
+}, (table) => [
+  index("name_idx").on(table.name),
+]);
 
 export const serverStatus = mysqlTable("server_status", {
   id: int().primaryKey().autoincrement().notNull(),
@@ -50,12 +49,10 @@ export const serverStatus = mysqlTable("server_status", {
   onlinePlayers: int().notNull(),
   registeredPlayers: int().notNull(),
   ping: int().notNull(),
-}, (table) => {
-  return {
-    serverTimestampIndex: index("server_timestamp_idx").on(table.serverId, table.timestamp),
-    onlinePlayersIndex: index("online_players_idx").on(table.onlinePlayers),
-  }
-});
+}, (table) => [
+  index("server_timestamp_idx").on(table.serverId, table.timestamp),
+  index("online_players_idx").on(table.onlinePlayers),
+]);
 
 export const serverVote = mysqlTable("server_vote", {
   id: int().primaryKey().autoincrement().notNull(),
@@ -66,11 +63,9 @@ export const serverVote = mysqlTable("server_vote", {
   ip: text().notNull(),
   browserFingerprint: bigint({ mode: "number" }).notNull(),
   timestamp: bigint({ mode: "number" }).notNull(),
-}, (table) => {
-  return {
-    serverIndex: index("server_idx").on(table.serverId),
-  }
-});
+}, (table) => [
+  index("server_idx").on(table.serverId),
+]);
 
 export const serverVoteHook = mysqlTable("server_vote_hook", {
   server_id: int()

@@ -1,7 +1,7 @@
 export type Server = {
   id: number;
   name: string;
-  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "CUSTOM";
+  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "SUNRISE" | "CUSTOM";
   description: string | null;
   url: string;
   iconUrl: string;
@@ -12,7 +12,7 @@ export type Server = {
 export type ServerFull = {
   id: number;
   name: string;
-  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "CUSTOM";
+  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "SUNRISE" | "CUSTOM";
   description: string | null;
   url: string;
   iconUrl: string;
@@ -30,7 +30,7 @@ export type ServerFull = {
 export type ServerFullHook = {
   id: number;
   name: string;
-  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "CUSTOM";
+  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "SUNRISE" | "CUSTOM";
   description: string | null;
   url: string;
   iconUrl: string;

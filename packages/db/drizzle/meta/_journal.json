@@ -36,6 +36,13 @@
       "when": 1769271911644,
       "tag": "0004_brown_kylun",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1775752823664,
+      "tag": "0005_abandoned_paladin",
+      "breakpoints": true
     }
   ]
 }
