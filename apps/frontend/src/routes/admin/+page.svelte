@@ -62,6 +62,7 @@
 		tags: '',
 		trending: false,
 		url: '',
+		discordUrl: '',
 		location: '',
 		postbackUrl: '',
 		discordWebhookUrl: '',
@@ -80,6 +81,7 @@
 		location: '',
 		trending: false,
 		url: '',
+		discordUrl: '',
 		postbackUrl: '',
 		discordWebhookUrl: '',
 		discordWebhookContent: ''
@@ -97,6 +99,10 @@
 		{
 			value: 'TITANIC',
 			label: 'TITANIC'
+		},
+		{
+			value: 'SUNRISE',
+			label: 'SUNRISE'
 		}
 	];
 
@@ -156,6 +162,7 @@
 							tags: row.original.tags ?? '',
 							trending: row.original.trending === 1 ? true : false,
 							url: row.original.url,
+							discordUrl: row.original.discordUrl ?? '',
 							postbackUrl: row.original.postbackUrl,
 							discordWebhookUrl: row.original.discordWebhookUrl,
 							discordWebhookContent: row.original.discordWebhookContent
@@ -265,6 +272,7 @@
 			tags: '',
 			trending: false,
 			url: '',
+			discordUrl: '',
 			location: '',
 			postbackUrl: '',
 			discordWebhookUrl: '',
@@ -318,6 +326,7 @@
 			tags: '',
 			trending: false,
 			url: '',
+			discordUrl: '',
 			location: '',
 			postbackUrl: '',
 			discordWebhookUrl: '',
@@ -380,6 +389,7 @@
 				tags: '',
 				trending: false,
 				url: '',
+				discordUrl: '',
 				location: '',
 				postbackUrl: '',
 				discordWebhookUrl: '',
@@ -449,6 +459,10 @@
 					<div class="grid grid-cols-1 items-center gap-2">
 						<Label for="url">URL</Label>
 						<Input class="col-span-3" id="url" bind:value={addServerObject.url} />
+					</div>
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="discord_url">Discord URL</Label>
+						<Input class="col-span-3" id="discord_url" bind:value={addServerObject.discordUrl} />
 					</div>
 					<div class="grid grid-cols-1 items-center gap-2">
 						<Label for="icon_url">Icon URL</Label>
@@ -537,6 +551,7 @@
 				tags: '',
 				trending: false,
 				url: '',
+				discordUrl: '',
 				location: '',
 				postbackUrl: '',
 				discordWebhookUrl: '',
@@ -606,6 +621,10 @@
 					<div class="grid grid-cols-1 items-center gap-2">
 						<Label for="url">URL</Label>
 						<Input class="col-span-3" id="url" bind:value={editServerObject.url} />
+					</div>
+					<div class="grid grid-cols-1 items-center gap-2">
+						<Label for="discord_url">Discord URL</Label>
+						<Input class="col-span-3" id="discord_url" bind:value={editServerObject.discordUrl} />
 					</div>
 					<div class="grid grid-cols-1 items-center gap-2">
 						<Label for="icon_url">Icon URL</Label>

@@ -45,6 +45,7 @@ export const getAllServers = async (): Promise<ServerFull[]> => {
       description: server.description,
       url: server.url,
       iconUrl: server.iconUrl,
+      discordUrl: server.discordUrl,
       tags: server.tags,
       trending: server.trending,
       onlinePlayers: intWithFallback(serverStatus.onlinePlayers, -1).as(
@@ -76,6 +77,7 @@ export const getAllServers = async (): Promise<ServerFull[]> => {
       server.description,
       server.url,
       server.iconUrl,
+      server.discordUrl,
       server.tags,
       server.trending,
       serverStatus.timestamp,
@@ -108,6 +110,7 @@ export const getAllServersWithHooks = async (): Promise<ServerFullHook[]> => {
       description: server.description,
       url: server.url,
       iconUrl: server.iconUrl,
+      discordUrl: server.discordUrl,
       tags: server.tags,
       trending: server.trending,
       onlinePlayers: intWithFallback(serverStatus.onlinePlayers, -1).as(
@@ -151,6 +154,7 @@ export const getAllServersWithHooks = async (): Promise<ServerFullHook[]> => {
       server.description,
       server.url,
       server.iconUrl,
+      server.discordUrl,
       server.tags,
       server.trending,
       serverStatus.timestamp,
@@ -183,6 +187,7 @@ export const getServerById = async (serverId: number) => {
       description: server.description,
       url: server.url,
       iconUrl: server.iconUrl,
+      discordUrl: server.discordUrl,
       tags: server.tags,
       trending: server.trending,
       onlinePlayers: intWithFallback(serverStatus.onlinePlayers, -1).as(
@@ -215,6 +220,7 @@ export const getServerById = async (serverId: number) => {
       server.description,
       server.url,
       server.iconUrl,
+      server.discordUrl,
       server.tags,
       server.trending,
       serverStatus.timestamp,
@@ -482,6 +488,7 @@ export const getUserManagePermissions = async (
       description: server.description,
       url: server.url,
       iconUrl: server.iconUrl,
+      discordUrl: server.discordUrl,
       tags: server.tags,
       trending: server.trending,
     })
@@ -522,6 +529,7 @@ export const addServer = async (
   tags: string,
   trending: boolean,
   url: string,
+  discordUrl: string | null,
   location: string,
   postbackUrl: string,
   discordWebhookUrl: string,
@@ -540,6 +548,7 @@ export const addServer = async (
           trending: trending ? 1 : 0,
           date_added: Date.now(),
           url,
+          discordUrl,
           location,
         })
         .$returningId();
@@ -580,6 +589,7 @@ export const editServer = async (
     tags: string;
     trending: boolean;
     url: string;
+    discordUrl: string | null;
     location: string;
     postbackUrl: string;
     discordWebhookUrl: string;
@@ -598,6 +608,7 @@ export const editServer = async (
           tags: opts.tags,
           trending: opts.trending ? 1 : 0,
           url: opts.url,
+          discordUrl: opts.discordUrl,
           location: opts.location,
         })
         .where(eq(server.id, serverId));

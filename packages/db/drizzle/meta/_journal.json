@@ -43,6 +43,13 @@
       "when": 1775752823664,
       "tag": "0005_abandoned_paladin",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1775752979563,
+      "tag": "0006_petite_strong_guy",
+      "breakpoints": true
     }
   ]
 }

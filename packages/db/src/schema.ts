@@ -32,6 +32,7 @@ export const server = mysqlTable("server", {
   description: text(),
   url: text().notNull(),
   iconUrl: text().notNull(),
+  discordUrl: text(),
   tags: text(),
   trending: int().notNull(),
   date_added: bigint({ mode: "number" }).notNull(),

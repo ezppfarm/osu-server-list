@@ -5,6 +5,7 @@ export type Server = {
   description: string | null;
   url: string;
   iconUrl: string;
+  discordUrl: string | null;
   tags: string | null;
   trending: number;
 };
@@ -16,6 +17,7 @@ export type ServerFull = {
   description: string | null;
   url: string;
   iconUrl: string;
+  discordUrl: string | null;
   tags: string | null;
   trending: number;
   onlinePlayers: number;
@@ -34,6 +36,7 @@ export type ServerFullHook = {
   description: string | null;
   url: string;
   iconUrl: string;
+  discordUrl: string | null;
   tags: string | null;
   trending: number;
   onlinePlayers: number;
