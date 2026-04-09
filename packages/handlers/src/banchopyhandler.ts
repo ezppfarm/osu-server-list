@@ -24,7 +24,7 @@ export class BanchoPyApiHandler implements IServerApiHandler {
   constructor(
     private baseUrl: string,
     private useOldApiFormat: boolean = false,
-  ) {}
+  ) { }
 
   private async makeRequest<T>(
     endpoint: string,
@@ -75,7 +75,7 @@ export class BanchoPyApiHandler implements IServerApiHandler {
     }
 
     return {
-      onlineCount: data.counts.online,
+      onlineCount: Math.max(data.counts.online, 0),
       totalCount: data.counts.total,
     };
   }

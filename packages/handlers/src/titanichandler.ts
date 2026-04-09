@@ -16,7 +16,7 @@ export class TitanicApiHandler implements IServerApiHandler {
   constructor(
     private baseUrl: string,
     private useOldApiFormat: boolean = false,
-  ) {}
+  ) { }
 
   private async makeRequest<T>(
     endpoint: string,
@@ -61,7 +61,7 @@ export class TitanicApiHandler implements IServerApiHandler {
     }
 
     return {
-      onlineCount: data.online_users,
+      onlineCount: Math.max(data.online_users, 0),
       totalCount: data.total_users,
     };
   }

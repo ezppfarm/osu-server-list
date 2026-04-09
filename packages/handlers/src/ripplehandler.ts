@@ -18,7 +18,7 @@ type RippleUserInfoResponse = {
 };
 
 export class RippleApiHandler implements IServerApiHandler {
-  constructor(private baseUrl: string) {}
+  constructor(private baseUrl: string) { }
 
   private async makeRequest<T>(url: string, params?: any): Promise<T | null> {
     try {
@@ -84,9 +84,11 @@ export class RippleApiHandler implements IServerApiHandler {
       }
     }
 
+    // what the hell
+    const onlineCount = "result" in data ? data.result : data.connected_users;
+
     return {
-      // what the hell
-      onlineCount: "result" in data ? data.result : data.connected_users,
+      onlineCount: Math.max(onlineCount, 0),
       totalCount: -1, // Ripple does not provide total user count
     };
   }

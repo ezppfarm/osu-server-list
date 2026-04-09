@@ -62,7 +62,7 @@ export class SunriseApiHandler implements IServerApiHandler {
     }
 
     return {
-      onlineCount: data.users_online - 1, // account for the bot
+      onlineCount: Math.max(data.users_online - 1, 0), // account for the bot
       totalCount: data.total_users,
     };
   }
