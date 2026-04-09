@@ -17,6 +17,7 @@ export const GET = async ({ params }) => {
 			description: server.description,
 			url: server.url,
 			iconUrl: server.iconUrl,
+			discordUrl: server.discordUrl,
 			tags: server.tags?.split(','),
 			trending: server.trending,
 			onlinePlayers: server.onlinePlayers,

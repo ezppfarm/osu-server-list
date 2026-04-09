@@ -50,6 +50,13 @@
       "when": 1775752979563,
       "tag": "0006_petite_strong_guy",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1775754336968,
+      "tag": "0007_heavy_skin",
+      "breakpoints": true
     }
   ]
 }

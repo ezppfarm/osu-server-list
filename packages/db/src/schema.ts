@@ -51,7 +51,7 @@ export const serverStatus = mysqlTable("server_status", {
   registeredPlayers: int().notNull(),
   ping: int().notNull(),
 }, (table) => [
-  index("server_timestamp_idx").on(table.serverId, table.timestamp),
+  index("server_timestamp_ping_idx").on(table.serverId, table.timestamp, table.ping),
   index("online_players_idx").on(table.onlinePlayers),
 ]);
 
@@ -65,7 +65,7 @@ export const serverVote = mysqlTable("server_vote", {
   browserFingerprint: bigint({ mode: "number" }).notNull(),
   timestamp: bigint({ mode: "number" }).notNull(),
 }, (table) => [
-  index("server_idx").on(table.serverId),
+  index("server_timestamp_idx").on(table.serverId, table.timestamp),
 ]);
 
 export const serverVoteHook = mysqlTable("server_vote_hook", {

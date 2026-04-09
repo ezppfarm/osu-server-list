@@ -392,12 +392,11 @@ export const getServerStatusThisYear = async (serverId: number) => {
 
   const dayExpr = sql<string>`DATE(FROM_UNIXTIME(${serverStatus.timestamp} / 1000))`;
 
-  const result = await db
+  const statusResult = await db
     .select({
       day: dayExpr,
       onlinePlayers: sql<number>`MAX(${serverStatus.onlinePlayers})`,
       registeredPlayers: sql<number>`MAX(${serverStatus.registeredPlayers})`,
-      votes: countDistinct(serverVote.id),
       avgPing: sql<number>`ROUND(AVG(${serverStatus.ping}))`,
     })
     .from(serverStatus)
@@ -408,17 +407,30 @@ export const getServerStatusThisYear = async (serverId: number) => {
         lte(serverStatus.timestamp, endUnixMs),
       ),
     )
-    .leftJoin(
-      serverVote,
+    .groupBy(dayExpr)
+    .orderBy(dayExpr);
+
+  const voteResult = await db
+    .select({
+      day: sql<string>`DATE(FROM_UNIXTIME(${serverVote.timestamp} / 1000))`,
+      votes: sql<number>`COUNT(*)`,
+    })
+    .from(serverVote)
+    .where(
       and(
-        eq(serverVote.serverId, serverStatus.serverId),
-        sql`DATE(FROM_UNIXTIME(${serverVote.timestamp} / 1000)) = ${dayExpr}`,
+        eq(serverVote.serverId, serverId),
+        gte(serverVote.timestamp, startUnixMs),
+        lte(serverVote.timestamp, endUnixMs),
       ),
     )
-    .groupBy(dayExpr)
-    .orderBy(sql`DATE(FROM_UNIXTIME(${serverStatus.timestamp} / 1000)) ASC`);
+    .groupBy(sql`DATE(FROM_UNIXTIME(${serverVote.timestamp} / 1000))`);
 
-  return result;
+  const voteMap = new Map(voteResult.map((v) => [v.day, v.votes]));
+
+  return statusResult.map((s) => ({
+    ...s,
+    votes: voteMap.get(s.day) ?? 0,
+  }));
 };
 
 export const getUserTotalVotesForServer = async (

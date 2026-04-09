@@ -29,6 +29,7 @@ export const GET = async (req: RequestEvent) => {
 			description: server.description,
 			url: server.url,
 			iconUrl: server.iconUrl,
+			discordUrl: server.discordUrl,
 			tags: server.tags?.split(','),
 			trending: server.trending,
 			onlinePlayers: server.onlinePlayers,
