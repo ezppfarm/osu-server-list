@@ -5,6 +5,7 @@ import type { UsersResponse } from "@osu-server-list/handlers/types";
 import Baker from "cronbake";
 
 const baker = Baker.create();
+const API_TIMEOUT_SECONDS = 5;
 
 baker.add({
   name: "server-status-job",
@@ -24,12 +25,12 @@ baker.add({
         let pingStart = Bun.nanoseconds();
         try {
           const apiHandler = getApiHandler(server.url, server.type);
-          
+
           let timeoutHandle: any;
           counts = await Promise.race([
             apiHandler.fetchUserCounts(),
             new Promise<UsersResponse>((resolve) => {
-              timeoutHandle = setTimeout(() => resolve({ onlineCount: -1, totalCount: -1 }), 5000);
+              timeoutHandle = setTimeout(() => resolve({ onlineCount: -1, totalCount: -1 }), API_TIMEOUT_SECONDS * 1000);
             })
           ]);
           clearTimeout(timeoutHandle);
