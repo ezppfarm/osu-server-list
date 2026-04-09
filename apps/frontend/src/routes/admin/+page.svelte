@@ -256,6 +256,15 @@
 			toast.error('Tags cannot be empty');
 			return;
 		}
+		if (
+			addServerObject.discordUrl.trim().length > 0 &&
+			!addServerObject.discordUrl.match(
+				/^(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/.+[a-z]/i
+			)
+		) {
+			toast.error('Invalid Discord invite URL');
+			return;
+		}
 		addServerLoading = true;
 		const addResult = await createServer(addServerObject);
 		if (addResult.code === 200) {
@@ -303,6 +312,15 @@
 		}
 		if (editServerObject.tags.trim().length <= 0) {
 			toast.error('Tags cannot be empty');
+			return;
+		}
+		if (
+			editServerObject.discordUrl.trim().length > 0 &&
+			!editServerObject.discordUrl.match(
+				/^(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/.+[a-z]/i
+			)
+		) {
+			toast.error('Invalid Discord invite URL');
 			return;
 		}
 		editServerLoading = true;
