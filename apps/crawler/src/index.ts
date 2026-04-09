@@ -24,7 +24,15 @@ baker.add({
         let pingStart = Bun.nanoseconds();
         try {
           const apiHandler = getApiHandler(server.url, server.type);
-          counts = await apiHandler.fetchUserCounts();
+          
+          let timeoutHandle: any;
+          counts = await Promise.race([
+            apiHandler.fetchUserCounts(),
+            new Promise<UsersResponse>((resolve) => {
+              timeoutHandle = setTimeout(() => resolve({ onlineCount: -1, totalCount: -1 }), 5000);
+            })
+          ]);
+          clearTimeout(timeoutHandle);
         } catch (e) {
           console.log("Error fetching server status:");
           console.log(e);
