@@ -1,10 +1,11 @@
 import type { MetaTagsProps } from 'svelte-meta-tags';
 import type { RequestEvent } from './$types';
 import { env } from '$env/dynamic/public';
+import { countUnseenResolvedRequests } from '@osu-server-list/db/query';
 
 export const ssr = true;
 
-export const load = (req: RequestEvent) => {
+export const load = async (req: RequestEvent) => {
 	const baseMetaTags = Object.freeze({
 		robots: true,
 		title: `${env.PUBLIC_APP_NAME} - Your Gateway to osu! Communities`,
@@ -50,9 +51,15 @@ export const load = (req: RequestEvent) => {
 		}
 	}) satisfies MetaTagsProps;
 
+	const session = req.locals.session ?? undefined;
+	const notificationCount = session
+		? await countUnseenResolvedRequests(session.user.id)
+		: 0;
+
 	return {
 		baseMetaTags,
 		pathName: req.url.pathname,
-		session: req.locals.session ?? undefined
+		session,
+		notificationCount
 	};
 };
