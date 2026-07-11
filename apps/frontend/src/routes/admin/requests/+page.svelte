@@ -89,7 +89,9 @@
 	<Dialog.Content class="max-w-fit md:max-w-2xl">
 		<Dialog.Header>
 			<Dialog.Title>Review Request</Dialog.Title>
-			<Dialog.Description>Edit the details before accepting, or deny with a reason.</Dialog.Description>
+			<Dialog.Description
+				>Edit the details before accepting, or deny with a reason.</Dialog.Description
+			>
 		</Dialog.Header>
 		<RequestForm bind:value={fields} disabled={loading} />
 		<div class="flex flex-row items-center gap-1.5">
@@ -103,7 +105,9 @@
 			</div>
 		{/if}
 		<Dialog.Footer>
-			<Button variant="outline" onclick={() => (reviewOpen = false)} disabled={loading}>Cancel</Button>
+			<Button variant="outline" onclick={() => (reviewOpen = false)} disabled={loading}
+				>Cancel</Button
+			>
 			<Button variant="destructive" onclick={deny} disabled={loading}>
 				{denying ? 'Confirm Deny' : 'Deny'}
 			</Button>

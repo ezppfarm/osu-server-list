@@ -742,8 +742,8 @@
 							{/if}
 						</Button>
 						<Button onclick={() => (addServerDialogOpen = true)}><Plus />Add Server</Button>
-						</div>
-					{/if}
+					</div>
+				{/if}
 			</div>
 			<div class="rounded-md border">
 				<Table.Root>

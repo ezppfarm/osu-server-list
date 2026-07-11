@@ -159,9 +159,13 @@
 			</Button>
 		{/if}
 		<DropdownMenu.Root>
-			<DropdownMenu.Trigger class="relative rounded-full bg-white/40 p-[1px] transition hover:bg-white/60">
+			<DropdownMenu.Trigger
+				class="relative rounded-full bg-white/40 p-[1px] transition hover:bg-white/60"
+			>
 				{#if session && notificationCount > 0}
-					<span class="absolute -top-0.5 -right-0.5 z-10 size-2.5 rounded-full bg-primary ring-2 ring-gray-950"></span>
+					<span
+						class="absolute -top-0.5 -right-0.5 z-10 size-2.5 rounded-full bg-primary ring-2 ring-gray-950"
+					></span>
 				{/if}
 				{#if session}
 					<Avatar.Root style="view-transition-name: user-menu;">

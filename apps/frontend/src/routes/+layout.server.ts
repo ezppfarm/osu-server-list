@@ -52,9 +52,7 @@ export const load = async (req: RequestEvent) => {
 	}) satisfies MetaTagsProps;
 
 	const session = req.locals.session ?? undefined;
-	const notificationCount = session
-		? await countUnseenResolvedRequests(session.user.id)
-		: 0;
+	const notificationCount = session ? await countUnseenResolvedRequests(session.user.id) : 0;
 
 	return {
 		baseMetaTags,
