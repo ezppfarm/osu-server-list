@@ -17,11 +17,18 @@
 	import { navEntries } from './navbar';
 	import * as Sheet from '@/components/ui/sheet';
 	import MenuIcon from 'svelte-radix/HamburgerMenu.svelte';
+	import Inbox from '@lucide/svelte/icons/inbox';
+	import { Badge } from '@/components/ui/badge';
 
 	let {
 		pathName,
-		session
-	}: { pathName: string; session?: { user: APIUser; manage: ServerManage } } = $props();
+		session,
+		notificationCount = 0
+	}: {
+		pathName: string;
+		session?: { user: APIUser; manage: ServerManage };
+		notificationCount?: number;
+	} = $props();
 
 	let isAdminPanel = $derived(page.url.pathname.startsWith('/admin/'));
 
@@ -152,7 +159,10 @@
 			</Button>
 		{/if}
 		<DropdownMenu.Root>
-			<DropdownMenu.Trigger class="rounded-full bg-white/40 p-[1px] transition hover:bg-white/60">
+			<DropdownMenu.Trigger class="relative rounded-full bg-white/40 p-[1px] transition hover:bg-white/60">
+				{#if session && notificationCount > 0}
+					<span class="absolute -top-0.5 -right-0.5 z-10 size-2.5 rounded-full bg-primary ring-2 ring-gray-950"></span>
+				{/if}
 				{#if session}
 					<Avatar.Root style="view-transition-name: user-menu;">
 						<Avatar.Image
@@ -174,6 +184,16 @@
 			<DropdownMenu.Content class="mr-3 w-screen p-0 md:w-48">
 				{#if session}
 					<div class="p-1">
+						<a href="/requests">
+							<DropdownMenu.Item class="cursor-pointer">
+								<Inbox />
+								My Requests
+								{#if notificationCount > 0}
+									<Badge variant="secondary" class="ml-auto">{notificationCount}</Badge>
+								{/if}
+							</DropdownMenu.Item>
+						</a>
+						<DropdownMenu.Separator></DropdownMenu.Separator>
 						{#if session.manage.systemAdmin || session.manage.manageServers.length > 0}
 							<a href="/admin">
 								<DropdownMenu.Item class="cursor-pointer">
