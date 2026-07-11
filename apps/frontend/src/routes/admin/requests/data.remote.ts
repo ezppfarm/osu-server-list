@@ -12,17 +12,11 @@ const requireAdmin = () => {
 	return event.locals.session?.manage.systemAdmin ? event.locals.session : null;
 };
 
-export const getPendingRequests = query(async () => {
-	if (!requireAdmin()) return { success: false, message: 'Unauthorized', requests: [] };
-	const requests = await getPendingServerRequests();
-	return { success: true, message: '', requests };
-});
-
 export const acceptRequest = query(
 	v.object({
 		id: v.number(),
 		name: v.string(),
-		type: v.string(),
+		type: v.picklist(['BANCHOPY', 'RIPPLE', 'TITANIC', 'SUNRISE', 'CUSTOM']),
 		description: v.string(),
 		iconUrl: v.string(),
 		tags: v.string(),
@@ -39,7 +33,7 @@ export const acceptRequest = query(
 		}
 		const accepted = await acceptServerRequest(input.id, {
 			name: input.name,
-			type: input.type as 'BANCHOPY' | 'RIPPLE' | 'TITANIC' | 'SUNRISE' | 'CUSTOM',
+			type: input.type,
 			description: input.description,
 			iconUrl: input.iconUrl,
 			tags: input.tags,

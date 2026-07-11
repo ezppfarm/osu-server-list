@@ -15,7 +15,7 @@ const discordUrlRegex =
 export const submitServerRequest = query(
 	v.object({
 		name: v.string(),
-		type: v.string(),
+		type: v.picklist(['BANCHOPY', 'RIPPLE', 'TITANIC', 'SUNRISE', 'CUSTOM']),
 		description: v.string(),
 		url: v.string(),
 		iconUrl: v.string(),
@@ -64,7 +64,7 @@ export const submitServerRequest = query(
 
 		const added = await addServerRequest(session.user.id, {
 			name: input.name,
-			type: input.type as 'BANCHOPY' | 'RIPPLE' | 'TITANIC' | 'SUNRISE' | 'CUSTOM',
+			type: input.type,
 			description: input.description,
 			url: input.url,
 			iconUrl: input.iconUrl,
