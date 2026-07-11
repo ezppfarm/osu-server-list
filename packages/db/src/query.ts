@@ -13,6 +13,7 @@ import {
 import { db } from ".";
 import {
   server,
+  serverRequest,
   serverStatus,
   serverVote,
   serverVoteHook,
@@ -25,7 +26,14 @@ import {
   stringWithFallback,
   sumAsIntWithFallback,
 } from "./util";
-import type { Server, ServerFull, ServerFullHook, ServerManage } from "./types";
+import type {
+  Server,
+  ServerFull,
+  ServerFullHook,
+  ServerManage,
+  ServerRequest,
+  ServerRequestInput,
+} from "./types";
 
 export const getAllServers = async (): Promise<ServerFull[]> => {
   const latestStatus = db
@@ -642,6 +650,160 @@ export const editServer = async (
         });
     });
     return true;
+  } catch {
+    return false;
+  }
+};
+
+export const addServerRequest = async (
+  discordId: string,
+  input: ServerRequestInput,
+) => {
+  try {
+    await db.insert(serverRequest).values({
+      discordId,
+      name: input.name,
+      type: input.type,
+      description: input.description,
+      url: input.url,
+      iconUrl: input.iconUrl,
+      discordUrl: input.discordUrl,
+      tags: input.tags,
+      location: input.location,
+      submittedAt: Date.now(),
+    });
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export const getServerRequestsByUser = async (
+  discordId: string,
+): Promise<ServerRequest[]> => {
+  return (await db
+    .select()
+    .from(serverRequest)
+    .where(eq(serverRequest.discordId, discordId))
+    .orderBy(desc(serverRequest.submittedAt))) as ServerRequest[];
+};
+
+export const getPendingServerRequests = async (): Promise<ServerRequest[]> => {
+  return (await db
+    .select()
+    .from(serverRequest)
+    .where(eq(serverRequest.status, "PENDING"))
+    .orderBy(desc(serverRequest.submittedAt))) as ServerRequest[];
+};
+
+export const getServerRequestById = async (
+  id: number,
+): Promise<ServerRequest | null> => {
+  const rows = await db
+    .select()
+    .from(serverRequest)
+    .where(eq(serverRequest.id, id))
+    .limit(1);
+  return (rows[0] as ServerRequest) ?? null;
+};
+
+export const countUnseenResolvedRequests = async (
+  discordId: string,
+): Promise<number> => {
+  const rows = await db
+    .select({ count: count() })
+    .from(serverRequest)
+    .where(
+      and(
+        eq(serverRequest.discordId, discordId),
+        eq(serverRequest.seen, 0),
+        sql`${serverRequest.status} <> 'PENDING'`,
+      ),
+    );
+  return rows[0]?.count ?? 0;
+};
+
+export const markUserRequestsSeen = async (discordId: string) => {
+  await db
+    .update(serverRequest)
+    .set({ seen: 1 })
+    .where(
+      and(
+        eq(serverRequest.discordId, discordId),
+        sql`${serverRequest.status} <> 'PENDING'`,
+      ),
+    );
+};
+
+export const denyServerRequest = async (id: number, reason: string) => {
+  try {
+    await db
+      .update(serverRequest)
+      .set({
+        status: "DENIED",
+        denialReason: reason,
+        reviewedAt: Date.now(),
+      })
+      .where(eq(serverRequest.id, id));
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export const acceptServerRequest = async (
+  id: number,
+  fields: {
+    name: string;
+    type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "SUNRISE" | "CUSTOM";
+    description: string;
+    iconUrl: string;
+    tags: string;
+    trending: boolean;
+    url: string;
+    discordUrl: string;
+    location: string;
+  },
+) => {
+  try {
+    let newServerId: number | undefined;
+    await db.transaction(async (tx) => {
+      const inserted = await tx
+        .insert(server)
+        .values({
+          name: fields.name,
+          type: fields.type,
+          description: fields.description,
+          iconUrl: fields.iconUrl,
+          tags: fields.tags,
+          trending: fields.trending ? 1 : 0,
+          date_added: Date.now(),
+          url: fields.url,
+          discordUrl: fields.discordUrl,
+          location: fields.location,
+        })
+        .$returningId();
+      newServerId = inserted[0]?.id;
+      if (!newServerId) {
+        tx.rollback();
+        return;
+      }
+      await tx.insert(serverVoteHook).values({
+        server_id: newServerId,
+        discord_webhook_content: "",
+        discord_webhook_url: "",
+        postback_url: "",
+      });
+      await tx
+        .update(serverRequest)
+        .set({
+          status: "ACCEPTED",
+          reviewedAt: Date.now(),
+          createdServerId: newServerId,
+        })
+        .where(eq(serverRequest.id, id));
+    });
+    return newServerId !== undefined;
   } catch {
     return false;
   }
