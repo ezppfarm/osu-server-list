@@ -1,4 +1,4 @@
-import { getAllServersWithHooks } from '@osu-server-list/db/query';
+import { getAllServersWithHooks, getPendingServerRequests } from '@osu-server-list/db/query';
 import type { ServerFullHook } from '@osu-server-list/db/types';
 import { redirect } from '@sveltejs/kit';
 
@@ -19,7 +19,11 @@ export const load = async ({ locals }) => {
 			...servers.filter((server) => userServers.some((userver) => userver.id === server.id))
 		);
 	}
+	const pendingRequestCount = locals.session.manage.systemAdmin
+		? (await getPendingServerRequests()).length
+		: 0;
 	return {
-		servers: serversToManage
+		servers: serversToManage,
+		pendingRequestCount
 	};
 };
