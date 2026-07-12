@@ -37,7 +37,6 @@
 	import { Label } from '@/components/ui/label';
 	import { toast } from 'svelte-sonner';
 	import { createServer, removeServer, updateServer } from './data.remote';
-	import { Textarea } from '@/components/ui/textarea';
 	import type { ServerAdd, ServerEdit } from './types';
 	import * as Select from '@/components/ui/select';
 	import { title } from '@/title';
@@ -442,7 +441,7 @@
 								</Select.Trigger>
 								<Select.Content>
 									<Select.Group>
-										{#each serverTypes as serverType}
+										{#each serverTypes as serverType (serverType)}
 											<Select.Item value={serverType.value} label={serverType.label}>
 												{serverType.label}
 											</Select.Item>
@@ -604,7 +603,7 @@
 								</Select.Trigger>
 								<Select.Content>
 									<Select.Group>
-										{#each serverTypes as serverType}
+										{#each serverTypes as serverType (serverType)}
 											<Select.Item value={serverType.value} label={serverType.label}>
 												{serverType.label}
 											</Select.Item>
