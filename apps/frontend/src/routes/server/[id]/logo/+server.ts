@@ -52,12 +52,11 @@ const getCachedIcon = async (serverId: number) => {
 		const filePath = path.join(iconsPath, file);
 		const stat = await fs.stat(filePath);
 
-		if (Date.now() - stat.mtimeMs >= cacheDuration) {
-			await fs.rm(filePath, { force: true });
-			return null;
-		}
-
-		return Bun.file(filePath);
+		return {
+			file: Bun.file(filePath),
+			path: filePath,
+			expired: Date.now() - stat.mtimeMs >= cacheDuration
+		};
 	}
 
 	return null;
@@ -88,9 +87,10 @@ export const GET = async (req: RequestEvent) => {
 
 	const cachedIcon = await getCachedIcon(serverId);
 
-	if (cachedIcon) {
-		return new Response(cachedIcon, {
-			headers: getCacheHeaders(cachedIcon.type || 'image/png')
+	// Fresh cache
+	if (cachedIcon && !cachedIcon.expired) {
+		return new Response(cachedIcon.file, {
+			headers: getCacheHeaders(cachedIcon.file.type || 'image/png')
 		});
 	}
 
@@ -110,9 +110,17 @@ export const GET = async (req: RequestEvent) => {
 				redirect: 'follow'
 			});
 
+			clearTimeout(timeout);
+
 			const contentType = response.headers.get('Content-Type')?.split(';')[0] ?? '';
 
 			if (!response.ok || !contentType.startsWith('image/')) {
+				if (cachedIcon) {
+					return new Response(cachedIcon.file, {
+						headers: getCacheHeaders(cachedIcon.file.type || 'image/png')
+					});
+				}
+
 				return getFallbackResponse();
 			}
 
@@ -120,6 +128,15 @@ export const GET = async (req: RequestEvent) => {
 
 			const finalPath = path.join(iconsPath, `${serverId}.${extension}`);
 			const tempPath = `${finalPath}.tmp`;
+
+			// Remove any old cached icon with a different extension
+			const files = await fs.readdir(iconsPath);
+
+			for (const file of files) {
+				if (file.startsWith(`${serverId}.`) && file !== path.basename(finalPath)) {
+					await fs.rm(path.join(iconsPath, file), { force: true });
+				}
+			}
 
 			const imageData = await response.arrayBuffer();
 
@@ -130,6 +147,12 @@ export const GET = async (req: RequestEvent) => {
 				headers: getCacheHeaders(contentType)
 			});
 		} catch {
+			if (cachedIcon) {
+				return new Response(cachedIcon.file, {
+					headers: getCacheHeaders(cachedIcon.file.type || 'image/png')
+				});
+			}
+
 			return getFallbackResponse();
 		} finally {
 			clearTimeout(timeout);
