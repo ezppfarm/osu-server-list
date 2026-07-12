@@ -98,7 +98,7 @@
 	</Dialog.Content>
 </Dialog.Root>
 
-<div class="mx-auto mt-12 max-w-3xl px-3 pt-16">
+<div class="mx-auto mt-12 max-w-7xl px-3 pt-16">
 	<Card.Root class="border-card-foreground/15 bg-card/50">
 		<Card.Content>
 			<div class="flex items-center justify-between py-4">

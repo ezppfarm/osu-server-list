@@ -116,12 +116,12 @@
 	</Dialog.Content>
 </Dialog.Root>
 
-<div class="mx-auto mt-12 max-w-4xl px-3 pt-16">
+<div class="mx-auto mt-12 max-w-7xl px-3 pt-16">
 	<Card.Root class="border-card-foreground/15 bg-card/50">
 		<Card.Content>
 			<div class="flex items-center justify-between py-4">
 				<div class="flex items-center gap-2">
-					<Button variant="ghost" size="icon" href="/admin"><ChevronLeft /></Button>
+					<Button variant="ghost" size="icon" href="/admin/servers"><ChevronLeft /></Button>
 					<h1 class="text-xl font-semibold">Pending Requests</h1>
 				</div>
 			</div>
