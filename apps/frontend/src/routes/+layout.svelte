@@ -48,7 +48,11 @@
 <PageLoader />
 
 <div class="flex min-h-screen flex-col bg-background">
-	<Navbar pathName={data.pathName} session={data.session} />
+	<Navbar
+		pathName={data.pathName}
+		session={data.session}
+		notificationCount={data.notificationCount}
+	/>
 
 	<main class="flex-1">
 		{@render children?.()}

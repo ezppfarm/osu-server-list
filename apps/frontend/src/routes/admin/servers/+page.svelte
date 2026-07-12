@@ -30,12 +30,13 @@
 	import ChevronsRight from '@lucide/svelte/icons/chevrons-right';
 	import ChevronsLeft from '@lucide/svelte/icons/chevrons-left';
 	import Plus from '@lucide/svelte/icons/plus';
+	import Inbox from '@lucide/svelte/icons/inbox';
+	import { Badge } from '@/components/ui/badge';
 	import DataTableActions from './data-table-actions.svelte';
 	import * as Dialog from '@/components/ui/dialog';
 	import { Label } from '@/components/ui/label';
 	import { toast } from 'svelte-sonner';
 	import { createServer, removeServer, updateServer } from './data.remote';
-	import { Textarea } from '@/components/ui/textarea';
 	import type { ServerAdd, ServerEdit } from './types';
 	import * as Select from '@/components/ui/select';
 	import { title } from '@/title';
@@ -440,7 +441,7 @@
 								</Select.Trigger>
 								<Select.Content>
 									<Select.Group>
-										{#each serverTypes as serverType}
+										{#each serverTypes as serverType (serverType)}
 											<Select.Item value={serverType.value} label={serverType.label}>
 												{serverType.label}
 											</Select.Item>
@@ -602,7 +603,7 @@
 								</Select.Trigger>
 								<Select.Content>
 									<Select.Group>
-										{#each serverTypes as serverType}
+										{#each serverTypes as serverType (serverType)}
 											<Select.Item value={serverType.value} label={serverType.label}>
 												{serverType.label}
 											</Select.Item>
@@ -731,9 +732,16 @@
 					class="max-w-sm"
 				/>
 				{#if props.data.session?.manage.systemAdmin}
-					<Button class="ml-auto" onclick={() => (addServerDialogOpen = true)}
-						><Plus />Add Server</Button
-					>
+					<div class="ml-auto flex gap-2">
+						<Button variant="outline" href="/admin/requests">
+							<Inbox />
+							Requests
+							{#if props.data.pendingRequestCount > 0}
+								<Badge variant="secondary">{props.data.pendingRequestCount}</Badge>
+							{/if}
+						</Button>
+						<Button onclick={() => (addServerDialogOpen = true)}><Plus />Add Server</Button>
+					</div>
 				{/if}
 			</div>
 			<div class="rounded-md border">

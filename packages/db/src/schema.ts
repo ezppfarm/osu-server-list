@@ -79,3 +79,31 @@ export const serverVoteHook = mysqlTable("server_vote_hook", {
   // TODO: default content?
   discord_webhook_content: text(),
 });
+
+export const serverRequest = mysqlTable("server_request", {
+  id: int().primaryKey().autoincrement().notNull(),
+  discordId: varchar({ length: 128 })
+    .references(() => user.discordId)
+    .notNull(),
+  status: mysqlEnum("status", ["PENDING", "ACCEPTED", "DENIED"])
+    .default("PENDING")
+    .notNull(),
+  type: mysqlEnum("type", ["BANCHOPY", "RIPPLE", "TITANIC", "SUNRISE", "CUSTOM"])
+    .default("BANCHOPY")
+    .notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text(),
+  url: text().notNull(),
+  iconUrl: text().notNull(),
+  discordUrl: text(),
+  tags: text(),
+  location: text(),
+  denialReason: text(),
+  createdServerId: int().references(() => server.id),
+  submittedAt: bigint({ mode: "number" }).notNull(),
+  reviewedAt: bigint({ mode: "number" }),
+  seen: tinyint().notNull().default(0),
+}, (table) => [
+  index("request_discord_idx").on(table.discordId),
+  index("request_status_idx").on(table.status),
+]);

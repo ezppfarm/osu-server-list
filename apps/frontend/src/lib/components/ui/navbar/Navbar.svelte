@@ -3,7 +3,6 @@
 	import { env } from '$env/dynamic/public';
 	import * as Avatar from '@/components/ui/avatar';
 	import User from '@lucide/svelte/icons/user';
-	import Logout from '@lucide/svelte/icons/log-out';
 	import Shield from '@lucide/svelte/icons/shield';
 	import Discord from 'svelte-radix/DiscordLogo.svelte';
 	import * as DropdownMenu from '@/components/ui/dropdown-menu';
@@ -17,11 +16,19 @@
 	import { navEntries } from './navbar';
 	import * as Sheet from '@/components/ui/sheet';
 	import MenuIcon from 'svelte-radix/HamburgerMenu.svelte';
+	import Inbox from '@lucide/svelte/icons/inbox';
+	import { Badge } from '@/components/ui/badge';
+	import { resolve } from '$app/paths';
 
 	let {
 		pathName,
-		session
-	}: { pathName: string; session?: { user: APIUser; manage: ServerManage } } = $props();
+		session,
+		notificationCount = 0
+	}: {
+		pathName: string;
+		session?: { user: APIUser; manage: ServerManage };
+		notificationCount?: number;
+	} = $props();
 
 	let isAdminPanel = $derived(page.url.pathname.startsWith('/admin/'));
 
@@ -53,7 +60,7 @@
 			</Button>
 		</Sheet.Trigger>
 		<Sheet.Content side="left">
-			<a href="/" class="mr-6 flex items-center gap-2 p-5 text-2xl lg:hidden">
+			<a href={resolve('/')} class="mr-6 flex items-center gap-2 p-5 text-2xl lg:hidden">
 				<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
 					<Activity class="h-5 w-5 text-primary-foreground" />
 				</div>
@@ -62,37 +69,39 @@
 			<div class="grid gap-2 px-3 py-2">
 				{#if !isAdminPanel}
 					{#each navEntries as navEntry (navEntry)}
-						{@const isActive = navEntry.activeRegex.some((regex) => pathName.match(regex))}
-						{#if navEntry.subEntries}
-							<a
-								href={navEntry.href}
-								class="flex w-full items-center rounded-lg pt-2 pb-1 text-lg font-semibold transition-all {isActive
-									? 'px-3 underline'
-									: ''}"
-							>
-								{navEntry.name}
-							</a>
-							<div class="flex flex-col">
-								{#each navEntry.subEntries as subEntry (subEntry)}
-									<a
-										href={subEntry.href}
-										class="flex w-full items-center py-1 {isActive
-											? 'px-6 hover:px-9'
-											: 'px-3 hover:px-6'} rounded-lg text-base font-semibold transition-all"
-									>
-										{subEntry.name}
-									</a>
-								{/each}
-							</div>
-						{:else}
-							<a
-								href={navEntry.href}
-								class="flex w-full items-center rounded-lg py-2 text-lg font-semibold transition-all hover:px-3 {isActive
-									? 'px-3 underline'
-									: ''}"
-							>
-								{navEntry.name}
-							</a>
+						{#if navEntry.href}
+							{@const isActive = navEntry.activeRegex.some((regex) => pathName.match(regex))}
+							{#if navEntry.subEntries}
+								<a
+									href={navEntry.href}
+									class="flex w-full items-center rounded-lg pt-2 pb-1 text-lg font-semibold transition-all {isActive
+										? 'px-3 underline'
+										: ''}"
+								>
+									{navEntry.name}
+								</a>
+								<div class="flex flex-col">
+									{#each navEntry.subEntries as subEntry (subEntry)}
+										<a
+											href={subEntry.href}
+											class="flex w-full items-center py-1 {isActive
+												? 'px-6 hover:px-9'
+												: 'px-3 hover:px-6'} rounded-lg text-base font-semibold transition-all"
+										>
+											{subEntry.name}
+										</a>
+									{/each}
+								</div>
+							{:else}
+								<a
+									href={navEntry.href}
+									class="flex w-full items-center rounded-lg py-2 text-lg font-semibold transition-all hover:px-3 {isActive
+										? 'px-3 underline'
+										: ''}"
+								>
+									{navEntry.name}
+								</a>
+							{/if}
 						{/if}
 					{/each}
 				{:else}{/if}
@@ -100,7 +109,7 @@
 		</Sheet.Content>
 	</Sheet.Root>
 	<div class="hidden w-full items-center gap-6 lg:flex">
-		<a href="/" class="hidden items-center gap-3 text-2xl lg:flex">
+		<a href={resolve('/')} class="hidden items-center gap-3 text-2xl lg:flex">
 			<div
 				class="flex {smallerBar
 					? 'size-8'
@@ -116,28 +125,30 @@
 			<div class="flex gap-3">
 				{#if !isAdminPanel}
 					{#each navEntries as navEntry (navEntry)}
-						{@const isActive = navEntry.activeRegex.some((regex) => pathName.match(regex))}
-						{#if navEntry.subEntries}
-							<DropdownMenu.Root>
-								<DropdownMenu.Trigger>
-									<Button class={isActive ? 'bg-accent' : ''} variant="ghost">
-										{navEntry.name}
-									</Button>
-								</DropdownMenu.Trigger>
-								<DropdownMenu.Content>
-									{#each navEntry.subEntries as subEntry (subEntry)}
-										<a href={subEntry.href}>
-											<DropdownMenu.Item class="cursor-pointer">
-												{subEntry.name}
-											</DropdownMenu.Item>
-										</a>
-									{/each}
-								</DropdownMenu.Content>
-							</DropdownMenu.Root>
-						{:else}
-							<Button class={isActive ? 'bg-accent' : ''} href={navEntry.href} variant="ghost">
-								{navEntry.name}
-							</Button>
+						{#if navEntry.href}
+							{@const isActive = navEntry.activeRegex.some((regex) => pathName.match(regex))}
+							{#if navEntry.subEntries}
+								<DropdownMenu.Root>
+									<DropdownMenu.Trigger>
+										<Button class={isActive ? 'bg-accent' : ''} variant="ghost">
+											{navEntry.name}
+										</Button>
+									</DropdownMenu.Trigger>
+									<DropdownMenu.Content>
+										{#each navEntry.subEntries as subEntry (subEntry)}
+											<a href={subEntry.href}>
+												<DropdownMenu.Item class="cursor-pointer">
+													{subEntry.name}
+												</DropdownMenu.Item>
+											</a>
+										{/each}
+									</DropdownMenu.Content>
+								</DropdownMenu.Root>
+							{:else}
+								<Button class={isActive ? 'bg-accent' : ''} href={navEntry.href} variant="ghost">
+									{navEntry.name}
+								</Button>
+							{/if}
 						{/if}
 					{/each}
 				{:else}{/if}
@@ -152,7 +163,14 @@
 			</Button>
 		{/if}
 		<DropdownMenu.Root>
-			<DropdownMenu.Trigger class="rounded-full bg-white/40 p-[1px] transition hover:bg-white/60">
+			<DropdownMenu.Trigger
+				class="relative rounded-full bg-white/40 p-[1px] transition hover:bg-white/60"
+			>
+				{#if session && notificationCount > 0}
+					<span
+						class="absolute -top-0.5 -right-0.5 z-10 size-2.5 rounded-full bg-primary ring-2 ring-gray-950"
+					></span>
+				{/if}
 				{#if session}
 					<Avatar.Root style="view-transition-name: user-menu;">
 						<Avatar.Image
@@ -174,8 +192,18 @@
 			<DropdownMenu.Content class="mr-3 w-screen p-0 md:w-48">
 				{#if session}
 					<div class="p-1">
+						<a href={resolve('/requests')}>
+							<DropdownMenu.Item class="cursor-pointer">
+								<Inbox />
+								My Requests
+								{#if notificationCount > 0}
+									<Badge variant="secondary" class="ml-auto">{notificationCount}</Badge>
+								{/if}
+							</DropdownMenu.Item>
+						</a>
+						<DropdownMenu.Separator></DropdownMenu.Separator>
 						{#if session.manage.systemAdmin || session.manage.manageServers.length > 0}
-							<a href="/admin">
+							<a href={resolve('/admin/servers')}>
 								<DropdownMenu.Item class="cursor-pointer">
 									<Shield />
 									Manage {session?.manage.systemAdmin ? 'all' : 'your'} servers
@@ -185,7 +213,7 @@
 						{/if}
 						<DropdownMenu.Item
 							class="cursor-pointer"
-							onclick={() => goto('/api/v1/session/logout')}
+							onclick={() => goto(resolve('/api/v1/session/logout'))}
 						>
 							<LogOut />
 							Logout
@@ -195,7 +223,7 @@
 					<div class="p-1">
 						<DropdownMenu.Item
 							class="cursor-pointer"
-							onclick={() => goto('/api/v1/session/authorize')}
+							onclick={() => goto(resolve('/api/v1/session/authorize'))}
 						>
 							<Discord />
 							Login
