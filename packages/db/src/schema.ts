@@ -21,7 +21,10 @@ export const user_server_manage = mysqlTable("user_server_manage", {
   serverId: int()
     .notNull()
     .references(() => server.id),
-});
+}, (table) => [
+  index("user_server_manage_discord_server_idx").on(table.discordId, table.serverId),
+  index("user_server_manage_server_idx").on(table.serverId),
+]);
 
 export const server = mysqlTable("server", {
   id: int().primaryKey().autoincrement().notNull(),
@@ -51,7 +54,7 @@ export const serverStatus = mysqlTable("server_status", {
   registeredPlayers: int().notNull(),
   ping: int().notNull(),
 }, (table) => [
-  index("server_timestamp_ping_idx").on(table.serverId, table.timestamp, table.ping),
+  index("server_status_server_timestamp_idx").on(table.serverId, table.timestamp),
   index("online_players_idx").on(table.onlinePlayers),
 ]);
 
@@ -65,7 +68,17 @@ export const serverVote = mysqlTable("server_vote", {
   browserFingerprint: bigint({ mode: "number" }).notNull(),
   timestamp: bigint({ mode: "number" }).notNull(),
 }, (table) => [
-  index("server_timestamp_idx").on(table.serverId, table.timestamp),
+  index("server_vote_server_timestamp_idx").on(table.serverId, table.timestamp),
+  index("server_vote_ip_timestamp_idx").on(table.ip, table.timestamp),
+  index("server_vote_user_server_timestamp_idx").on(
+    table.userId,
+    table.serverId,
+    table.timestamp,
+  ),
+  index("server_vote_browser_timestamp_idx").on(
+    table.browserFingerprint,
+    table.timestamp,
+  ),
 ]);
 
 export const serverVoteHook = mysqlTable("server_vote_hook", {
@@ -104,6 +117,8 @@ export const serverRequest = mysqlTable("server_request", {
   reviewedAt: bigint({ mode: "number" }),
   seen: tinyint().notNull().default(0),
 }, (table) => [
-  index("request_discord_idx").on(table.discordId),
-  index("request_status_idx").on(table.status),
+  index("request_discord_submitted_idx").on(table.discordId, table.submittedAt),
+  index("request_status_submitted_idx").on(table.status, table.submittedAt),
+  index("request_discord_seen_idx").on(table.discordId, table.seen),
+  index("request_created_server_idx").on(table.createdServerId),
 ]);
