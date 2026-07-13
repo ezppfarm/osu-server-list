@@ -31,9 +31,6 @@
       "prettier-plugin-tailwindcss": "^0.8.0"
     }
   },
-  "dependencies": {
-    "@osu-server-list/db": "workspace:*"
-  },
   "devDependencies": {
     "prettier": "catalog:",
     "prettier-plugin-svelte": "catalog:",

@@ -3,9 +3,6 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "dependencies": {
-        "@osu-server-list/db": "workspace:*",
-      },
       "devDependencies": {
         "prettier": "catalog:",
         "prettier-plugin-svelte": "catalog:",
@@ -24,7 +21,7 @@
         "cronbake": "^0.4.0",
       },
       "devDependencies": {
-        "@types/bun": "latest",
+        "@types/bun": "catalog:",
       },
       "peerDependencies": {
         "tsdown": "catalog:",
@@ -57,7 +54,7 @@
         "@tailwindcss/typography": "^0.5.18",
         "@tailwindcss/vite": "^4.1.13",
         "@tanstack/table-core": "^8.20.5",
-        "@types/bun": "latest",
+        "@types/bun": "catalog:",
         "bits-ui": "^2.11.0",
         "clsx": "^2.1.1",
         "eslint": "^9.36.0",
