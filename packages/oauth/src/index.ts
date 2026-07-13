@@ -23,7 +23,6 @@ export const getDiscordSessionFromURLRequest = async (
 ) => {
   const code = url.searchParams.get("code");
   if (!code) {
-    console.log("no code");
     return null;
   }
 
@@ -47,17 +46,14 @@ export const getDiscordSessionFromURLRequest = async (
       },
     );
     if (oauthRequest.error) {
-      console.log(oauthRequest.error);
       return null;
     }
     if (!oauthObjectValidation.safeParse(oauthRequest.data).success) {
-      console.log("object validation failed");
       return null;
     }
 
     return oauthRequest.data;
   } catch (err) {
-    console.log(err);
     return null;
   }
 };

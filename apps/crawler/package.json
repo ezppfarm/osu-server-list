@@ -8,16 +8,16 @@
     "build": "tsdown"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "catalog:"
   },
   "peerDependencies": {
-    "tsdown": "^0.15.6",
-    "typescript": "^5"
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
     "@better-fetch/fetch": "catalog:",
     "@osu-server-list/db": "workspace:*",
     "@osu-server-list/handlers": "workspace:*",
-    "cronbake": "^0.3.0"
+    "cronbake": "^0.4.0"
   }
 }

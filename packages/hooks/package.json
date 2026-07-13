@@ -17,16 +17,16 @@
     }
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "catalog:"
   },
   "peerDependencies": {
     "tsdown": "catalog:",
-    "typescript": "^5"
+    "typescript": "catalog:"
   },
   "dependencies": {
     "@osu-server-list/db": "workspace:*",
     "@better-fetch/fetch": "catalog:",
     "zod": "catalog:",
-    "@vermaysha/discord-webhook": "1.4.0"
+    "@vermaysha/discord-webhook": "catalog:"
   }
 }

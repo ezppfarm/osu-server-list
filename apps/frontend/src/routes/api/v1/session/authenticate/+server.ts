@@ -13,14 +13,12 @@ import { addUser } from '@osu-server-list/db/query';
 export const GET = async ({ url, cookies }) => {
 	const redirectUri = `${url.protocol}//${url.host}/api/v1/session/authenticate`;
 
-	console.log(redirectUri);
-
 	const oauthResponse = await getDiscordSessionFromURLRequest(url, {
 		oauthClientId: pubEnv.PUBLIC_DISCORD_CLIENT_ID ?? '',
 		oauthClientSecret: privEnv.DISCORD_CLIENT_SECRET ?? '',
 		redirectUrl: redirectUri
 	});
-	console.log(oauthResponse);
+
 	if (oauthResponse) {
 		const discordUser = await getDiscordUserFromTokenObject(oauthResponse);
 		if (discordUser) {
