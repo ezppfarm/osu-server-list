@@ -16,11 +16,15 @@
       "default": "./src/*.ts"
     }
   },
+  "devDependencies": {
+    "@types/bun": "catalog:"
+  },
   "peerDependencies": {
     "tsdown": "catalog:",
-    "typescript": "^5"
+    "typescript": "catalog:"
   },
   "dependencies": {
-    "@better-fetch/fetch": "catalog:"
+    "@better-fetch/fetch": "catalog:",
+    "tldts": "^7.4.8"
   }
 }
