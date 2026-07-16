@@ -1,6 +1,7 @@
 import { betterFetch } from "@better-fetch/fetch";
 import type { UserResponse, UsersResponse } from "./types";
 import type { IServerApiHandler } from "./iserverapihandler";
+import { rewriteUrl } from "./utils";
 
 type RippleOnlineUsersResponse = {
   message: string;
@@ -18,7 +19,7 @@ type RippleUserInfoResponse = {
 };
 
 export class RippleApiHandler implements IServerApiHandler {
-  constructor(private baseUrl: string) { }
+  constructor(private baseUrl: string) {}
 
   private async makeRequest<T>(url: string, params?: any): Promise<T | null> {
     try {
@@ -30,6 +31,7 @@ export class RippleApiHandler implements IServerApiHandler {
         },
         query: params,
         throw: false,
+        timeout: 5000,
       });
 
       if (response.error) {
@@ -52,7 +54,7 @@ export class RippleApiHandler implements IServerApiHandler {
     endpoint: string,
     params?: any,
   ): Promise<T | null> {
-    const apiUrl = this.baseUrl.replace("https://", "https://c.");
+    const apiUrl = rewriteUrl(this.baseUrl, "c.");
     const url = `${apiUrl}${endpoint}`;
     return this.makeRequest<T>(url, params);
   }

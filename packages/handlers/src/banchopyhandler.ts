@@ -1,6 +1,7 @@
 import { betterFetch } from "@better-fetch/fetch";
 import type { UserResponse, UsersResponse } from "./types";
 import type { IServerApiHandler } from "./iserverapihandler";
+import { rewriteUrl } from "./utils";
 
 type BpyUsersResponse = {
   status: string;
@@ -24,14 +25,14 @@ export class BanchoPyApiHandler implements IServerApiHandler {
   constructor(
     private baseUrl: string,
     private useOldApiFormat: boolean = false,
-  ) { }
+  ) {}
 
   private async makeRequest<T>(
     endpoint: string,
     params?: any,
   ): Promise<T | null> {
     try {
-      const apiUrl = this.baseUrl.replace("https://", "https://api.");
+      const apiUrl = rewriteUrl(this.baseUrl, "api.");
 
       // who knows, maybe someone still uses this /shrug
       let oldApiFormat = "/v1";

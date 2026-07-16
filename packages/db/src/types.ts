@@ -1,25 +1,19 @@
+export type ServerType =
+  "BANCHOPY" | "RIPPLE" | "TITANIC" | "SUNRISE" | "CUSTOM";
+
 export type Server = {
   id: number;
   name: string;
-  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "SUNRISE" | "CUSTOM";
+  type: ServerType;
   description: string | null;
   url: string;
   iconUrl: string;
-  discordUrl: string | null;
   tags: string | null;
   trending: number;
 };
 
-export type ServerFull = {
-  id: number;
-  name: string;
-  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "SUNRISE" | "CUSTOM";
-  description: string | null;
-  url: string;
-  iconUrl: string;
+export type ServerFull = Server & {
   discordUrl: string | null;
-  tags: string | null;
-  trending: number;
   onlinePlayers: number;
   registeredPlayers: number;
   ping: number;
@@ -29,23 +23,7 @@ export type ServerFull = {
   location: string | null;
 };
 
-export type ServerFullHook = {
-  id: number;
-  name: string;
-  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "SUNRISE" | "CUSTOM";
-  description: string | null;
-  url: string;
-  iconUrl: string;
-  discordUrl: string | null;
-  tags: string | null;
-  trending: number;
-  onlinePlayers: number;
-  registeredPlayers: number;
-  ping: number;
-  votes: number;
-  last_update: number | null;
-  date_added: number;
-  location: string | null;
+export type ServerFullHook = ServerFull & {
   postbackUrl: string;
   discordWebhookUrl: string;
   discordWebhookContent: string;
@@ -62,7 +40,7 @@ export type ServerRequest = {
   id: number;
   discordId: string;
   status: ServerRequestStatus;
-  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "SUNRISE" | "CUSTOM";
+  type: ServerType;
   name: string;
   description: string | null;
   url: string;
@@ -79,7 +57,7 @@ export type ServerRequest = {
 
 export type ServerRequestInput = {
   name: string;
-  type: "BANCHOPY" | "RIPPLE" | "TITANIC" | "SUNRISE" | "CUSTOM";
+  type: ServerType;
   description: string;
   url: string;
   iconUrl: string;

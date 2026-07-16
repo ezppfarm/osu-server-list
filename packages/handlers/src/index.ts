@@ -5,18 +5,18 @@ import { SunriseApiHandler } from "./sunrisehandler";
 import { TitanicApiHandler } from "./titanichandler";
 
 export const getApiHandler = (
-  baseUrl: string,
+  apiUrl: string,
   type: string,
 ): IServerApiHandler => {
   switch (type.toLowerCase()) {
     case "titanic":
-      return new TitanicApiHandler(baseUrl);
+      return new TitanicApiHandler(apiUrl);
     case "banchopy":
-      return new BanchoPyApiHandler(baseUrl);
+      return new BanchoPyApiHandler(apiUrl);
     case "ripple":
-      return new RippleApiHandler(baseUrl);
+      return new RippleApiHandler(apiUrl);
     case "sunrise":
-      return new SunriseApiHandler(baseUrl);
+      return new SunriseApiHandler(apiUrl);
     default:
       throw new Error(`Unsupported server type: ${type}`);
   }

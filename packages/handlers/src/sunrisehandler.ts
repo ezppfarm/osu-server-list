@@ -1,6 +1,7 @@
 import { betterFetch } from "@better-fetch/fetch";
 import type { UserResponse, UsersResponse } from "./types";
 import type { IServerApiHandler } from "./iserverapihandler";
+import { rewriteUrl } from "./utils";
 
 type SunriseUsersResponse = {
   is_online: boolean;
@@ -15,16 +16,14 @@ type SunriseUserInfoResponse = {
 };
 
 export class SunriseApiHandler implements IServerApiHandler {
-  constructor(
-    private baseUrl: string,
-  ) { }
+  constructor(private baseUrl: string) {}
 
   private async makeRequest<T>(
     endpoint: string,
     params?: any,
   ): Promise<T | null> {
     try {
-      const apiUrl = this.baseUrl.replace("https://", "https://api.");
+      const apiUrl = rewriteUrl(this.baseUrl, "api.");
 
       const url = `${apiUrl}${endpoint}`;
       const response = await betterFetch<T>(url, {

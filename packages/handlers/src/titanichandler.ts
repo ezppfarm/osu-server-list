@@ -1,6 +1,7 @@
 import { betterFetch } from "@better-fetch/fetch";
 import type { UserResponse, UsersResponse } from "./types";
 import type { IServerApiHandler } from "./iserverapihandler";
+import { rewriteUrl } from "./utils";
 
 type TitanicStatsResponse = {
   online_users: number;
@@ -13,17 +14,14 @@ type TitanicUserInfoResponse = {
 };
 
 export class TitanicApiHandler implements IServerApiHandler {
-  constructor(
-    private baseUrl: string,
-    private useOldApiFormat: boolean = false,
-  ) { }
+  constructor(private baseUrl: string) {}
 
   private async makeRequest<T>(
     endpoint: string,
     params?: any,
   ): Promise<T | null> {
     try {
-      const apiUrl = this.baseUrl.replace("https://osu.", "https://api.");
+      const apiUrl = rewriteUrl(this.baseUrl, "api.");
 
       const url = `${apiUrl}${endpoint}`;
       const response = await betterFetch<T>(url, {
