@@ -4,9 +4,7 @@
   "version": "0.0.1",
   "packageManager": "bun@1.2.23",
   "scripts": {
-    "db:migrate-data": "bun migrate-data.ts",
-    "format": "prettier --write .",
-    "check": "tsc --noEmit"
+    "db:migrate-data": "bun migrate-data.ts"
   },
   "devEngines": {
     "runtime": {
