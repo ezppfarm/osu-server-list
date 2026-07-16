@@ -6,5 +6,5 @@ node_modules
 
 .env
 
-# MySQL data
+# Postgres data
 db_data/

@@ -1,68 +1,12 @@
 {
   "version": "7",
-  "dialect": "mysql",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1761507474962,
-      "tag": "0000_familiar_moonstone",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1761748719714,
-      "tag": "0001_icy_roxanne_simpson",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1761811572141,
-      "tag": "0002_material_bulldozer",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1761842509625,
-      "tag": "0003_harsh_stranger",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1769271911644,
-      "tag": "0004_brown_kylun",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1775752823664,
-      "tag": "0005_abandoned_paladin",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1775752979563,
-      "tag": "0006_petite_strong_guy",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "5",
-      "when": 1775754336968,
-      "tag": "0007_heavy_skin",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "5",
-      "when": 1783813384011,
-      "tag": "0008_hard_genesis",
+      "version": "7",
+      "when": 1784200091896,
+      "tag": "0000_plain_gamma_corps",
       "breakpoints": true
     }
   ]

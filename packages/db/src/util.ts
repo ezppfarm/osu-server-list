@@ -1,17 +1,17 @@
 import { SQL, sql } from "drizzle-orm";
-import type { MySqlColumn } from "drizzle-orm/mysql-core";
+import type { PgColumn } from "drizzle-orm/pg-core";
 
-export const sumAsIntWithFallback = (expr: MySqlColumn, fallback: number) =>
-  sql<number>`COALESCE(CAST(SUM(${expr}) AS SIGNED), ${fallback})`;
+export const sumAsIntWithFallback = (expr: PgColumn, fallback: number) =>
+  sql<number>`COALESCE(CAST(SUM(${expr}) AS INTEGER), ${fallback})`;
 
-export const intWithFallback = (expr: MySqlColumn, fallback: number) =>
+export const intWithFallback = (expr: PgColumn, fallback: number) =>
   sql<number>`COALESCE(${expr}, ${fallback})`;
 
-export const stringWithFallback = (expr: MySqlColumn, fallback: string) =>
+export const stringWithFallback = (expr: PgColumn, fallback: string) =>
   sql<string>`COALESCE(${expr}, ${fallback})`;
 
 export const countDistinctWithFallback = (
-  expr: MySqlColumn,
+  expr: PgColumn,
   fallback: number,
 ) => sql<number>`COALESCE(COUNT(DISTINCT ${expr}), ${fallback})`;
 

@@ -1,23 +1,20 @@
 services:
-  mysql:
-    image: mysql:latest
+  postgres:
+    image: postgres:18-alpine
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_USER=${MYSQL_USERNAME}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_TCP_PORT=${MYSQL_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PGPORT=${POSTGRES_PORT}
     ports:
-      - "${MYSQL_PORT}:${MYSQL_PORT}"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     volumes:
-      - ${DATA_MYSQL_PATH}:/var/lib/mysql
-
-    command: mysqld --sql-mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+      - ${DATA_POSTGRES_PATH}:/var/lib/postgresql/data
 
     healthcheck:
-      test: '/usr/bin/mysql --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD --execute "SELECT 1;"'
-      interval: 1s
-      timeout: 10s
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 2s
+      timeout: 5s
       retries: 10
 
   crawler:
@@ -25,30 +22,30 @@ services:
       context: .
       dockerfile: apps/crawler/Dockerfile
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
       frontend:
         condition: service_started
     environment:
-      - MYSQL_HOST=mysql
-      - MYSQL_PORT=${MYSQL_PORT}
-      - MYSQL_USERNAME=${MYSQL_USERNAME}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
 
   frontend:
     build:
       context: .
       dockerfile: apps/frontend/Dockerfile
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
     environment:
-      - MYSQL_HOST=mysql
-      - MYSQL_PORT=${MYSQL_PORT}
-      - MYSQL_USERNAME=${MYSQL_USERNAME}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
       - PUBLIC_TURNSTILE_SITE_KEY=${TURNSTILE_SITE_KEY}
       - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
       - PUBLIC_APP_NAME=${FRONTEND_APP_NAME}
@@ -61,23 +58,20 @@ services:
     volumes:
       - "${DATA_LOGO_CACHE_PATH}:/data/logos"
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
     ports:
-      - "${PHPMYADMIN_PORT}:80"
+      - "${PGADMIN_PORT}:80"
 
     healthcheck:
-      test: "curl --fail http://phpmyadmin"
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:80/misc/ping || exit 1"]
       interval: 60s
       timeout: 10s
       retries: 5
 
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
-
-    environment:
-      - PMA_HOST=mysql
-      - PMA_PORT=${MYSQL_PORT}
-      - UPLOAD_LIMIT=1G
-      - HIDE_PHP_VERSION=true
