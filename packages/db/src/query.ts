@@ -608,7 +608,7 @@ export const editServer = async (
 ) => {
   try {
     await db.transaction(async (tx) => {
-      await db
+      await tx
         .update(server)
         .set({
           name: opts.name,
@@ -623,7 +623,7 @@ export const editServer = async (
         })
         .where(eq(server.id, serverId));
 
-      await db
+      await tx
         .insert(serverVoteHook)
         .values({
           server_id: serverId,
