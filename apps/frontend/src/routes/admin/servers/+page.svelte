@@ -68,7 +68,7 @@
 		postbackUrl: '',
 		discordWebhookUrl: '',
 		discordWebhookContent: `[{{ user_name }}]({{ server_url }}/u/{{ user_id }}) has voted for {{ server_name }}! We are now at {{ server_votes }} total votes.
-Vote for your favorite private server [here](https://find.circles-to.click/)!`
+Vote for your favourite private server [here](https://find.circles-to.click/)!`
 	});
 
 	let editServerDialogOpen = $state(false);
@@ -288,7 +288,7 @@ Vote for your favorite private server [here](https://find.circles-to.click/)!`
 			postbackUrl: '',
 			discordWebhookUrl: '',
 			discordWebhookContent: `[{{ user_name }}]({{ server_url }}/u/{{ user_id }}) has voted for {{ server_name }}! We are now at {{ server_votes }} total votes.
-Vote for your favorite private server [here](https://find.circles-to.click/)!`
+Vote for your favourite private server [here](https://find.circles-to.click/)!`
 		};
 	};
 
