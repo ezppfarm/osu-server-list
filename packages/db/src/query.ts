@@ -560,7 +560,7 @@ export const addServer = async (
           discordUrl,
           location,
         })
-        .$returningId();
+        .returning();
       if (serverId.length <= 0 || !serverId[0]?.id) {
         tx.rollback();
         return;
@@ -773,7 +773,7 @@ export const acceptServerRequest = async (
           discordUrl: fields.discordUrl,
           location: fields.location,
         })
-        .$returningId();
+        .returning();
       newServerId = inserted[0]?.id;
       if (!newServerId) {
         tx.rollback();
