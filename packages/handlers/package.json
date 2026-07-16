@@ -24,6 +24,7 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@better-fetch/fetch": "catalog:"
+    "@better-fetch/fetch": "catalog:",
+    "tldts": "^7.4.8"
   }
 }
