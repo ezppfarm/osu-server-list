@@ -348,23 +348,10 @@ export const getServerUptime = async (
   const now = Date.now();
   const startTime = now - durationMinutes * 60 * 1000;
 
-  const resultValidPings = await db
+  const result = await db
     .select({
-      count: sql<number>`COUNT(*)`,
-    })
-    .from(serverStatus)
-    .where(
-      and(
-        eq(serverStatus.serverId, serverId),
-        gte(serverStatus.timestamp, startTime),
-        lte(serverStatus.timestamp, now),
-        gt(serverStatus.ping, -1),
-      ),
-    );
-
-  const resultAllPings = await db
-    .select({
-      count: sql<number>`COUNT(*)`,
+      countSuccess: sql<number>`COUNT(CASE WHEN ${serverStatus.ping} > -1 THEN 1 END)`,
+      countAll: sql<number>`COUNT(*)`,
     })
     .from(serverStatus)
     .where(
@@ -375,8 +362,8 @@ export const getServerUptime = async (
       ),
     );
 
-  const countSuccess = resultValidPings[0]?.count ?? 0;
-  const countAll = resultAllPings[0]?.count ?? 0;
+  const countSuccess = result[0]?.countSuccess ?? 0;
+  const countAll = result[0]?.countAll ?? 0;
   const expected = countAll < durationMinutes ? countAll : durationMinutes;
   const uptime = Math.min((countSuccess / expected) * 100, 100);
 
@@ -398,7 +385,7 @@ export const getServerStatusThisYear = async (serverId: number) => {
   const startUnixMs = startOfYear.getTime();
   const endUnixMs = endOfYear.getTime();
 
-  const dayExpr = sql<string>`DATE(FROM_UNIXTIME(${serverStatus.timestamp} / 1000))`;
+  const dayExpr = sql<string>`(to_timestamp(${serverStatus.timestamp} / 1000.0)::date)::text`;
 
   const statusResult = await db
     .select({
@@ -418,9 +405,11 @@ export const getServerStatusThisYear = async (serverId: number) => {
     .groupBy(dayExpr)
     .orderBy(dayExpr);
 
+  const voteDayExpr = sql<string>`(to_timestamp(${serverVote.timestamp} / 1000.0)::date)::text`;
+
   const voteResult = await db
     .select({
-      day: sql<string>`DATE(FROM_UNIXTIME(${serverVote.timestamp} / 1000))`,
+      day: voteDayExpr,
       votes: sql<number>`COUNT(*)`,
     })
     .from(serverVote)
@@ -431,7 +420,7 @@ export const getServerStatusThisYear = async (serverId: number) => {
         lte(serverVote.timestamp, endUnixMs),
       ),
     )
-    .groupBy(sql`DATE(FROM_UNIXTIME(${serverVote.timestamp} / 1000))`);
+    .groupBy(voteDayExpr);
 
   const voteMap = new Map(voteResult.map((v) => [v.day, v.votes]));
 
@@ -571,7 +560,7 @@ export const addServer = async (
           discordUrl,
           location,
         })
-        .$returningId();
+        .returning();
       if (serverId.length <= 0 || !serverId[0]?.id) {
         tx.rollback();
         return;
@@ -584,7 +573,8 @@ export const addServer = async (
           discord_webhook_url: discordWebhookUrl,
           postback_url: postbackUrl,
         })
-        .onDuplicateKeyUpdate({
+        .onConflictDoUpdate({
+          target: serverVoteHook.server_id,
           set: {
             postback_url: postbackUrl,
             discord_webhook_content: discordWebhookContent,
@@ -618,7 +608,7 @@ export const editServer = async (
 ) => {
   try {
     await db.transaction(async (tx) => {
-      await db
+      await tx
         .update(server)
         .set({
           name: opts.name,
@@ -633,7 +623,7 @@ export const editServer = async (
         })
         .where(eq(server.id, serverId));
 
-      await db
+      await tx
         .insert(serverVoteHook)
         .values({
           server_id: serverId,
@@ -641,7 +631,8 @@ export const editServer = async (
           discord_webhook_url: opts.discordWebhookUrl,
           postback_url: opts.postbackUrl,
         })
-        .onDuplicateKeyUpdate({
+        .onConflictDoUpdate({
+          target: serverVoteHook.server_id,
           set: {
             discord_webhook_content: opts.discordWebhookContent,
             discord_webhook_url: opts.discordWebhookUrl,
@@ -782,7 +773,7 @@ export const acceptServerRequest = async (
           discordUrl: fields.discordUrl,
           location: fields.location,
         })
-        .$returningId();
+        .returning();
       newServerId = inserted[0]?.id;
       if (!newServerId) {
         tx.rollback();

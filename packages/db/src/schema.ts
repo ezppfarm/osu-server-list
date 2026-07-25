@@ -1,69 +1,81 @@
 import {
-  mysqlTable,
-  int,
+  pgTable,
+  integer,
   text,
   bigint,
-  tinyint,
+  serial,
   varchar,
   index,
-  mysqlEnum,
-} from "drizzle-orm/mysql-core";
+  pgEnum,
+  primaryKey,
+} from "drizzle-orm/pg-core";
 
-export const user = mysqlTable("user", {
+export const serverTypeEnum = pgEnum("server_type", [
+  "BANCHOPY",
+  "RIPPLE",
+  "TITANIC",
+  "SUNRISE",
+  "CUSTOM",
+]);
+
+export const requestStatusEnum = pgEnum("request_status", [
+  "PENDING",
+  "ACCEPTED",
+  "DENIED",
+]);
+
+export const user = pgTable("user", {
   discordId: varchar({ length: 128 }).primaryKey().notNull(),
-  systemAdmin: tinyint().notNull().default(0),
+  systemAdmin: integer().notNull().default(0),
 });
 
-export const user_server_manage = mysqlTable("user_server_manage", {
+export const user_server_manage = pgTable("user_server_manage", {
   discordId: varchar({ length: 128 })
     .references(() => user.discordId)
     .notNull(),
-  serverId: int()
+  serverId: integer()
     .notNull()
     .references(() => server.id),
 }, (table) => [
-  index("user_server_manage_discord_server_idx").on(table.discordId, table.serverId),
+  primaryKey({ columns: [table.discordId, table.serverId] }),
   index("user_server_manage_server_idx").on(table.serverId),
 ]);
 
-export const server = mysqlTable("server", {
-  id: int().primaryKey().autoincrement().notNull(),
-  type: mysqlEnum("type", ["BANCHOPY", "RIPPLE", "TITANIC", "SUNRISE", "CUSTOM"])
-    .default("BANCHOPY")
-    .notNull(),
+export const server = pgTable("server", {
+  id: serial().primaryKey().notNull(),
+  type: serverTypeEnum("type").default("BANCHOPY").notNull(),
   name: varchar("name", { length: 255 }).notNull(),
   description: text(),
   url: text().notNull(),
   iconUrl: text().notNull(),
   discordUrl: text(),
   tags: text(),
-  trending: int().notNull(),
+  trending: integer().notNull(),
   date_added: bigint({ mode: "number" }).notNull(),
   location: text(),
 }, (table) => [
   index("name_idx").on(table.name),
 ]);
 
-export const serverStatus = mysqlTable("server_status", {
-  id: int().primaryKey().autoincrement().notNull(),
-  serverId: int()
+export const serverStatus = pgTable("server_status", {
+  id: serial().primaryKey().notNull(),
+  serverId: integer()
     .references(() => server.id)
     .notNull(),
   timestamp: bigint({ mode: "number" }).notNull(),
-  onlinePlayers: int().notNull(),
-  registeredPlayers: int().notNull(),
-  ping: int().notNull(),
+  onlinePlayers: integer().notNull(),
+  registeredPlayers: integer().notNull(),
+  ping: integer().notNull(),
 }, (table) => [
   index("server_status_server_timestamp_idx").on(table.serverId, table.timestamp),
-  index("online_players_idx").on(table.onlinePlayers),
 ]);
 
-export const serverVote = mysqlTable("server_vote", {
-  id: int().primaryKey().autoincrement().notNull(),
-  serverId: int()
+export const serverVote = pgTable("server_vote", {
+  id: serial().primaryKey().notNull(),
+  serverId: integer()
     .references(() => server.id)
     .notNull(),
-  userId: int().notNull(),
+  userId: integer().notNull(),
   ip: text().notNull(),
   browserFingerprint: bigint({ mode: "number" }).notNull(),
   timestamp: bigint({ mode: "number" }).notNull(),
@@ -81,8 +93,8 @@ export const serverVote = mysqlTable("server_vote", {
   ),
 ]);
 
-export const serverVoteHook = mysqlTable("server_vote_hook", {
-  server_id: int()
+export const serverVoteHook = pgTable("server_vote_hook", {
+  server_id: integer()
     .unique()
     .references(() => server.id)
     .notNull()
@@ -93,17 +105,13 @@ export const serverVoteHook = mysqlTable("server_vote_hook", {
   discord_webhook_content: text(),
 });
 
-export const serverRequest = mysqlTable("server_request", {
-  id: int().primaryKey().autoincrement().notNull(),
+export const serverRequest = pgTable("server_request", {
+  id: serial().primaryKey().notNull(),
   discordId: varchar({ length: 128 })
     .references(() => user.discordId)
     .notNull(),
-  status: mysqlEnum("status", ["PENDING", "ACCEPTED", "DENIED"])
-    .default("PENDING")
-    .notNull(),
-  type: mysqlEnum("type", ["BANCHOPY", "RIPPLE", "TITANIC", "SUNRISE", "CUSTOM"])
-    .default("BANCHOPY")
-    .notNull(),
+  status: requestStatusEnum("status").default("PENDING").notNull(),
+  type: serverTypeEnum("type").default("BANCHOPY").notNull(),
   name: varchar("name", { length: 255 }).notNull(),
   description: text(),
   url: text().notNull(),
@@ -112,10 +120,10 @@ export const serverRequest = mysqlTable("server_request", {
   tags: text(),
   location: text(),
   denialReason: text(),
-  createdServerId: int().references(() => server.id),
+  createdServerId: integer().references(() => server.id),
   submittedAt: bigint({ mode: "number" }).notNull(),
   reviewedAt: bigint({ mode: "number" }),
-  seen: tinyint().notNull().default(0),
+  seen: integer().notNull().default(0),
 }, (table) => [
   index("request_discord_submitted_idx").on(table.discordId, table.submittedAt),
   index("request_status_submitted_idx").on(table.status, table.submittedAt),
